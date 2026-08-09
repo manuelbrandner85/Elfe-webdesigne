@@ -1,3 +1,4 @@
+import { medien } from "@/lib/pfad";
 export const site = {
   name: "Webdesign Elfe",
   url: "https://www.webdesign-elfe.de",
@@ -262,8 +263,8 @@ export const demoConcepts: DemoConcept[] = [
       ],
     },
     showcase: "gallery",
-    media: { poster: "/images/concept-atelier.webp", video: "/videos/concept-atelier.mp4", videoWebm: "/videos/concept-atelier.webm" },
-    tiles: ["/images/tiles/atelier-1.webp", "/images/tiles/atelier-2.webp", "/images/tiles/atelier-3.webp", "/images/tiles/atelier-4.webp", "/images/tiles/atelier-5.webp", "/images/tiles/atelier-6.webp"],
+    media: { poster: medien("/images/concept-atelier.webp"), video: medien("/videos/concept-atelier.mp4"), videoWebm: medien("/videos/concept-atelier.webm") },
+    tiles: [medien("/images/tiles/atelier-1.webp"), medien("/images/tiles/atelier-2.webp"), medien("/images/tiles/atelier-3.webp"), medien("/images/tiles/atelier-4.webp"), medien("/images/tiles/atelier-5.webp"), medien("/images/tiles/atelier-6.webp")],
     screens: [
       { nav: "Studio", type: "hero" },
       {
@@ -318,8 +319,8 @@ export const demoConcepts: DemoConcept[] = [
       ],
     },
     showcase: "menu",
-    media: { poster: "/images/concept-verde.webp", video: "/videos/concept-verde.mp4", videoWebm: "/videos/concept-verde.webm" },
-    tiles: ["/images/tiles/verde-1.webp", "/images/tiles/verde-2.webp", "/images/tiles/verde-3.webp", "/images/tiles/verde-4.webp", "/images/tiles/verde-5.webp", "/images/tiles/verde-6.webp"],
+    media: { poster: medien("/images/concept-verde.webp"), video: medien("/videos/concept-verde.mp4"), videoWebm: medien("/videos/concept-verde.webm") },
+    tiles: [medien("/images/tiles/verde-1.webp"), medien("/images/tiles/verde-2.webp"), medien("/images/tiles/verde-3.webp"), medien("/images/tiles/verde-4.webp"), medien("/images/tiles/verde-5.webp"), medien("/images/tiles/verde-6.webp")],
     screens: [
       { nav: "Karte", type: "hero" },
       {
@@ -374,8 +375,8 @@ export const demoConcepts: DemoConcept[] = [
       ],
     },
     showcase: "stats",
-    media: { poster: "/images/concept-nordwerk.webp", video: "/videos/concept-nordwerk.mp4", videoWebm: "/videos/concept-nordwerk.webm" },
-    tiles: ["/images/tiles/nordwerk-1.webp", "/images/tiles/nordwerk-2.webp", "/images/tiles/nordwerk-3.webp", "/images/tiles/nordwerk-4.webp", "/images/tiles/nordwerk-5.webp", "/images/tiles/nordwerk-6.webp"],
+    media: { poster: medien("/images/concept-nordwerk.webp"), video: medien("/videos/concept-nordwerk.mp4"), videoWebm: medien("/videos/concept-nordwerk.webm") },
+    tiles: [medien("/images/tiles/nordwerk-1.webp"), medien("/images/tiles/nordwerk-2.webp"), medien("/images/tiles/nordwerk-3.webp"), medien("/images/tiles/nordwerk-4.webp"), medien("/images/tiles/nordwerk-5.webp"), medien("/images/tiles/nordwerk-6.webp")],
     screens: [
       { nav: "Leistungen", type: "hero" },
       {

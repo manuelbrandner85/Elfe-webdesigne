@@ -1,5 +1,7 @@
 "use client";
 
+import { medien } from "@/lib/pfad";
+
 import { m } from "framer-motion";
 import WerkstattGL from "@/components/WerkstattGL";
 import { realProjects, demoConcepts } from "@/data/content";
@@ -78,7 +80,7 @@ export default function Portfolio() {
             nichts allein von WebGL abhängt. */}
         <div className="mb-16">
           <WerkstattGL
-            bilder={demoConcepts.map((k) => `/images/concept-${k.slug}.webp`)}
+            bilder={demoConcepts.map((k) => medien(`/images/concept-${k.slug}.webp`))}
             beschriftungen={demoConcepts.map((k) => `${k.title} — ${k.tag}`)}
           />
         </div>

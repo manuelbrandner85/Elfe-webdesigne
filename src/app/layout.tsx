@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { medien } from "@/lib/pfad";
 import SanftesScrollen from "@/components/SanftesScrollen";
 import BewegungsRahmen from "@/components/BewegungsRahmen";
 import MagnetischeElemente from "@/components/MagnetischeElemente";
@@ -146,7 +147,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className="h-full scroll-smooth">
+    <html
+      lang="de"
+      className="h-full scroll-smooth"
+      /* Der Unterpfad wird einmal als Variable durchgereicht — CSS kann
+         Umgebungswerte nicht selbst lesen. */
+      style={{ ["--logo-quelle" as string]: `url('${medien("/images/logo.webp")}')` }}
+    >
       <head>
         {/* Entscheidet VOR dem ersten Bild, ob die Eröffnung läuft, und
             beendet sie. Ein React-Bauteil käme dafür zu spät: gemessen
@@ -168,7 +175,7 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="/images/logo.webp"
+          href={medien("/images/logo.webp")}
           type="image/webp"
           fetchPriority="high"
         />
@@ -204,7 +211,7 @@ export default function RootLayout({
           <span className="eroeffnung-staub" />
           <span
             className="eroeffnung-logo"
-            style={{ backgroundImage: "url('/images/logo.webp')" }}
+            style={{ backgroundImage: `url('${medien("/images/logo.webp")}')` }}
           />
           <span className="eroeffnung-linie" />
         </div>

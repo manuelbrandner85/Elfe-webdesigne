@@ -1,0 +1,67 @@
+name: Website bauen und veröffentlichen
+
+# Läuft bei jedem Push auf main — und lässt sich von Hand auslösen.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Nur ein Lauf gleichzeitig; ein neuer Push wartet, statt zu überholen.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  bauen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Quellcode holen
+        uses: actions/checkout@v4
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Pakete installieren
+        run: npm ci
+
+      - name: Bauen
+        env:
+          # Pages liefert Projektseiten unter /<Repository>/ aus
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+        run: npm run build
+
+      - name: Prüfen, ob der Bau vollständig ist
+        # Lieber hier abbrechen als eine kaputte Seite veröffentlichen.
+        run: |
+          test -f out/index.html || { echo "Startseite fehlt"; exit 1; }
+          test -f out/images/logo.webp || { echo "Logo fehlt"; exit 1; }
+          SEITEN=$(find out -name index.html | wc -l)
+          echo "Erzeugte Seiten: $SEITEN"
+          test "$SEITEN" -ge 8 || { echo "Zu wenige Seiten erzeugt"; exit 1; }
+
+      - name: Pages vorbereiten
+        uses: actions/configure-pages@v5
+
+      - name: Ergebnis hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  veroeffentlichen:
+    needs: bauen
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.veroeffentlichung.outputs.page_url }}
+    steps:
+      - name: Veröffentlichen
+        id: veroeffentlichung
+        uses: actions/deploy-pages@v4

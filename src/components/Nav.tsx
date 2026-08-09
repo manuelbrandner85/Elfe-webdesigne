@@ -1,5 +1,7 @@
 "use client";
 
+import { medien } from "@/lib/pfad";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, m } from "framer-motion";
@@ -56,7 +58,7 @@ export default function Nav() {
         <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center justify-between gap-6">
           <a href="#top" className="flex items-center gap-3 shrink-0">
             <Image
-              src="/images/logo-klein.webp"
+              src={medien("/images/logo-klein.webp")}
               alt="Webdesign Elfe Logo"
               width={42}
               height={42}

@@ -232,8 +232,9 @@ export default function CinematicHero() {
                   }}
                 />
                 <span
-                  className="absolute inset-0 bg-[url('/images/logo.webp')] bg-no-repeat bg-center"
+                  className="absolute inset-0 bg-no-repeat bg-center"
                   style={{
+                    backgroundImage: "var(--logo-quelle)",
                     backgroundSize: "34%",
                     opacity: 0.5 + camIn * 0.3,
                   }}

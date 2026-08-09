@@ -1,3 +1,4 @@
+import { medien } from "@/lib/pfad";
 import Image from "next/image";
 import { contact } from "@/data/content";
 
@@ -7,7 +8,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-center gap-3 mb-5.5">
           <Image
-            src="/images/logo-klein.webp"
+            src={medien("/images/logo-klein.webp")}
             alt="Webdesign Elfe"
             width={34}
             height={34}

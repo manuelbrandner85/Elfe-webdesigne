@@ -1,5 +1,7 @@
 "use client";
 
+import { medien } from "@/lib/pfad";
+
 import { useEffect, useRef } from "react";
 import { m, useInView, useScroll, useTransform } from "framer-motion";
 
@@ -34,7 +36,7 @@ export default function CinemaBanner() {
       <m.div style={{ scale, y }} className="absolute inset-[-6%]">
         <video
           ref={videoRef}
-          poster="/images/concept-atelier.webp"
+          poster={medien("/images/concept-atelier.webp")}
           muted
           loop
           playsInline
@@ -42,8 +44,8 @@ export default function CinemaBanner() {
           aria-hidden
           className="w-full h-full object-cover"
         >
-          <source src="/videos/concept-atelier.webm" type="video/webm" />
-          <source src="/videos/concept-atelier.mp4" type="video/mp4" />
+          <source src={medien("/videos/concept-atelier.webm")} type="video/webm" />
+          <source src={medien("/videos/concept-atelier.mp4")} type="video/mp4" />
         </video>
       </m.div>
 

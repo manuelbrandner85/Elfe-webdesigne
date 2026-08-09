@@ -172,7 +172,7 @@ body::after {
   transform: translateY(-50%);
   width: min(46vw, 520px);
   aspect-ratio: 1 / 1;
-  background: url("/images/logo.webp") center / contain no-repeat;
+  background: var(--logo-quelle) center / contain no-repeat;
   opacity: 0.035;
   pointer-events: none;
   z-index: -1;
@@ -376,7 +376,7 @@ body::after {
 .eroeffnung::after {
   width: 7rem;
   height: 7rem;
-  background: url("/images/logo.webp") center / contain no-repeat;
+  background: var(--logo-quelle) center / contain no-repeat;
   animation: logo-treten 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 

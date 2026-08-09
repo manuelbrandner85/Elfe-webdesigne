@@ -1,5 +1,7 @@
 "use client";
 
+import { medien } from "@/lib/pfad";
+
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRef } from "react";
@@ -163,7 +165,7 @@ export default function Hero() {
               className="relative w-[68%] max-w-[330px] aspect-square"
             >
               <Image
-                src="/images/logo.webp"
+                src={medien("/images/logo.webp")}
                 alt="Webdesign Elfe"
                 fill
                 sizes="(max-width: 768px) 70vw, 330px"

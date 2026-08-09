@@ -1,5 +1,7 @@
 "use client";
 
+import { medien } from "@/lib/pfad";
+
 import Image from "next/image";
 import SplitHeading from "@/components/SplitHeading";
 import { m } from "framer-motion";
@@ -22,7 +24,7 @@ export default function About() {
           <div className="relative rounded-sm p-[10px] bg-[linear-gradient(160deg,rgba(255,250,240,0.09),rgba(0,0,0,0.26))] border border-gold/40 shadow-[0_1px_0_rgba(255,250,240,0.14)_inset,0_30px_64px_rgba(0,0,0,0.5)]">
             <div className="relative overflow-hidden rounded-[2px] border border-line bg-[linear-gradient(180deg,#6b665f_0%,#565149_58%,#453f39_100%)]">
               <Image
-                src="/images/portrait.webp"
+                src={medien("/images/portrait.webp")}
                 alt="Ulrike Elferich, Inhaberin von Webdesign Elfe"
                 width={928}
                 height={1152}
