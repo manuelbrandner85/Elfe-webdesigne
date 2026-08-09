@@ -1,0 +1,438 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* warm stone base — wie in der Ursprungsversion */
+  --color-stone-950: #5e5a55;
+  --color-stone-900: #4f4b47;
+  --color-stone-850: #565250;
+  --color-stone-800: #6a6660;
+  --color-stone-deep: #423e3a;
+
+  /* Gold statt Orange */
+  --color-gold: #c9a227;
+  --color-gold-bright: #f2d894;
+  --color-gold-deep: #8a6d1f;
+  --color-gold-soft: #ddc077;
+  /* Nur für Kleinschrift: erfüllt den Kontrast-Mindestwert (4,6:1) */
+  --color-gold-text: #ead490;
+
+  --color-parchment: #f7f2e6;
+  --color-silver: #ddd8cb;
+  --color-silver-bright: #efe9dc;
+  --color-line: rgba(255, 250, 240, 0.16);
+
+  --font-serif: "Cormorant Garamond", serif;
+  --font-script: "Tangerine", cursive;
+  --font-sans: "Jost", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-stone-950);
+  color: var(--color-parchment);
+  font-family: var(--font-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Feine Körnung + Lichtstimmung über der gesamten Seite */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+}
+
+/* Warme Lichtquelle oben, sanfte Abdunklung zu den Rändern */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(255, 252, 245, 0.07), transparent 58%),
+    radial-gradient(100% 70% at 50% 115%, rgba(0, 0, 0, 0.16), transparent 62%);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: #2b2723;
+}
+
+.font-serif-display {
+  font-family: var(--font-serif), serif;
+}
+
+.font-script {
+  font-family: var(--font-script), cursive;
+}
+
+/* Edler Goldverlauf mit Glanzkante */
+.text-gold-gradient {
+  background: linear-gradient(
+    118deg,
+    var(--color-gold-deep) 0%,
+    var(--color-gold) 26%,
+    #fff3cf 48%,
+    var(--color-gold-bright) 62%,
+    var(--color-gold) 82%,
+    var(--color-gold-deep) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.42));
+}
+
+.text-shadow-elegant {
+  /* Plastischer Eindruck entsteht aus zwei Gegensätzen: einer feinen
+     Lichtkante an der Oberkante (als käme das Licht von oben) und einer
+     harten dunklen Kante direkt darunter. Erst danach folgen die weichen
+     Schatten, die den Abstand zur Fläche erzeugen. Ohne die Lichtkante
+     wirkt Schrift nur verschoben, nicht erhaben. */
+  text-shadow:
+    0 -1px 0 rgba(255, 250, 240, 0.20),
+    0 1px 1px rgba(0, 0, 0, 0.55),
+    0 2px 4px rgba(0, 0, 0, 0.42),
+    0 8px 18px rgba(0, 0, 0, 0.3),
+    0 18px 36px rgba(0, 0, 0, 0.2);
+}
+
+/* Feine Goldlinie als Trennelement */
+.rule-gold {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(201, 162, 39, 0.55),
+    transparent
+  );
+}
+
+/* Glaskarten mit Tiefe */
+.panel {
+  background:
+    linear-gradient(160deg, rgba(255, 250, 240, 0.055), rgba(0, 0, 0, 0.14)),
+    var(--color-stone-900);
+  border: 1px solid var(--color-line);
+  box-shadow:
+    0 1px 0 rgba(255, 250, 240, 0.06) inset,
+    0 18px 38px rgba(0, 0, 0, 0.34),
+    0 3px 8px rgba(0, 0, 0, 0.22);
+}
+
+.panel-hover {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease, box-shadow 0.45s ease;
+}
+.panel-hover:hover {
+  transform: translateY(-6px);
+  border-color: rgba(201, 162, 39, 0.45);
+  box-shadow:
+    0 1px 0 rgba(255, 250, 240, 0.08) inset,
+    0 28px 54px rgba(0, 0, 0, 0.42),
+    0 6px 14px rgba(0, 0, 0, 0.26);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-stone-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-deep);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+
+/* Dezentes Logo-Wasserzeichen für einzelne Abschnitte */
+.watermark {
+  position: relative;
+  isolation: isolate;
+}
+.watermark::before {
+  content: "";
+  position: absolute;
+  right: -4%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(46vw, 520px);
+  aspect-ratio: 1 / 1;
+  background: url("/images/logo.webp") center / contain no-repeat;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: -1;
+}
+@media (max-width: 900px) {
+  .watermark::before { width: 84vw; right: -18%; opacity: 0.028; }
+}
+
+/* Weiche Übergänge zwischen den Abschnitten */
+.fade-edges {
+  position: relative;
+}
+.fade-edges::before,
+.fade-edges::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 1;
+}
+.fade-edges::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.10), transparent);
+}
+.fade-edges::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.10), transparent);
+}
+
+
+/* ---------- Druckansicht ---------- */
+@media print {
+  body {
+    background: #fff !important;
+    color: #1a1a1a !important;
+  }
+  body::before,
+  body::after { display: none !important; }
+
+  header,
+  footer,
+  video,
+  canvas,
+  .rule-gold,
+  [aria-label="Zurück nach oben"],
+  section[aria-label="Vorher-Nachher-Vergleich"] { display: none !important; }
+
+  main { padding-top: 0 !important; }
+
+  section { page-break-inside: avoid; padding: 18pt 0 !important; background: none !important; }
+
+  h1, h2, h3, h4, p, li, dt, dd, span, blockquote {
+    color: #1a1a1a !important;
+    text-shadow: none !important;
+  }
+
+  .panel {
+    background: #fff !important;
+    border: 1pt solid #bbb !important;
+    box-shadow: none !important;
+  }
+
+  a { color: #1a1a1a !important; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #555; }
+  a[href^="#"]::after { content: ""; }
+
+  .text-gold-gradient { -webkit-text-fill-color: #7a5c2e !important; color: #7a5c2e !important; }
+}
+
+
+/* Ladebalken der Kamerafahrt */
+@keyframes slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+/* ---------- Bewegung reduzieren ----------
+   Wer im Betriebssystem "Bewegung reduzieren" eingestellt hat, bekommt
+   keine Bewegung — aber auch keine leere Seite: Übergänge werden auf einen
+   Wimpernschlag verkürzt, statt sie zu entfernen. Das ist wichtig, weil
+   viele Elemente erst durch ihre Animation sichtbar werden.
+
+   Der Grund ist nicht Kosmetik: Parallax und ähnliche Bewegungen können
+   bei Menschen mit Gleichgewichtsstörungen Übelkeit und Migräne auslösen. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Elemente, die per Animation eingeblendet werden, bleiben sichtbar */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ---------- Fortschrittsbalken ohne Skript ----------
+   Läuft über die Scroll-Zeitleiste des Browsers und damit auf dem
+   Compositor — flüssiger als jede Berechnung in JavaScript und ohne Last
+   für den Hauptthread. Browser ohne Unterstützung behalten die bisherige
+   Lösung; deshalb steht alles in einer Abfrage. */
+@supports (animation-timeline: scroll()) {
+  .scroll-fortschritt-css {
+    transform-origin: 0 50%;
+    animation: fortschritt linear;
+    animation-timeline: scroll(root block);
+  }
+
+  @keyframes fortschritt {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+}
+
+/* ---------- Seitenübergänge ----------
+   Sanftes Überblenden beim Wechsel zwischen Startseite, Paketseiten,
+   Impressum und Datenschutz. Rein über CSS, ohne Skript — Browser ohne
+   Unterstützung wechseln wie bisher hart, ohne Fehler.
+
+   Bewusst kurz und ohne Bewegung: Ein Schiebe-Effekt zwischen Seiten wird
+   schnell zur Geduldsprobe, wenn man mehrfach hin und her wechselt. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ---------- Eröffnungssequenz ----------
+   Der Vorhang steht im ausgelieferten HTML und wird allein von CSS
+   bewegt. Damit ist er ab dem ersten Bild da — nicht erst, wenn React
+   geladen hat. Ein kleines Skript im Kopf entscheidet vorab, ob er
+   überhaupt erscheint, und beendet ihn nach 900 Millisekunden oder bei
+   der ersten Eingabe. Fällt das Skript aus, hebt die CSS-Animation ihn
+   trotzdem — die Seite bleibt in jedem Fall erreichbar. */
+.eroeffnung {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  background: #100e0c;
+  animation: vorhang 1320ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes vorhang {
+  0%, 68%   { opacity: 1; visibility: visible; }
+  100%      { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+.eroeffnung::before,
+.eroeffnung::after {
+  content: "";
+  grid-area: 1 / 1;
+  display: block;
+}
+
+/* Goldstaub, der sich zur Mitte sammelt */
+.eroeffnung::before {
+  width: 26rem;
+  height: 26rem;
+  max-width: 78vw;
+  max-height: 78vw;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 35%, rgba(242,216,148,0.55) 0 1.6px, transparent 2.2px),
+    radial-gradient(circle at 68% 28%, rgba(242,216,148,0.45) 0 1.6px, transparent 2.2px),
+    radial-gradient(circle at 44% 72%, rgba(242,216,148,0.5) 0 1.6px, transparent 2.2px),
+    radial-gradient(circle at 76% 64%, rgba(242,216,148,0.4) 0 1.6px, transparent 2.2px),
+    radial-gradient(circle at 22% 58%, rgba(242,216,148,0.45) 0 1.6px, transparent 2.2px),
+    radial-gradient(circle at 58% 46%, rgba(242,216,148,0.35) 0 1.6px, transparent 2.2px),
+    radial-gradient(circle at 38% 22%, rgba(242,216,148,0.4) 0 1.4px, transparent 2px),
+    radial-gradient(circle, rgba(201,162,39,0.18), transparent 62%);
+  animation: staub 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes staub {
+  from { transform: scale(1.55) rotate(-9deg); opacity: 0; }
+  30%  { opacity: 1; }
+  to   { transform: scale(0.58) rotate(5deg); opacity: 0; }
+}
+
+/* Das Logo tritt daraus hervor */
+.eroeffnung::after {
+  width: 7rem;
+  height: 7rem;
+  background: url("/images/logo.webp") center / contain no-repeat;
+  animation: logo-treten 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes logo-treten {
+  from { opacity: 0; transform: scale(1.18); filter: blur(7px); }
+  55%  { opacity: 1; }
+  to   { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+@media (min-width: 640px) {
+  .eroeffnung::after { width: 8.5rem; height: 8.5rem; }
+}
+
+/* Sofort beenden: bei Eingabe, bei zweitem Besuch, bei Ankerlink */
+html.eroeffnung-fertig .eroeffnung {
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.ohne-eroeffnung .eroeffnung {
+  display: none;
+}
+
+/* Ohne JavaScript gar nicht erst zeigen — sonst bliebe der Vorhang
+   stehen, wenn auch die CSS-Animation unterdrückt wird. */
+@media (prefers-reduced-motion: reduce) {
+  .eroeffnung { display: none; }
+}
+
+/* ---------- Zeilenweise Überschriften ----------
+   Die äußere Hülle beschneidet, die innere bewegt sich. Erst wenn die
+   Überschrift ins Bild kommt, wird „sichtbar" gesetzt und die Bewegung
+   läuft — gestaffelt über eine Verzögerung je Zeile. */
+.zeile-huelle {
+  display: block;
+  overflow: hidden;
+}
+
+[data-geteilt="ja"] .zeile {
+  display: block;
+  transform: translateY(112%);
+}
+
+[data-geteilt="ja"][data-sichtbar="ja"] .zeile {
+  animation: zeile-heben 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--verzug, 0s) + var(--zeile) * 0.09s);
+}
+
+@keyframes zeile-heben {
+  from { transform: translateY(112%); }
+  to   { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-geteilt="ja"] .zeile { transform: none; animation: none; }
+}

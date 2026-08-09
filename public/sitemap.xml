@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.webdesign-elfe.de/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.webdesign-elfe.de/webdesign/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.webdesign-elfe.de/logodesign/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.webdesign-elfe.de/referenzen/atelier/</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.webdesign-elfe.de/referenzen/verde/</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.webdesign-elfe.de/referenzen/nordwerk/</loc><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.webdesign-elfe.de/impressum/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.webdesign-elfe.de/datenschutz/</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url>
+    <loc>https://www.webdesign-elfe.de/pakete/start/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.webdesign-elfe.de/pakete/profi/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.webdesign-elfe.de/pakete/marke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
