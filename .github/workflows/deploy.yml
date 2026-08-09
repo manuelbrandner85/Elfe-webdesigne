@@ -38,6 +38,13 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
         run: npm run build
 
+      - name: Vorschau für Suchmaschinen sperren
+        # Die Meta-Angabe im HTML tut das bereits. Diese Datei ist die
+        # zweite Absicherung — sie wirkt auch für Dateien ohne HTML-Kopf.
+        run: |
+          printf 'User-agent: *\nDisallow: /\n' > out/robots.txt
+          rm -f out/sitemap.xml
+
       - name: Prüfen, ob der Bau vollständig ist
         # Lieber hier abbrechen als eine kaputte Seite veröffentlichen.
         run: |

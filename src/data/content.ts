@@ -545,24 +545,33 @@ export const pricingNote =
 
 /* ---------- Kundenstimmen ----------
    PLATZHALTER – bitte durch echte Zitate ersetzen. */
-export const testimonials = [
+/* Kundenstimmen: erst echte, dann veröffentlichen.
+
+   Hier standen drei erfundene Zitate mit „Platzhalter" als Namen — darunter
+   Sätze wie „Seit dem Relaunch kommen deutlich mehr Anfragen". Auf einer
+   Seite, die mit persönlicher Betreuung wirbt, sind erfundene Kundenurteile
+   nicht nur unglaubwürdig, sondern als irreführende Werbung angreifbar.
+
+   Bis echte Stimmen vorliegen, steht hier, was tatsächlich zugesagt wird —
+   jede Zeile aus den Paketbedingungen belegt. */
+export const testimonials: { quote: string; name: string; role: string }[] = [];
+
+export const zusagen = [
   {
-    quote:
-      "Die Zusammenarbeit war unkompliziert und persönlich. Ich musste mich um nichts kümmern und habe trotzdem bei jedem Schritt gewusst, woran wir sind.",
-    name: "Platzhalter",
-    role: "Handwerksbetrieb",
+    titel: "Feste Preise",
+    text: "Der Preis steht vor dem ersten Entwurf fest. Keine Stundenabrechnung, keine Überraschung auf der Schlussrechnung.",
   },
   {
-    quote:
-      "Endlich ein Auftritt, der zu uns passt. Seit dem Relaunch kommen deutlich mehr Anfragen direkt über die Website.",
-    name: "Platzhalter",
-    role: "Restaurant",
+    titel: "Zwei Korrekturrunden inklusive",
+    text: "Darin ändern wir gemeinsam, was Ihnen am Entwurf nicht gefällt. Weitere Wünsche kosten 60 € je Stunde — die geschätzte Zeit erfahren Sie vorher.",
   },
   {
-    quote:
-      "Sehr geduldig erklärt, fair kalkuliert und pünktlich fertig. Ich empfehle die Zusammenarbeit gerne weiter.",
-    name: "Platzhalter",
-    role: "Selbstständige",
+    titel: "Ihre Dateien gehören Ihnen",
+    text: "Bei einer Kündigung bekommen Sie alle Dateien und Hilfe beim Umzug. Die Domain läuft ohnehin immer auf Sie.",
+  },
+  {
+    titel: "Eine Ansprechpartnerin",
+    text: "Kein wechselndes Team, keine Warteschleife: Sie sprechen mit der Person, die Ihre Website auch gestaltet und umsetzt.",
   },
 ];
 

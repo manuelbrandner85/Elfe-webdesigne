@@ -36,11 +36,22 @@ export const metadata: Metadata = {
   creator: site.name,
   publisher: site.name,
   alternates: { canonical: "/", languages: { "de-DE": "/" } },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
+  /* Die Vorschau bei GitHub Pages darf nicht in den Suchindex.
+
+     Sonst konkurriert eine zweite, identische Fassung mit der echten Seite —
+     und schlimmer: Sie trägt eine kanonische Angabe auf
+     www.webdesign-elfe.de, obwohl dort womöglich noch nichts steht. Google
+     folgt dann einem Verweis ins Leere.
+
+     Erkennungsmerkmal ist der Unterpfad; er wird nur im Vorschau-Bau
+     gesetzt. */
+  robots: process.env.NEXT_PUBLIC_BASE_PATH
+    ? { index: false, follow: false, googleBot: { index: false, follow: false } }
+    : {
+        index: true,
+        follow: true,
+        googleBot: { index: true, follow: true, "max-image-preview": "large" },
+      },
   openGraph: {
     type: "website",
     locale: "de_DE",

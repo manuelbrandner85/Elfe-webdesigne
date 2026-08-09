@@ -2,8 +2,8 @@
 
 import SplitHeading from "@/components/SplitHeading";
 import { m } from "framer-motion";
-import { Quote } from "lucide-react";
-import { testimonials } from "@/data/content";
+import { Check, Quote } from "lucide-react";
+import { testimonials, zusagen } from "@/data/content";
 
 export default function Testimonials() {
   return (
@@ -17,13 +17,20 @@ export default function Testimonials() {
           className="text-center max-w-2xl mx-auto mb-14"
         >
           <p className="text-[0.78rem] tracking-[0.22em] uppercase text-gold-text mb-4">
-            Kundenstimmen
+            {testimonials.length ? "Kundenstimmen" : "Was Sie erwarten können"}
           </p>
-          <SplitHeading as="h2" text="Was Kunden sagen" className="font-serif-display text-shadow-elegant text-[clamp(2rem,3.6vw,2.9rem)] text-parchment mb-5" />
+          <SplitHeading
+            as="h2"
+            text={testimonials.length ? "Was Kunden sagen" : "Vier Zusagen, die vorher feststehen"} className="font-serif-display text-shadow-elegant text-[clamp(2rem,3.6vw,2.9rem)] text-parchment mb-5" />
           <div className="rule-gold w-24 mx-auto" />
         </m.header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        {/* Erst wenn echte Stimmen vorliegen, werden sie gezeigt. Bis dahin
+            stehen hier Zusagen, die jede für sich aus den Paketbedingungen
+            belegt sind — statt erfundener Zitate, die als irreführende
+            Werbung angreifbar wären. */}
+        {testimonials.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {testimonials.map((t, i) => (
             <m.figure
               key={i}
@@ -50,6 +57,32 @@ export default function Testimonials() {
             </m.figure>
           ))}
         </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-stretch">
+            {zusagen.map((z, i) => (
+              <m.div
+                key={z.titel}
+                initial={{ opacity: 0, y: 26 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "80px" }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className="panel panel-hover rounded-sm p-8 h-full flex flex-col text-left"
+              >
+                <Check
+                  size={20}
+                  className="text-gold/80 mb-5 shrink-0"
+                  strokeWidth={1.6}
+                />
+                <h3 className="font-serif-display text-[1.15rem] text-parchment mb-3">
+                  {z.titel}
+                </h3>
+                <p className="text-silver text-[0.95rem] leading-relaxed">
+                  {z.text}
+                </p>
+              </m.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
