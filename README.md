@@ -4,6 +4,12 @@ Website von Ulrike Elferich — Webdesign, Logodesign und laufende Betreuung
 für kleine Betriebe in Jork und Umgebung.
 
 **Live:** https://www.webdesign-elfe.de
+**Vorschau:** https://manuelbrandner85.github.io/Elfe-webdesigne/
+
+Die Vorschau wird bei jedem Push auf `main` automatisch neu gebaut und
+veröffentlicht (siehe `.github/workflows/deploy.yml`). Sie läuft unter
+einem Unterpfad; der Pfad kommt aus `NEXT_PUBLIC_BASE_PATH` und ist im
+Bau für Strato leer.
 
 ---
 
