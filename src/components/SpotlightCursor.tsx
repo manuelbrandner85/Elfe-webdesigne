@@ -28,7 +28,7 @@ export default function SpotlightCursor() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[1] hidden min-[1140px]:block"
+      className="pointer-events-none fixed inset-0 z-[var(--ebene-grund)] hidden min-[1140px]:block"
       style={{
         background: `radial-gradient(420px circle at ${pos.x}px ${pos.y}px, rgba(242,216,148,0.055), transparent 70%)`,
       }}

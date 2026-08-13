@@ -30,7 +30,7 @@ export default function StickyCta() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 70, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="min-[1140px]:hidden fixed bottom-0 left-0 right-0 z-[140] px-3 pb-3 pt-2 bg-[rgba(53,49,44,0.92)] backdrop-blur-xl border-t border-[rgba(201,162,39,0.25)]"
+          className="min-[1140px]:hidden fixed bottom-0 left-0 right-0 z-[var(--ebene-leiste)] px-3 pb-3 pt-2 bg-[rgba(53,49,44,0.92)] backdrop-blur-xl border-t border-[rgba(201,162,39,0.25)]"
         >
           <div id="sticky-cta" className="flex gap-2.5">
             <a

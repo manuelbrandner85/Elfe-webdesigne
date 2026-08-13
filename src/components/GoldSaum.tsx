@@ -126,7 +126,7 @@ export default function GoldSaum({ position }: { position: number }) {
     <canvas
       ref={flaeche}
       aria-hidden
-      className="pointer-events-none absolute inset-0 z-[6] h-full w-full"
+      className="pointer-events-none absolute inset-0 z-[var(--ebene-ueberlagerung)] h-full w-full"
     />
   );
 }

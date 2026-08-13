@@ -49,7 +49,7 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-100 transition-all duration-400 ${
+        className={`fixed top-0 left-0 right-0 z-[var(--ebene-kopfzeile)] transition-all duration-400 ${
           scrolled
             ? "bg-[rgba(53,49,44,0.86)] backdrop-blur-xl py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.4)] border-b border-[rgba(201,162,39,0.22)]"
             : "py-5.5"

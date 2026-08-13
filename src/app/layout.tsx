@@ -209,7 +209,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-stone-950 text-parchment antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[300] focus:bg-stone-900 focus:text-gold-bright focus:px-4 focus:py-2 focus:rounded"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[var(--ebene-dialog)] focus:bg-stone-900 focus:text-gold-bright focus:px-4 focus:py-2 focus:rounded"
         >
           Zum Inhalt springen
         </a>

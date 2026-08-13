@@ -55,7 +55,7 @@ export default function GoldCursor() {
     <div
       ref={ring}
       aria-hidden
-      className="pointer-events-none fixed top-0 left-0 z-[190] w-8 h-8 rounded-full border border-gold-bright/70 mix-blend-screen transition-opacity duration-300"
+      className="pointer-events-none fixed top-0 left-0 z-[var(--ebene-menue)] w-8 h-8 rounded-full border border-gold-bright/70 mix-blend-screen transition-opacity duration-300"
       style={{ willChange: "transform" }}
     />
   );

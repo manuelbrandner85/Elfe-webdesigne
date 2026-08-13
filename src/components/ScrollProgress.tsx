@@ -23,7 +23,7 @@ export default function ScrollProgress() {
   }, []);
 
   const gestaltung =
-    "fixed top-0 left-0 right-0 h-[2px] origin-left z-[150] bg-[linear-gradient(to_right,#8a6d1f,#c9a227,#f2d894)]";
+    "fixed top-0 left-0 right-0 h-[2px] origin-left z-[var(--ebene-fortschritt)] bg-[linear-gradient(to_right,#8a6d1f,#c9a227,#f2d894)]";
 
   if (ohneSkript === null) return null;
 

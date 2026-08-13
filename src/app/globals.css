@@ -1,6 +1,26 @@
 @import "tailwindcss";
 
 @theme inline {
+  /* Ebenen — Spiegel von src/lib/marken.ts. In Hunderterschritten und nach
+     Zweck benannt: „z-[--ebene-vorhang]" sagt, wofür es steht, „z-[400]"
+     nur, dass es größer ist als 300. */
+  --ebene-grund: 1;
+  --ebene-ueberlagerung: 10;
+  --ebene-kopfzeile: 100;
+  --ebene-leiste: 140;
+  --ebene-fortschritt: 150;
+  --ebene-menue: 200;
+  --ebene-dialog: 300;
+  --ebene-vorhang: 400;
+
+  /* Bewegung */
+  --dauer-mikro: 200ms;
+  --dauer-ui: 400ms;
+  --dauer-inhalt: 600ms;
+  --dauer-filmisch: 900ms;
+  --kurve-haupt: var(--kurve-haupt);
+  --kurve-weich: var(--kurve-weich);
+
   /* warm stone base — wie in der Ursprungsversion */
   --color-stone-950: #5e5a55;
   --color-stone-900: #4f4b47;
@@ -132,7 +152,7 @@ body::after {
 }
 
 .panel-hover {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: transform 0.45s var(--kurve-haupt),
     border-color 0.4s ease, box-shadow 0.45s ease;
 }
 .panel-hover:hover {
@@ -308,7 +328,7 @@ body::after {
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 260ms;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-timing-function: var(--kurve-haupt);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -328,11 +348,11 @@ body::after {
 .eroeffnung {
   position: fixed;
   inset: 0;
-  z-index: 400;
+  z-index: var(--ebene-vorhang);
   display: grid;
   place-items: center;
   background: #100e0c;
-  animation: vorhang 1320ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: vorhang 1320ms var(--kurve-haupt) forwards;
 }
 
 @keyframes vorhang {
@@ -363,7 +383,7 @@ body::after {
     radial-gradient(circle at 58% 46%, rgba(242,216,148,0.35) 0 1.6px, transparent 2.2px),
     radial-gradient(circle at 38% 22%, rgba(242,216,148,0.4) 0 1.4px, transparent 2px),
     radial-gradient(circle, rgba(201,162,39,0.18), transparent 62%);
-  animation: staub 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: staub 900ms var(--kurve-haupt) forwards;
 }
 
 @keyframes staub {
@@ -377,7 +397,7 @@ body::after {
   width: 7rem;
   height: 7rem;
   background: var(--logo-quelle) center / contain no-repeat;
-  animation: logo-treten 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: logo-treten 900ms var(--kurve-haupt) forwards;
 }
 
 @keyframes logo-treten {
@@ -396,7 +416,7 @@ html.eroeffnung-fertig .eroeffnung {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 380ms var(--kurve-haupt);
 }
 
 html.ohne-eroeffnung .eroeffnung {
@@ -424,7 +444,7 @@ html.ohne-eroeffnung .eroeffnung {
 }
 
 [data-geteilt="ja"][data-sichtbar="ja"] .zeile {
-  animation: zeile-heben 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: zeile-heben 0.9s var(--kurve-weich) forwards;
   animation-delay: calc(var(--verzug, 0s) + var(--zeile) * 0.09s);
 }
 
