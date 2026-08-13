@@ -74,6 +74,7 @@ export const services: Service[] = [
   {
     icon: "code",
     title: "Entwicklung & Technik",
+    href: "/entwicklung",
     text:
       "Sauber programmierte Websites mit kurzen Ladezeiten, sicherer Technik und einer Struktur, die Suchmaschinen zuverlässig erfassen können.",
     points: ["Schnelle Ladezeiten", "SEO-Grundlagen", "SSL & DSGVO-konform"],
@@ -81,6 +82,7 @@ export const services: Service[] = [
   {
     icon: "sun",
     title: "Pflege & Betreuung",
+    href: "/betreuung",
     text:
       "Nach dem Launch bleibe ich Ihr fester Ansprechpartner: Inhalte aktualisieren, Erweiterungen umsetzen, Technik im Blick behalten.",
     points: ["Inhaltspflege", "Updates & Backups", "Erweiterungen"],
@@ -662,6 +664,91 @@ export const subPages: SubPage[] = [
       },
     ],
     faqRefs: [0, 1, 2],
+  },
+  {
+    slug: "entwicklung",
+    title: "Entwicklung & Technik",
+    metaTitle: "Websites sauber programmiert — schnell, sicher, auffindbar",
+    metaDescription:
+      "Handgeschriebener Code statt aufgeblähter Baukasten: kurze Ladezeiten, saubere Struktur für Suchmaschinen, verschlüsselte Übertragung und tägliche Sicherung.",
+    kicker: "Leistung",
+    lead:
+      "Was unter der Oberfläche passiert, sieht niemand — bis es hakt. Eine Seite, die drei Sekunden zum Laden braucht, verliert Besucher, bevor sie den ersten Satz gelesen haben. Deshalb baue ich Websites von Hand, statt einen Baukasten zu füllen.",
+    sections: [
+      {
+        h2: "Warum die Ladezeit über Anfragen entscheidet",
+        text: "Die meisten Besucher kommen über das Handy, oft mit mittelmäßigem Empfang. Jede Sekunde Wartezeit kostet Interessenten. Baukastenseiten laden schnell mehrere Megabyte, weil sie alles mitbringen, was irgendjemand brauchen könnte. Ihre Seite lädt nur, was sie tatsächlich zeigt.",
+        points: [
+          "Bilder in modernen Formaten, auf die tatsächliche Anzeigegröße gerechnet",
+          "Schriften liegen auf dem Server, keine Nachladeschleife",
+          "Kein fremder Code, der still im Hintergrund mitläuft",
+        ],
+      },
+      {
+        h2: "Struktur, die Suchmaschinen lesen können",
+        text: "Google bewertet nicht, wie hübsch eine Seite aussieht, sondern ob es sie versteht. Überschriften in richtiger Reihenfolge, sprechende Adressen, Beschreibungen für jede Seite und maschinenlesbare Angaben zu Ihrem Betrieb sind die Grundlage dafür — nicht ein Zusatzmodul, das man später kauft.",
+        points: [
+          "Saubere Überschriftenhierarchie statt optischer Größenwahl",
+          "Eigener Titel und eigene Beschreibung je Seite",
+          "Strukturierte Daten zu Betrieb, Adresse und Leistungen",
+          "Sitemap und robots.txt von Anfang an",
+        ],
+      },
+      {
+        h2: "Sicherheit, ohne dass Sie sich kümmern müssen",
+        text: "Verschlüsselte Übertragung ist Pflicht, nicht Zusatzleistung — ohne sie warnen Browser Ihre Besucher. Dazu kommt eine tägliche Sicherung: Falls doch etwas schiefgeht, ist der Stand von gestern in Minuten wieder da.",
+        points: [
+          "SSL-Verschlüsselung eingerichtet und verlängert",
+          "Tägliche Sicherung der gesamten Seite",
+          "Störungen behebe ich innerhalb eines Werktags",
+        ],
+      },
+      {
+        h2: "Auf jedem Gerät geprüft, nicht gehofft",
+        text: "Eine Seite kann am großen Bildschirm überzeugen und auf dem Telefon auseinanderfallen. Deshalb prüfe ich jede Seite auf mehreren Bildschirmgrößen und in verschiedenen Browsern, bevor sie online geht — vom kleinen Telefon bis zum breiten Monitor.",
+      },
+    ],
+    faqRefs: [0, 1, 3],
+  },
+  {
+    slug: "betreuung",
+    title: "Pflege & Betreuung",
+    metaTitle: "Website-Betreuung ab 19 € im Monat — feste Ansprechpartnerin",
+    metaDescription:
+      "Laufende Betreuung für Ihre Website: Inhalte aktualisieren, Technik im Blick behalten, tägliche Sicherung und eine feste Ansprechpartnerin statt Warteschleife.",
+    kicker: "Leistung",
+    lead:
+      "Die meisten Websites veralten nicht, weil sie schlecht gebaut wären, sondern weil sich niemand mehr kümmert. Nach dem Livegang bleibe ich Ihre Ansprechpartnerin — für neue Öffnungszeiten genauso wie für die Technik im Hintergrund.",
+    sections: [
+      {
+        h2: "Was in der Betreuung enthalten ist",
+        text: "Der Monatsbeitrag deckt alles ab, was eine Website am Laufen hält: den Platz auf dem Server, die verschlüsselte Übertragung, die tägliche Sicherung und Ihre E-Mail-Postfächer. Dazu kommen Inhaltsänderungen im vereinbarten Umfang.",
+        points: [
+          "Hosting, SSL und E-Mail-Postfächer",
+          "Tägliche Sicherung, Wiederherstellung im Fall der Fälle",
+          "Inhaltsänderungen je nach Paket bis 30 Minuten im Monat",
+          "Erreichbarkeitsprüfung, damit Ausfälle nicht Ihnen auffallen",
+        ],
+      },
+      {
+        h2: "Eine Ansprechpartnerin, kein Ticketsystem",
+        text: "Sie schreiben oder rufen an, und es meldet sich die Person, die Ihre Website gebaut hat. Kein wechselndes Team, keine Nummer, keine Warteschleife. Das ist der Grund, warum ich nur so viele Betriebe betreue, wie ich tatsächlich betreuen kann.",
+      },
+      {
+        h2: "Auch für Seiten, die jemand anderes gebaut hat",
+        text: "Ihre Website steht bereits, aber niemand pflegt sie mehr? Ich übernehme Umzug und Betreuung — einmalig ab 90 € für die Übernahme, danach ab 19 € im Monat. Vorher sehe ich mir an, in welchem Zustand die Seite ist, und sage Ihnen ehrlich, ob sich das lohnt oder ob ein Neuaufbau der bessere Weg wäre.",
+        points: [
+          "Umzug und Einrichtung einmalig ab 90 €",
+          "Betreuung ab 19 € im Monat",
+          "Ehrliche Einschätzung vorher, ob sich die Übernahme lohnt",
+        ],
+      },
+      {
+        h2: "Sie bleiben jederzeit unabhängig",
+        text: "Der monatliche Beitrag läuft zwölf Monate, danach monatlich kündbar mit einem Monat Frist. Bei einer Kündigung bekommen Sie alle Dateien und Hilfe beim Umzug zum neuen Anbieter. Ihre Domain läuft ohnehin immer auf Sie — nicht auf mich.",
+      },
+    ],
+    faqRefs: [4, 5, 6],
   },
 ];
 
