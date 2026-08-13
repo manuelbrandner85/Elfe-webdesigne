@@ -177,7 +177,7 @@ export default function DemoConceptCard({
                       wandernden Strich ein unverhältnismäßiger Preis. */}
                   <span
                     aria-hidden
-                    className="absolute -bottom-[3px] left-0 right-0 h-px origin-left transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                    className="absolute -bottom-[3px] left-0 right-0 h-px origin-left transition-transform duration-500 ease-[var(--kurve-haupt)]"
                     style={{
                       background: t.accent,
                       transform:
