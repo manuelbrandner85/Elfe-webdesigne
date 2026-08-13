@@ -72,7 +72,7 @@ export default function Footer() {
             { href: "#kontakt", label: "Kontakt" },
             { href: "/impressum", label: "Impressum" },
             { href: "/datenschutz", label: "Datenschutz" },
-            { href: "/agb", label: "AGB" },
+            { href: "/agb/", label: "AGB" },
           ].map((l) => (
             <a
               key={l.href}

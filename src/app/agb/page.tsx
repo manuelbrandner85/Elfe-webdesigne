@@ -280,9 +280,23 @@ export default function AGB() {
           </p>
         </Absatz>
 
-        <p className="text-[0.85rem] text-silver/70 border-t border-line pt-6">
-          Stand: {heute}
-        </p>
+        <div className="border-t border-line pt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <p className="text-[0.85rem] text-silver/70 mr-auto">Stand: {heute}</p>
+          {/* Rückweg zu den Paketen: Wer die Bedingungen gelesen hat, will
+              meist wissen, worauf sie sich beziehen. */}
+          <Link
+            href="/#preise"
+            className="text-[0.8rem] tracking-[0.12em] uppercase text-gold-text hover:text-parchment transition-colors"
+          >
+            Pakete im Überblick
+          </Link>
+          <Link
+            href="/#kontakt"
+            className="text-[0.8rem] tracking-[0.12em] uppercase text-gold-text hover:text-parchment transition-colors"
+          >
+            Frage stellen
+          </Link>
+        </div>
       </div>
     </main>
   );

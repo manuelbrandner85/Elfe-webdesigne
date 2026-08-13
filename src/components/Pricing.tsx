@@ -102,7 +102,17 @@ export default function Pricing() {
         </div>
 
         <p className="text-center text-[0.78rem] text-silver max-w-2xl mx-auto mt-10 leading-relaxed">
-          {pricingNote}
+          {pricingNote}{" "}
+          {/* Der Verweis steht bewusst direkt bei den Preisen: Laufzeit,
+              Zahlungsweise und Kündigung gehören zur Kaufentscheidung, nicht
+              ins Kleingedruckte am Seitenende. */}
+          <a
+            href="/agb"
+            className="text-gold-text underline underline-offset-4 hover:text-parchment transition-colors"
+          >
+            Laufzeit, Zahlung und Kündigung im Detail
+          </a>
+          .
         </p>
 
         {/* Zusatzleistung: Einrichtung beim Hosting-Anbieter */}

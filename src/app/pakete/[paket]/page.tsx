@@ -123,6 +123,21 @@ export default async function PaketSeite({
           ))}
         </dl>
 
+        {/* Die vier Punkte oben sind die Kurzfassung. Wer den vollen
+            Wortlaut lesen will, soll ihn nicht suchen müssen — und beide
+            Texte stammen ohnehin aus derselben Quelle, können also nicht
+            auseinanderlaufen. */}
+        <p className="mt-6 text-[0.92rem] text-silver">
+          Der vollständige Wortlaut steht in den{" "}
+          <Link
+            href="/agb"
+            className="text-gold-text underline underline-offset-4 hover:text-parchment transition-colors"
+          >
+            Allgemeinen Geschäftsbedingungen
+          </Link>
+          .
+        </p>
+
         <h2 className={ueberschrift}>Fragen zu diesem Paket</h2>
         <div className="grid gap-5">
           {d.fragen.map((f) => (
