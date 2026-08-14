@@ -214,6 +214,31 @@ export default function Atmosphaere() {
     });
     if (!gl) return;
 
+    /* Zeichnet die Grafikkarte — oder rechnet die CPU?
+
+       Chrome fällt auf einen Software-Rasterisierer zurück, wenn keine
+       Grafikkarte da ist, der Treiber gesperrt wurde, das Gerät im
+       Sparmodus läuft oder die Seite über eine Fernsitzung angezeigt
+       wird. WebGL funktioniert dann weiterhin — es ist nur zwei
+       Größenordnungen langsamer.
+
+       Gemessen in genau so einer Umgebung: 483 Millisekunden je Bild mit
+       dieser Ebene gegen 33 ohne. Zwei Bilder je Sekunde. Ein
+       bildschirmfüllender Rauschshader ist für einen Software-Renderer
+       der denkbar schlechteste Fall, und kein Nachregeln der Auflösung
+       holt einen Faktor 15 wieder herein.
+
+       Deshalb wird hier gar nicht erst begonnen. Die Seite behält ihre
+       CSS-Ebenen und sieht ruhiger aus — aber sie läuft. */
+    const kennung = gl.getExtension("WEBGL_debug_renderer_info");
+    const zeichner = kennung
+      ? String(gl.getParameter(kennung.UNMASKED_RENDERER_WEBGL) || "")
+      : "";
+    if (/swiftshader|llvmpipe|software|basic render|microsoft basic/i.test(zeichner)) {
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      return;
+    }
+
     const uebersetzen = (art: number, quelle: string) => {
       const s = gl.createShader(art)!;
       gl.shaderSource(s, quelle);
@@ -311,13 +336,35 @@ export default function Atmosphaere() {
     let staerke = 0;
 
     /* Wächter: Läuft es dauerhaft zu langsam, sinkt erst die Auflösung
-       und dann hört die Ebene auf. Gemessen wird der gleitende Mittelwert
-       über zwei Sekunden — einzelne Ausreißer sind normal und dürfen
-       nicht dazu führen, dass die Atmosphäre flackernd abschaltet. */
+       und dann hört die Ebene auf.
+
+       Gemessen wird über die UHR, nicht über die Zahl der Bilder — und
+       das ist der ganze Punkt. Vorher stand hier ein Zähler: entscheide
+       nach 48 Bildern. Bei 24 Bildern je Sekunde sind das zwei Sekunden,
+       wie im alten Kommentar behauptet. Bei zwei Bildern je Sekunde sind
+       es vierundzwanzig. Der Wächter reagierte also umso später, je
+       dringender er gebraucht wurde — genau verkehrt herum. Auf einem
+       langsamen Gerät griff er erst, wenn der Besucher längst weg war.
+
+       Jetzt fällt alle 900 Millisekunden eine Entscheidung, unabhängig
+       davon, wie viele Bilder in dieser Zeit zustande kamen. Dazu eine
+       Notbremse: Ein einzelnes Bild über 300 Millisekunden in der
+       Anlaufphase beendet die Ebene sofort. Ein Gerät, das dafür so
+       lange braucht, wird es auch bei halber Auflösung nicht schaffen. */
+    const FENSTER_MS = 900;
+    const NOTBREMSE_MS = 300;
     let summe = 0;
     let zaehler = 0;
-    let gedrosselt = false;
+    let fensterStart = 0;
+    let stufe = 0;
     let aus = false;
+
+    const abschalten = () => {
+      aus = true;
+      cancelAnimationFrame(raf);
+      cv.style.opacity = "0";
+      document.documentElement.classList.remove("mit-atmosphaere");
+    };
 
     const bild = (jetzt: number) => {
       raf = requestAnimationFrame(bild);
@@ -327,24 +374,40 @@ export default function Atmosphaere() {
 
       if (document.hidden) return;
 
+      if (!fensterStart) fensterStart = jetzt;
+
+      /* Notbremse in der Anlaufphase: einmal reicht als Beleg. */
+      if (jetzt - start < 4000 && abstand > NOTBREMSE_MS) {
+        abschalten();
+        return;
+      }
+
       summe += abstand;
       zaehler++;
-      if (zaehler >= ZIEL_BILDER * 2) {
+      if (jetzt - fensterStart >= FENSTER_MS) {
         const mittel = summe / zaehler;
         summe = 0;
         zaehler = 0;
+        fensterStart = jetzt;
         if (mittel > ZIEL_ABSTAND * 1.9) {
-          if (!gedrosselt) {
-            gedrosselt = true;
-            skala = 0.38;
+          stufe++;
+          if (stufe === 1) {
+            skala = 0.32;
+            messen();
+          } else if (stufe === 2) {
+            skala = 0.22;
             messen();
           } else if (!aus) {
-            aus = true;
-            cancelAnimationFrame(raf);
-            cv.style.opacity = "0";
-            document.documentElement.classList.remove("mit-atmosphaere");
+            abschalten();
             return;
           }
+        } else if (mittel < ZIEL_ABSTAND * 1.1 && stufe > 0) {
+          /* Erholt sich das Gerät wieder — etwa weil ein Video zu Ende
+             ist —, darf die Auflösung einen Schritt zurück. Nur einen:
+             Sonst pendelt die Ebene sichtbar zwischen zwei Schärfen. */
+          stufe--;
+          skala = stufe === 0 ? 0.45 : 0.32;
+          messen();
         }
       }
 
