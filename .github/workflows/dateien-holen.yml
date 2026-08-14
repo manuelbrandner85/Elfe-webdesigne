@@ -112,6 +112,30 @@ jobs:
             }
           })()"
 
+      # Video wird ebenfalls auf dem Laeufer verkleinert. Was Veo
+      # ausliefert, sind zweistellige Megabyte; auf der Seite laeuft es
+      # hinter einem Schleier und unter Text. Zwei Fassungen, weil kein
+      # Format ueberall das guenstigere ist: VP9 ist meist kleiner,
+      # H.264 laeuft ueberall.
+      #
+      # Ohne Ton: Ein Hintergrundvideo, das ungefragt Ton mitbringt,
+      # waere ein Fehler - und die Tonspur kostet Bytes fuer nichts.
+      - name: Video verkleinern
+        if: always()
+        run: |
+          shopt -s nullglob
+          for f in werkzeug/roh/*.mp4; do
+            n=$(basename "$f" .mp4)
+            mkdir -p public/videos
+            ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" \
+              -c:v libx264 -crf 30 -preset slow -movflags +faststart \
+              "public/videos/$n.mp4"
+            ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" \
+              -c:v libvpx-vp9 -crf 40 -b:v 0 -row-mt 1 \
+              "public/videos/$n.webm"
+            echo "$n: $(du -h public/videos/$n.mp4 | cut -f1) mp4, $(du -h public/videos/$n.webm | cut -f1) webm"
+          done
+
       - name: Festschreiben
         run: |
           git config user.name "github-actions[bot]"
