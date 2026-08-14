@@ -42,6 +42,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm install sharp --no-save
 
       # Der Schritt bricht bewusst NICHT ab, sondern schreibt einen
       # Bericht ins Repository. Grund: Die Laufprotokolle liegen auf
@@ -75,6 +78,39 @@ jobs:
           print(bericht)
           pathlib.Path("werkzeug/holen-bericht.txt").write_text(bericht + "\n", encoding="utf-8")
           PY
+
+      # Umgewandelt wird auf dem Laeufer, nicht hier.
+      #
+      # Grund: werkzeug/roh/ steht auf der Ignorierliste - 72 MB PNG
+      # gehoeren nicht in die Historie. Genau deshalb hat der Laeufer beim
+      # ersten Anlauf zwar alles heruntergeladen, aber nichts
+      # festgeschrieben: `git add` respektiert die Ignorierliste. Das
+      # Rohmaterial existierte nur fuer die Dauer des Laufs.
+      #
+      # Also wandelt der Laeufer selbst um. Was zurueckkommt, sind die
+      # rund 40 KB grossen Auslieferungsdateien - und die duerfen ins
+      # Repository.
+      - name: Umwandeln
+        if: always()
+        run: |
+          node -e "
+          const sharp=require('sharp'), fs=require('fs');
+          const q='werkzeug/roh';
+          if(!fs.existsSync(q)) process.exit(0);
+          fs.mkdirSync('public/images/tiles',{recursive:true});
+          (async()=>{
+            for (const d of fs.readdirSync(q).filter(f=>f.endsWith('.png'))) {
+              const n=d.replace(/\.png\$/,'');
+              for (const b of [640,360]) {
+                const k=sharp(q+'/'+d)
+                  .resize(b, Math.round(b*3/4), {fit:'cover', kernel:'lanczos3'})
+                  .sharpen({sigma:0.6,m1:0.4,m2:0.9});
+                await k.clone().avif({quality:56,effort:6}).toFile('public/images/tiles/foto-'+n+'-'+b+'.avif');
+                await k.clone().webp({quality:80,effort:6}).toFile('public/images/tiles/foto-'+n+'-'+b+'.webp');
+              }
+              console.log('umgewandelt', n);
+            }
+          })()"
 
       - name: Festschreiben
         run: |
