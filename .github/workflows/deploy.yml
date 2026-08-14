@@ -34,13 +34,16 @@ jobs:
 
       - name: Bauen
         env:
-          # Pages liefert Projektseiten unter /<Repository>/ aus
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          # Sobald eine eigene Domain eingetragen ist (public/CNAME), läuft
+          # die Seite in der Wurzel — der Unterpfad entfällt und muss auch
+          # entfallen, sonst zeigen alle Bilder ins Leere.
+          NEXT_PUBLIC_BASE_PATH: ${{ hashFiles('public/CNAME') != '' && '' || format('/{0}', github.event.repository.name) }}
         run: npm run build
 
       - name: Vorschau für Suchmaschinen sperren
-        # Die Meta-Angabe im HTML tut das bereits. Diese Datei ist die
-        # zweite Absicherung — sie wirkt auch für Dateien ohne HTML-Kopf.
+        # Nur solange die Seite unter der github.io-Adresse läuft. Sobald
+        # eine eigene Domain eingetragen ist, soll Google sie finden.
+        if: hashFiles('public/CNAME') == ''
         run: |
           printf 'User-agent: *\nDisallow: /\n' > out/robots.txt
           rm -f out/sitemap.xml
