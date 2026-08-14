@@ -279,7 +279,7 @@ export const demoConcepts: DemoConcept[] = [
       ],
     },
     showcase: "gallery",
-    media: { poster: medien("/images/concept-atelier.webp"), video: medien("/videos/concept-atelier.mp4"), videoWebm: medien("/videos/concept-atelier.webm") },
+    media: { poster: medien("/images/poster-atelier.webp"), video: medien("/videos/konzept-atelier.mp4"), videoWebm: medien("/videos/konzept-atelier.webm") },
     tiles: [medien("/images/tiles/atelier-1-640.webp"), medien("/images/tiles/atelier-2-640.webp"), medien("/images/tiles/atelier-3-640.webp"), medien("/images/tiles/atelier-4-640.webp"), medien("/images/tiles/atelier-5-640.webp"), medien("/images/tiles/atelier-6-640.webp")],
     galerie: [medien("/images/tiles/foto-atelier-lobby-640.webp"), medien("/images/tiles/foto-atelier-privathaus-640.webp"), medien("/images/tiles/foto-atelier-restaurant-640.webp")],
     screens: [
@@ -344,7 +344,7 @@ export const demoConcepts: DemoConcept[] = [
       ],
     },
     showcase: "menu",
-    media: { poster: medien("/images/concept-verde.webp"), video: medien("/videos/concept-verde.mp4"), videoWebm: medien("/videos/concept-verde.webm") },
+    media: { poster: medien("/images/poster-verde.webp"), video: medien("/videos/konzept-verde.mp4"), videoWebm: medien("/videos/konzept-verde.webm") },
     tiles: [medien("/images/tiles/verde-1-640.webp"), medien("/images/tiles/verde-2-640.webp"), medien("/images/tiles/verde-3-640.webp"), medien("/images/tiles/verde-4-640.webp"), medien("/images/tiles/verde-5-640.webp"), medien("/images/tiles/verde-6-640.webp")],
     galerie: [medien("/images/tiles/foto-verde-antipasti-640.webp"), medien("/images/tiles/foto-verde-pasta-640.webp"), medien("/images/tiles/foto-verde-dolci-640.webp")],
     screens: [
@@ -401,7 +401,7 @@ export const demoConcepts: DemoConcept[] = [
       ],
     },
     showcase: "stats",
-    media: { poster: medien("/images/concept-nordwerk.webp"), video: medien("/videos/concept-nordwerk.mp4"), videoWebm: medien("/videos/concept-nordwerk.webm") },
+    media: { poster: medien("/images/poster-nordwerk.webp"), video: medien("/videos/konzept-nordwerk.mp4"), videoWebm: medien("/videos/konzept-nordwerk.webm") },
     tiles: [medien("/images/tiles/nordwerk-1-640.webp"), medien("/images/tiles/nordwerk-2-640.webp"), medien("/images/tiles/nordwerk-3-640.webp"), medien("/images/tiles/nordwerk-4-640.webp"), medien("/images/tiles/nordwerk-5-640.webp"), medien("/images/tiles/nordwerk-6-640.webp")],
     galerie: [medien("/images/tiles/foto-nordwerk-dachstuhl-640.webp"), medien("/images/tiles/foto-nordwerk-innenausbau-640.webp"), medien("/images/tiles/foto-nordwerk-fachwerk-640.webp")],
     screens: [

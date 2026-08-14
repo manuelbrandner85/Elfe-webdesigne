@@ -44,8 +44,8 @@ export default function CinemaBanner() {
           aria-hidden
           className="w-full h-full object-cover"
         >
-          <source src={medien("/videos/concept-atelier.webm")} type="video/webm" />
-          <source src={medien("/videos/concept-atelier.mp4")} type="video/mp4" />
+          <source src={medien("/videos/konzept-atelier.webm")} type="video/webm" />
+          <source src={medien("/videos/konzept-atelier.mp4")} type="video/mp4" />
         </video>
       </m.div>
 
