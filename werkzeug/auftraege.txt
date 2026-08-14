@@ -26,3 +26,5 @@
 2026-08-14 22:11:09  video-concept-verde-neu  54324b976994173c4e80d6068bccd037
 2026-08-14 22:14:36  video-concept-atelier-neu  9f82c78bcd3e8d6b848484f0463f4185
 2026-08-14 22:29:09  video-konzept-nordwerk  5556ce209a8ede5090faddcc53218d1d
+2026-08-14 22:40:10  kling-konzept-verde  d76cb19cae1450b28c446ab1a77a4796
+2026-08-14 22:42:46  kling-konzept-atelier  000fd579e629dd97fdd0f9a1ca506bb9
