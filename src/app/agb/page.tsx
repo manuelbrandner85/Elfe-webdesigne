@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Allgemeine Geschäftsbedingungen",
   description:
     "Die Bedingungen für Gestaltung, Umsetzung und Betreuung von Websites durch Webdesign Elfe — in verständlicher Sprache.",
-  alternates: { canonical: "https://www.webdesign-elfe.de/agb/" },
+  alternates: { canonical: "https://webdesign-elfe.de/agb/" },
 };
 
 function Absatz({

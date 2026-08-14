@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 
      Sonst konkurriert eine zweite, identische Fassung mit der echten Seite —
      und schlimmer: Sie trägt eine kanonische Angabe auf
-     www.webdesign-elfe.de, obwohl dort womöglich noch nichts steht. Google
+     webdesign-elfe.de, obwohl dort womöglich noch nichts steht. Google
      folgt dann einem Verweis ins Leere.
 
      Erkennungsmerkmal ist der Unterpfad; er wird nur im Vorschau-Bau
