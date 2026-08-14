@@ -124,7 +124,7 @@ def erzeugen(konzept, name, prompt, aufloesung="2K"):
 
     eingabe = {
         "prompt": prompt + " " + STIL,
-        "image_input": ([] if name == "restaurant"
+        "image_input": ([] if konzept == "plan" or name == "restaurant"
                         else [f"{ROH}/public/images/concept-{konzept}.webp"]),
         "aspect_ratio": "4:3",
         "resolution": aufloesung,
@@ -156,7 +156,27 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--nur", default=None)
     p.add_argument("--ohne", default="", help="Namen, die uebersprungen werden")
+    p.add_argument("--plan", default=None, help="JSON-Datei mit Auftraegen")
     args = p.parse_args()
+
+    if args.plan:
+        import json as _j
+        plan = _j.loads(pathlib.Path(args.plan).read_text(encoding="utf-8"))
+        dateien = []
+        for a in plan["auftraege"]:
+            if args.nur and not a["name"].startswith(args.nur):
+                continue
+            if a["name"] in args.ohne.split(","):
+                continue
+            u = erzeugen("plan", a["name"], a["prompt"] + " " + plan["stil"], plan["aufloesung"])
+            if u:
+                dateien.append({"url": u, "ziel": f"werkzeug/roh/{a['name']}.png"})
+                print(f"  -> {u}", flush=True)
+        ziel = HIER / "holen-eingabe.json"
+        ziel.write_text(_j.dumps(dateien, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"\n{len(dateien)} Adressen in {ziel}")
+        print(f"Guthaben am Ende: {guthaben():.1f}")
+        raise SystemExit
 
     dateien = []
     for konzept, liste in AUFTRAEGE.items():

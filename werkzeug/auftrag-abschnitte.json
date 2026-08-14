@@ -1,0 +1,49 @@
+{
+ "modell": "nano-banana-2",
+ "aufloesung": "2K",
+ "verhaeltnis": "4:3",
+ "mindestguthaben": 60,
+ "stil": "Warm, cinematic, muted stone-and-gold palette matching a dark elegant website: deep warm greys, aged brass, soft directional daylight, shallow depth of field, fine film grain, 35mm full-frame look. Calm and empty of clutter. No text, no lettering, no signage, no logos, no watermarks, no visible faces.",
+ "auftraege": [
+  {
+   "name": "leistung-logo",
+   "prompt": "A designer's desk from above: pencil logo sketches on tracing paper, a fountain pen, a brass ruler, colour swatch cards in gold and stone tones, warm window light from the left."
+  },
+  {
+   "name": "leistung-webdesign",
+   "prompt": "A large monitor on a quiet desk showing an abstract dark website layout as soft blocks of light, a notebook with a hand-drawn wireframe beside it, warm evening lamp light."
+  },
+  {
+   "name": "leistung-technik",
+   "prompt": "A close, shallow view of a laptop screen at night showing softly blurred coloured code lines, a brass desk lamp casting warm light, everything else falling into darkness."
+  },
+  {
+   "name": "leistung-betreuung",
+   "prompt": "A tidy workspace in morning light: an open laptop showing a calm dashboard of soft bars, a cup of coffee, a small potted plant, a notebook with a checklist, warm daylight from a window."
+  },
+  {
+   "name": "wen-handwerk",
+   "prompt": "A carpenter's hands measuring a fresh oak beam with a folding rule in a bright workshop, wood shavings on the bench, daylight from a high window."
+  },
+  {
+   "name": "wen-selbststaendig",
+   "prompt": "A freelancer's small home studio at dusk: a wooden desk, a laptop, a lamp, shelves with books and folders, a window with warm city light beyond."
+  },
+  {
+   "name": "wen-gastro",
+   "prompt": "A restaurant table set for service in warm afternoon light: linen cloth, folded napkin, wine glass, a small vase, the dining room blurred behind."
+  },
+  {
+   "name": "wen-gruendung",
+   "prompt": "A single desk in an almost empty new office: a laptop, a notebook, a coffee cup, an unpacked cardboard box beside it, bright morning light through large windows."
+  },
+  {
+   "name": "wen-praxis",
+   "prompt": "A calm consulting room: two upholstered chairs facing each other across a low wooden table, a plant, soft daylight through a linen curtain."
+  },
+  {
+   "name": "wen-verein",
+   "prompt": "A village hall interior before an event: rows of wooden chairs, a small stage, bunting, warm late-afternoon light through tall windows."
+  }
+ ]
+}
