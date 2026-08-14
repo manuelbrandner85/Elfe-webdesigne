@@ -124,16 +124,12 @@ jobs:
         if: always()
         run: |
           shopt -s nullglob
+          mkdir -p public/videos
           for f in werkzeug/roh/*.mp4; do
             n=$(basename "$f" .mp4)
-            mkdir -p public/videos
-            ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" \
-              -c:v libx264 -crf 30 -preset slow -movflags +faststart \
-              "public/videos/$n.mp4"
-            ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" \
-              -c:v libvpx-vp9 -crf 40 -b:v 0 -row-mt 1 \
-              "public/videos/$n.webm"
-            echo "$n: $(du -h public/videos/$n.mp4 | cut -f1) mp4, $(du -h public/videos/$n.webm | cut -f1) webm"
+            ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" -c:v libx264 -crf 30 -preset slow -movflags +faststart "public/videos/$n.mp4"
+            ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" -c:v libvpx-vp9 -crf 40 -b:v 0 -row-mt 1 "public/videos/$n.webm" || echo "VP9 nicht verfuegbar, nur H.264"
+            ls -la "public/videos/$n."* || true
           done
 
       - name: Festschreiben
