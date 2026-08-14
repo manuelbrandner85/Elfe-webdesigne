@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { paketBedingungen, pricing } from "@/data/content";
+import { paketBedingungen, pricing, site } from "@/data/content";
 
 /* Allgemeine Geschäftsbedingungen.
 
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Allgemeine Geschäftsbedingungen",
   description:
     "Die Bedingungen für Gestaltung, Umsetzung und Betreuung von Websites durch Webdesign Elfe — in verständlicher Sprache.",
-  alternates: { canonical: "https://webdesign-elfe.de/agb/" },
+  alternates: { canonical: `${site.url}/agb/` },
 };
 
 function Absatz({

@@ -1,7 +1,7 @@
 import { medien } from "@/lib/pfad";
 export const site = {
   name: "Webdesign Elfe",
-  url: "https://webdesign-elfe.de",
+  url: "https://www.webdesign-elfe.de",
   title: "Webdesign Elfe – Webdesign & Logodesign für kleine Unternehmen",
   description:
     "Individuelles Webdesign, Logodesign und Websitebetreuung aus einer Hand. Für Handwerksbetriebe, Selbstständige und Existenzgründer – persönlich betreut, mobiloptimiert und suchmaschinenfreundlich.",
