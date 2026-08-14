@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Nordwerk Handwerk – Startseite</title>
+<style>
+  /* Der alte Auftritt von „Nordwerk Handwerk“, Stand etwa 2011.
+
+     Nichts hier ist Karikatur um der Karikatur willen: feste Breite von
+     760 Pixeln auf einem breiten Bildschirm, Fließtext im Blocksatz bei
+     11 Pixeln, Bilder mit falschem Seitenverhältnis und schwarzem Rahmen,
+     Besucherzähler, Gästebuch. Genau daran erkennt der Betrachter den
+     Zustand wieder, in dem seine eigene Seite steckt. */
+
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 100%; min-height: 100%;
+    font-family: "Liberation Sans", Arial, Helvetica, sans-serif;
+    font-size: 11px; color: #1c1c1c;
+    background-color: #56687f;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(0deg, rgba(0,0,0,.05) 0 1px, transparent 1px 4px),
+      linear-gradient(180deg, #64768d, #46566b);
+  }
+  a { color: #0000ee; }
+
+  .seite {
+    width: 760px; margin: 8px auto 0; background: #fff;
+    border: 2px solid #17325c;
+  }
+
+  /* Kopf */
+  .kopf {
+    height: 74px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #3a5f96 0%, #2a4a7a 55%, #1f3860 100%);
+    border-bottom: 3px solid #c9c9c0;
+  }
+  .kopf .name {
+    position: absolute; left: 12px; top: 16px;
+    font-family: "Liberation Sans", Arial, sans-serif;
+    font-weight: bold; font-size: 25px; color: #fff;
+    letter-spacing: .5px; text-shadow: 1px 1px 0 #12233d;
+    transform: scaleX(1.22); transform-origin: left center;   /* verzerrtes Logo */
+  }
+  .kopf .claim {
+    position: absolute; left: 13px; top: 47px; font-size: 10px; color: #cfd9e8;
+    font-style: italic;
+  }
+  .kopf .tel {
+    position: absolute; right: 10px; top: 20px; text-align: right;
+    color: #fff; font-size: 10px; line-height: 1.5;
+  }
+  .kopf .tel b { font-size: 13px; }
+
+  /* Navigation */
+  .nav {
+    background: linear-gradient(180deg, #4d70aa, #35558a);
+    border-bottom: 1px solid #17325c; padding: 4px 8px;
+  }
+  .nav a {
+    color: #fff; font-size: 11px; text-decoration: underline; margin: 0 3px;
+  }
+  .nav span { color: #b9c8e0; }
+
+  .raster { display: table; width: 100%; border-collapse: collapse; }
+  .haupt { display: table-cell; width: 545px; vertical-align: top; padding: 10px 12px 14px; }
+  .rand  { display: table-cell; vertical-align: top; padding: 10px 10px 14px;
+           background: #eceae2; border-left: 1px solid #c3c0b5; }
+
+  h1 {
+    margin: 2px 0 8px; font-size: 17px; color: #2a4a7a;
+    text-decoration: underline; font-weight: bold;
+  }
+  .haupt p { margin: 0 0 8px; line-height: 1.45; text-align: justify; }
+
+  .foto {
+    float: right; margin: 0 0 6px 10px;
+    width: 168px; height: 148px;               /* absichtlich falsches Verhältnis */
+    border: 1px solid #000; padding: 2px; background: #fff;
+  }
+  .foto img { width: 100%; height: 100%; display: block; }
+
+  .neu { color: #cc0000; font-weight: bold; font-style: italic; }
+
+  .miniatur { margin-top: 4px; }
+  .miniatur img {
+    width: 88px; height: 66px; border: 1px solid #000; margin-right: 5px;
+    display: inline-block; vertical-align: top;
+  }
+  .mehr { display: block; margin-top: 7px; font-size: 11px; }
+
+  /* Randspalte */
+  .rand h2 {
+    margin: 0 0 6px; font-size: 12px; color: #2a4a7a;
+    border-bottom: 1px solid #b7b4a8; padding-bottom: 3px;
+  }
+  .rand p { margin: 0 0 9px; line-height: 1.5; font-size: 10px; }
+  .zaehler {
+    font-family: "Liberation Mono", monospace; font-size: 15px; letter-spacing: 2px;
+    background: #12160f; color: #7cf07c; padding: 3px 5px; display: inline-block;
+    border: 1px solid #000;
+  }
+  .hinweis { font-size: 9px; color: #6a6a62; line-height: 1.45; }
+
+  .leistungen { clear: both; margin-top: 12px; border-top: 1px solid #c3c0b5; padding-top: 9px; }
+  .leistungen h2 { margin: 0 0 6px; font-size: 13px; color: #2a4a7a; text-decoration: underline; }
+  .spalten { display: table; width: 100%; }
+  .spalte { display: table-cell; width: 33%; vertical-align: top; padding-right: 10px; }
+  .spalte h3 { margin: 0 0 3px; font-size: 11px; color: #17325c; }
+  .spalte ul { margin: 0; padding-left: 15px; }
+  .spalte li { line-height: 1.5; }
+  .anfahrt { margin-top: 9px; font-size: 10px; color: #33332e; }
+  .anfahrt b { color: #17325c; }
+
+  .referenzen { clear: both; margin-top: 12px; border-top: 1px solid #c3c0b5; padding-top: 9px; }
+  .referenzen h2 { margin: 0 0 6px; font-size: 13px; color: #2a4a7a; text-decoration: underline; }
+  .referenzen table { border-collapse: collapse; }
+  .referenzen td { padding: 0 6px 8px 0; text-align: center; font-size: 9px; color: #55524a; }
+  .referenzen img { width: 108px; height: 81px; border: 1px solid #000; display: block; margin-bottom: 2px; }
+  .neuigkeiten { margin-top: 10px; border-top: 1px solid #c3c0b5; padding-top: 8px; }
+  .neuigkeiten h2 { margin: 0 0 5px; font-size: 13px; color: #2a4a7a; text-decoration: underline; }
+  .neuigkeiten dl { margin: 0; }
+  .neuigkeiten dt { font-weight: bold; color: #17325c; font-size: 10px; margin-top: 5px; }
+  .neuigkeiten dd { margin: 0; font-size: 10px; line-height: 1.45; }
+
+  .kontakt { margin-top: 10px; border-top: 1px solid #c3c0b5; padding-top: 8px; }
+  .kontakt h2 { margin: 0 0 6px; font-size: 13px; color: #2a4a7a; text-decoration: underline; }
+  .kontakt table { border-collapse: collapse; width: 100%; }
+  .kontakt td { vertical-align: top; padding: 0 8px 0 0; font-size: 10px; line-height: 1.55; }
+  .karte {
+    width: 232px; height: 138px; border: 1px solid #000; padding: 2px; background: #fff;
+  }
+  .karte div {
+    width: 100%; height: 100%;
+    background:
+      linear-gradient(90deg, #d8d4c6 0 3px, transparent 3px 27px),
+      linear-gradient(0deg, #d8d4c6 0 3px, transparent 3px 23px),
+      linear-gradient(58deg, transparent 46%, #e8c98a 46% 52%, transparent 52%),
+      #eeeee6;
+  }
+  .karte + span { display: block; font-size: 9px; color: #6a6a62; margin-top: 2px; }
+
+  .partner {
+    clear: both; border-top: 1px solid #c3c0b5; background: #f2f1ec;
+    padding: 7px 12px; text-align: center;
+  }
+  .partner .marke {
+    display: inline-block; border: 1px solid #b7b4a8; background: #fff;
+    color: #55524a; font-size: 9px; padding: 3px 7px; margin: 0 3px;
+  }
+  .partner .gueltig { background: #1f3860; color: #fff; border-color: #17325c; }
+
+  .fuss {
+    clear: both; background: #2a4a7a; color: #dbe3ef; font-size: 9px;
+    text-align: center; padding: 5px 0;
+  }
+  .fuss a { color: #dbe3ef; }
+</style>
+</head>
+<body>
+  <div class="seite">
+    <div class="kopf">
+      <div class="name">NORDWERK HANDWERK GMBH</div>
+      <div class="claim">Zimmerei &middot; Innenausbau &middot; Sanierung</div>
+      <div class="tel">
+        Tel. <b>0451 / 88 24 19</b><br>
+        Mo&ndash;Fr 7.00&ndash;16.30 Uhr
+      </div>
+    </div>
+
+    <div class="nav">
+      <a href="#">Startseite</a><span>|</span>
+      <a href="#">&Uuml;ber uns</a><span>|</span>
+      <a href="#">Leistungen</a><span>|</span>
+      <a href="#">Galerie</a><span>|</span>
+      <a href="#">Anfahrt</a><span>|</span>
+      <a href="#">G&auml;stebuch</a><span>|</span>
+      <a href="#">Kontakt</a><span>|</span>
+      <a href="#">Impressum</a>
+    </div>
+
+    <div class="raster">
+      <div class="haupt">
+        <h1>Herzlich Willkommen auf unserer Homepage!</h1>
+
+        <div class="foto"><img src="fotos/hero-alt.jpg" alt=""></div>
+
+        <p>
+          Sch&ouml;n, dass Sie den Weg auf unsere Internetpr&auml;senz gefunden
+          haben. Seit nunmehr &uuml;ber 40 Jahren sind wir Ihr zuverl&auml;ssiger
+          Partner rund um die Bereiche Zimmerei, Innenausbau und Sanierung. Unser
+          eingespieltes Team aus 12 Mitarbeitern steht Ihnen mit Rat und Tat zur
+          Seite &ndash; termingerecht, sauber und zu fairen Preisen.
+        </p>
+        <p>
+          Bitte beachten Sie unsere Betriebsferien vom 23.12. bis 06.01.
+          Anfragen nehmen wir in dieser Zeit gerne per E-Mail entgegen unter
+          info(at)nordwerk-handwerk.de &ndash; wir melden uns dann umgehend
+          bei Ihnen zur&uuml;ck.
+        </p>
+        <p class="neu">NEU: Unsere Galerie wurde aktualisiert!</p>
+
+        <div class="miniatur">
+          <img src="fotos/g1-alt.jpg" alt="">
+          <img src="fotos/g2-alt.jpg" alt="">
+          <img src="fotos/g3-alt.jpg" alt="">
+        </div>
+        <a class="mehr" href="#">&raquo; Hier klicken f&uuml;r weitere Informationen</a>
+
+        <div class="leistungen">
+          <h2>Unsere Leistungen im &Uuml;berblick</h2>
+          <div class="spalten">
+            <div class="spalte">
+              <h3>Zimmerei</h3>
+              <ul>
+                <li>Dachst&uuml;hle</li>
+                <li>Carports</li>
+                <li>Holzbau</li>
+              </ul>
+            </div>
+            <div class="spalte">
+              <h3>Innenausbau</h3>
+              <ul>
+                <li>Trockenbau</li>
+                <li>T&uuml;ren &amp; Zargen</li>
+                <li>Dielenb&ouml;den</li>
+              </ul>
+            </div>
+            <div class="spalte">
+              <h3>Sanierung</h3>
+              <ul>
+                <li>Fachwerk</li>
+                <li>Altbau</li>
+                <li>D&auml;mmung</li>
+              </ul>
+            </div>
+          </div>
+          <div class="referenzen">
+            <h2>Referenzen aus unserer Galerie</h2>
+            <table>
+              <tr>
+                <td><img src="fotos/g1-alt.jpg" alt="">Dachstuhl</td>
+                <td><img src="fotos/g2-alt.jpg" alt="">Innenausbau</td>
+                <td><img src="fotos/g3-alt.jpg" alt="">Sanierung</td>
+              </tr>
+              <tr>
+                <td><img src="fotos/g2-alt.jpg" alt="">Carport</td>
+                <td><img src="fotos/g3-alt.jpg" alt="">Fachwerk</td>
+                <td><img src="fotos/g1-alt.jpg" alt="">Dielenboden</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="neuigkeiten">
+            <h2>Neuigkeiten</h2>
+            <dl>
+              <dt>14.03.2011</dt>
+              <dd>Unser neuer Firmenwagen ist eingetroffen. <a href="#">weiter...</a></dd>
+              <dt>08.11.2010</dt>
+              <dd>Wir haben die Innung gewechselt. <a href="#">weiter...</a></dd>
+              <dt>21.06.2010</dt>
+              <dd>Sommerfest mit allen Mitarbeitern. <a href="#">weiter...</a></dd>
+            </dl>
+          </div>
+
+          <div class="kontakt">
+            <h2>Kontakt und Anfahrt</h2>
+            <table>
+              <tr>
+                <td style="width: 250px;">
+                  <b>Nordwerk Handwerk GmbH</b><br>
+                  Gewerbestra&szlig;e 14<br>
+                  23554 L&uuml;beck<br><br>
+                  Telefon: 0451 / 88 24 19<br>
+                  Telefax: 0451 / 88 24 20<br>
+                  E-Mail: info(at)nordwerk-handwerk.de<br><br>
+                  Gesch&auml;ftsf&uuml;hrer: H. Ahrens<br>
+                  HRB 4711 Amtsgericht L&uuml;beck<br>
+                  USt-IdNr.: DE123456789
+                </td>
+                <td>
+                  <div class="karte"><div></div></div>
+                  <span>Kartenausschnitt &ndash; zum Vergr&ouml;&szlig;ern bitte anklicken</span>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <p class="anfahrt">
+            <b>Anfahrt:</b> Sie finden uns in der Gewerbestra&szlig;e 14, 23554 L&uuml;beck.
+            Parkpl&auml;tze sind direkt vor dem Haus vorhanden.
+            <a href="#">&raquo; Anfahrtsskizze (PDF, 2,4 MB)</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="rand">
+        <h2>Aktuelles</h2>
+        <p>
+          14.03.2011<br>
+          Neuer Firmenwagen<br>
+          <a href="#">mehr...</a>
+        </p>
+        <h2>Besucher</h2>
+        <p><span class="zaehler">004821</span></p>
+        <h2>G&auml;stebuch</h2>
+        <p>
+          &bdquo;Alles bestens gelaufen, sehr saubere Arbeit!&ldquo;<br>
+          <i>&ndash; Fam. Petersen, 02.02.2011</i><br>
+          <a href="#">Eintragen</a>
+        </p>
+        <h2>&Ouml;ffnungszeiten</h2>
+        <p>
+          Mo&ndash;Do 7.00&ndash;16.30 Uhr<br>
+          Fr 7.00&ndash;13.00 Uhr<br>
+          Sa &amp; So geschlossen
+        </p>
+        <h2>Hinweis</h2>
+        <p class="hinweis">
+          Diese Seite ist optimiert f&uuml;r eine Aufl&ouml;sung von
+          1024&times;768 Pixeln und den Internet Explorer ab Version 6.
+        </p>
+      </div>
+    </div>
+
+    <div class="partner">
+      <span class="marke">Mitglied der Kreishandwerkerschaft</span>
+      <span class="marke">Innung des Zimmererhandwerks</span>
+      <span class="marke">Meisterbetrieb</span>
+      <span class="marke gueltig">Valid HTML 4.01</span>
+    </div>
+
+    <div class="fuss">
+      &copy; 2011 Nordwerk Handwerk GmbH &ndash; Alle Rechte vorbehalten
+      &nbsp;|&nbsp; <a href="#">Impressum</a>
+      &nbsp;|&nbsp; Letzte Aktualisierung: 14.03.2011
+    </div>
+  </div>
+</body>
+</html>

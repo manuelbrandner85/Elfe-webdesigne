@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useImperativeHandle, useRef, type RefObject } from "react";
 import { useReduzierteBewegung } from "@/lib/bewegung";
 
 /* Der Goldstaub am Schnitt zwischen alt und neu.
@@ -17,6 +17,12 @@ import { useReduzierteBewegung } from "@/lib/bewegung";
    sie ein Bild zeichnen kann — dann entstehen Körner, aber man sieht nie
    eines. Genau dieser Fehler war in meinem ersten Versuch drin.
 
+   Angesteuert wird von außen jetzt über einen Griff statt über eine
+   Eigenschaft. Grund: Die Reglerstellung ändert sich bei jedem Bild. Lag
+   sie als Eigenschaft an, rechnete React sechzigmal je Sekunde den
+   gesamten Abschnitt neu durch — für eine Zahl, die nur eine Zeichenfläche
+   interessiert. Der Griff schreibt direkt, React bleibt außen vor.
+
    Zurückhaltung: Körner entstehen nur, während sich der Griff bewegt.
    Bleibt er stehen, versiegt der Strom in Zehntelsekunden. Die Schleife
    hält an, sobald das letzte Korn erloschen ist. */
@@ -29,12 +35,26 @@ type Korn = {
   groesse: number;
 };
 
+export type GoldSaumGriff = { saeen: (position: number) => void };
+
 const HOECHSTZAHL = 160;
 
-export default function GoldSaum({ position }: { position: number }) {
+export default function GoldSaum({
+  ref,
+}: {
+  ref?: RefObject<GoldSaumGriff | null>;
+}) {
   const flaeche = useRef<HTMLCanvasElement>(null);
   const saeen = useRef<((pos: number) => void) | null>(null);
   const reduziert = useReduzierteBewegung();
+
+  /* Nach außen: eine einzige Methode. Sie zeigt auf den Verweis, damit der
+     Griff auch dann gültig bleibt, wenn der Aufbau erst später nachzieht. */
+  useImperativeHandle(
+    ref,
+    () => ({ saeen: (position: number) => saeen.current?.(position) }),
+    [],
+  );
 
   /* Aufbau — genau einmal */
   useEffect(() => {
@@ -114,11 +134,6 @@ export default function GoldSaum({ position }: { position: number }) {
       saeen.current = null;
     };
   }, [reduziert]);
-
-  /* Auslösung — bei jeder Reglerbewegung */
-  useEffect(() => {
-    saeen.current?.(position);
-  }, [position]);
 
   if (reduziert) return null;
 

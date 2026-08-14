@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Nordwerk Handwerk – Zimmerei, Innenausbau, Sanierung</title>
+<style>
+  /* Derselbe erfundene Betrieb, heute.
+
+     Farben, Schrift und Radius stammen unverändert aus dem Konzept
+     „Nordwerk Handwerk“ in src/data/content.ts. Der Vergleich zeigt damit
+     nicht irgendeine fremde Vorlage, sondern genau das Konzept, das auf
+     dieser Seite ohnehin schon gezeigt wird — eine Aussage, kein Effekt. */
+
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-500-normal.woff2) format('woff2'); font-weight: 500; }
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-700-normal.woff2) format('woff2'); font-weight: 700; }
+
+  :root {
+    --grund: #12181c;
+    --flaeche: #1b242a;
+    --akzent: #d9a441;
+    --auf-akzent: #12181c;
+    --text: #eef1f2;
+    --gedaempft: rgba(238, 241, 242, .5);
+    --linie: rgba(217, 164, 65, .18);
+    --radius: 2px;
+  }
+
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 100%; min-height: 100%; overflow-x: hidden;
+    background: var(--grund); color: var(--text);
+    font-family: Jost, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Kopfzeile */
+  .kopf {
+    height: 62px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; border-bottom: 1px solid var(--linie);
+    position: relative; z-index: 2;
+  }
+  .wort {
+    font-size: 15px; font-weight: 600; letter-spacing: .24em;
+    text-transform: uppercase; color: var(--akzent);
+  }
+  .wort small {
+    display: block; font-size: 8px; letter-spacing: .18em; font-weight: 400;
+    color: var(--gedaempft); margin-top: 3px;
+  }
+  .menue { display: flex; align-items: center; gap: 26px; }
+  .menue a {
+    font-size: 11.5px; letter-spacing: .07em; color: rgba(238,241,242,.72);
+    text-decoration: none;
+  }
+  .menue a.aktiv { color: var(--text); }
+  .knopf {
+    font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    background: var(--akzent); color: var(--auf-akzent);
+    padding: 9px 16px; border-radius: var(--radius); font-weight: 500;
+  }
+
+  /* Bühne */
+  .buehne { position: relative; height: 452px; overflow: hidden; }
+  .buehne img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 46%;
+  }
+  /* Der Schleier liegt rechts, weil dort die Schrift steht.
+
+     Das ist keine Stilfrage: Im Vergleich wandert die Schnittkante von
+     rechts nach links. Stünde die Überschrift links, wäre sie erst in den
+     letzten Prozent zu sehen — die halbe Strecke zeigte nur ein Foto. */
+  .schleier {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(268deg, rgba(18,24,28,.94) 0%, rgba(18,24,28,.80) 36%, rgba(18,24,28,.20) 68%, rgba(18,24,28,.45) 100%),
+      linear-gradient(180deg, rgba(18,24,28,.55) 0%, transparent 22%, transparent 62%, rgba(18,24,28,.85) 100%);
+  }
+  .inhalt {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-end; text-align: right;
+    padding: 0 40px;
+  }
+  .kicker {
+    font-size: 9.5px; letter-spacing: .34em; text-transform: uppercase;
+    color: var(--akzent); margin-bottom: 18px;
+  }
+  h1 {
+    margin: 0 0 20px; font-size: 46px; line-height: 1.05; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .005em;
+  }
+  .unter {
+    margin: 0 0 28px; font-size: 13.5px; line-height: 1.75;
+    color: var(--gedaempft); max-width: 400px;
+  }
+  .reihe { display: flex; gap: 10px; justify-content: flex-end; }
+  .voll {
+    font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase;
+    background: var(--akzent); color: var(--auf-akzent);
+    padding: 12px 22px; border-radius: var(--radius); font-weight: 500;
+  }
+  .leer {
+    font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase;
+    border: 1px solid rgba(217,164,65,.45); color: var(--text);
+    padding: 12px 22px; border-radius: var(--radius);
+  }
+
+  /* Zahlenband */
+  .zahlen {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--linie); background: var(--grund);
+  }
+  .zahl { padding: 20px 40px; border-left: 1px solid var(--linie); }
+  .zahl:first-child { border-left: 0; }
+  .zahl b {
+    display: block; font-size: 30px; font-weight: 600; color: var(--akzent);
+    line-height: 1; margin-bottom: 7px;
+  }
+  .zahl span {
+    font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gedaempft);
+  }
+
+  /* Werkstatt-Galerie, vom unteren Bildrand angeschnitten */
+  .galerie { padding: 26px 40px 0; }
+  .galerie .kicker { margin-bottom: 14px; }
+  .kacheln { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .kachel { border-radius: var(--radius); overflow: hidden; position: relative; }
+  .kachel img { width: 100%; height: 132px; object-fit: cover; display: block; }
+
+  .brenner { display: none; }
+
+  /* Handy ist keine geschrumpfte Fassung des Rechners.
+
+     Derselbe Betrieb, dieselben Farben — aber eine eigene Ordnung: ein
+     Menü, das nicht mitgeschleppt wird, eine Überschrift in lesbarer
+     Größe, eine Handlung statt zwei nebeneinander, und Zahlen unter-
+     statt nebeneinander. Genau das ist der Unterschied, den der Vergleich
+     auf dem Handy zeigen soll. */
+  @media (max-width: 640px) {
+    .kopf { height: 56px; padding: 0 18px; }
+    .wort { font-size: 14px; letter-spacing: .2em; }
+    .wort small { font-size: 7.5px; }
+    .menue a { display: none; }
+    .knopf { font-size: 10px; padding: 8px 13px; }
+    .brenner { display: block; width: 19px; }
+    .brenner i { display: block; height: 1.5px; background: rgba(238,241,242,.8); margin: 4px 0; }
+
+    .buehne { height: 400px; }
+    .buehne img { object-position: 62% 50%; }
+    .inhalt { align-items: stretch; text-align: left; }
+    .reihe { justify-content: stretch; }
+    .schleier {
+      background:
+        linear-gradient(180deg, rgba(18,24,28,.74) 0%, rgba(18,24,28,.22) 26%, rgba(18,24,28,.80) 52%, rgba(18,24,28,.97) 78%, #12181c 100%);
+    }
+    .inhalt { padding: 0 18px; max-width: none; justify-content: flex-end; padding-bottom: 26px; }
+    .kicker { font-size: 8.5px; letter-spacing: .26em; margin-bottom: 12px; }
+    h1 { font-size: 30px; line-height: 1.08; margin-bottom: 12px; }
+    .unter { font-size: 12.5px; line-height: 1.65; margin-bottom: 20px; max-width: none; }
+    .reihe { flex-direction: column; gap: 8px; }
+    .voll, .leer { text-align: center; padding: 13px 0; font-size: 11px; }
+
+    .zahlen { grid-template-columns: 1fr; }
+    .zahl {
+      border-left: 0; border-top: 1px solid var(--linie);
+      padding: 14px 18px; display: flex; align-items: baseline; gap: 12px;
+    }
+    .zahl:first-child { border-top: 0; }
+    .zahl b { font-size: 24px; margin-bottom: 0; min-width: 52px; }
+
+    .galerie { padding: 22px 18px 0; }
+    .kacheln { grid-template-columns: 1fr; gap: 10px; }
+    .kachel img { height: 160px; }
+  }
+</style>
+</head>
+<body>
+  <header class="kopf">
+    <div class="wort">Nordwerk<small>Handwerk seit 1981</small></div>
+    <nav class="menue">
+      <a class="aktiv" href="#">Leistungen</a>
+      <a href="#">Referenzen</a>
+      <a href="#">Team</a>
+      <a href="#">Kontakt</a>
+      <span class="knopf">Anfragen</span>
+      <span class="brenner"><i></i><i></i><i></i></span>
+    </nav>
+  </header>
+
+  <section class="buehne">
+    <img src="fotos/hero.jpg" alt="">
+    <div class="schleier"></div>
+    <div class="inhalt">
+      <p class="kicker">Zimmerei &middot; Innenausbau &middot; Sanierung</p>
+      <h1>Meisterarbeit seit<br>drei Generationen</h1>
+      <p class="unter">
+        Termintreu ausgef&uuml;hrt von einem eingespielten Team aus der Region &ndash;
+        vom Dachstuhl bis zum letzten Zapfen.
+      </p>
+      <div class="reihe">
+        <span class="voll">Angebot anfragen</span>
+        <span class="leer">Referenzen ansehen</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="zahlen">
+    <div class="zahl"><b>40+</b><span>Jahre Erfahrung</span></div>
+    <div class="zahl"><b>250</b><span>Projekte</span></div>
+    <div class="zahl"><b>12</b><span>Mitarbeiter</span></div>
+  </section>
+
+  <section class="galerie">
+    <p class="kicker">Aus der Werkstatt</p>
+    <div class="kacheln">
+      <div class="kachel"><img src="fotos/g1.jpg" alt=""></div>
+      <div class="kachel"><img src="fotos/g2.jpg" alt=""></div>
+      <div class="kachel"><img src="fotos/g3.jpg" alt=""></div>
+    </div>
+  </section>
+</body>
+</html>

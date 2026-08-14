@@ -1,255 +1,385 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
-import GoldSaum from "@/components/GoldSaum";
-import { m, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
+import {
+  m,
+  useMotionTemplate,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { MoveHorizontal } from "lucide-react";
+import GoldSaum, { type GoldSaumGriff } from "@/components/GoldSaum";
+import { useReduzierteBewegung } from "@/lib/bewegung";
+import { medien } from "@/lib/pfad";
 
-/* Beispielhafte Gegenüberstellung: links ein typischer veralteter Auftritt,
-   rechts eine zeitgemäße Umsetzung. Bei echten Projektbildern lassen sich
-   die beiden Blöcke 1:1 durch <Image /> ersetzen. */
+/* Der Vorher-Nachher-Vergleich.
 
-function OldSite() {
+   Gezeigt wird derselbe erfundene Betrieb zweimal: „Nordwerk Handwerk“ im
+   Zustand von 2011 und im heutigen Konzept, das auf dieser Seite ohnehin
+   schon vorkommt. Das ist der Grund, warum der Vergleich überhaupt etwas
+   beweist — zwei fremde Seiten nebeneinander zeigen nur zwei Geschmäcker,
+   derselbe Betrieb vorher und nachher zeigt eine Entscheidung.
+
+   Warum echte Bilder und kein nachgebautes DOM:
+
+   Die frühere Fassung zeichnete beide Auftritte als HTML nach — bei sechs
+   bis neun Pixeln Schriftgröße, damit es in den Rahmen passte. Das war auf
+   dem Handy unlesbar, brach bei jeder anderen Rahmenbreite anders um und
+   kostete bei jedem Aufbau Rechenzeit für zwei komplette Seitenlayouts.
+   Jetzt liegen zwei Aufnahmen vor, in echter Größe gesetzt und erst danach
+   verkleinert. Zusammen rund 90 KB in AVIF, für beide Seiten, gegen null
+   Layoutarbeit im Browser.
+
+   Nachgebaut bleibt allein die Fensterleiste — als DOM, weil ihre Schrift
+   scharf bleiben soll und weil sie die einzige Stelle ist, an der beide
+   Seiten dieselbe Adresse tragen: derselbe Betrieb, nicht zwei. */
+
+/* Der Abschnitt beginnt beim alten Auftritt und endet beim neuen.
+
+   Vorher lief es andersherum: Die Seite zeigte zuerst den neuen Auftritt,
+   und beim Scrollen schob sich der alte darüber. Erzählt wurde damit "aus
+   neu wird alt" — das Gegenteil der Überschrift. Die Kante wandert jetzt
+   von rechts nach links und wischt das Alte weg. */
+const ANFANG = 94;
+
+/* Bis 640 Pixel greift eine eigene Bildfassung, siehe Aufnahme(). */
+const SCHMAL = "(max-width: 639.98px)";
+const MASS_SCHMAL = "calc(100vw - 3rem)";
+const MASS_BREIT = "(min-width: 1024px) min(62rem, (100vh - 26rem) * 1.6), calc(100vw - 3rem)";
+
+/* Winzige, stark unscharfe Standbilder. Sie liegen als Zeichenkette im
+   Aufbau statt als eigene Datei, weil ein zusätzlicher Netzabruf für 200
+   Byte teurer wäre als die Bytes selbst. */
+const STANDBILD: Record<Seite, string> = {
+  vorher:
+    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAAAQAgCdASoQAAoAA4BaJZQCdIIjGAHkIpUgAPaXa4mKnfQ33VsTRM//dGiJn5G3Qah09PCgAAA=",
+  nachher:
+    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAQCdASoQAAoAA4BaJZQAAugx9FSaMAAA/vEQkKzG0NhnmFsMddHAAAA=",
+};
+
+type Seite = "vorher" | "nachher";
+
+/* Fensterleiste. Beide Seiten haben dieselbe Geometrie und unterscheiden
+   sich nur in Haut und Adresse — dadurch bleibt der Schnitt beim Ziehen
+   durchgehend, statt an der Oberkante zu springen.
+
+   Maße in cqw, weil die Leiste Teil des abgebildeten Fensters ist und
+   deshalb mit dem Bild skalieren muss. Die Beschriftungen weiter unten
+   sind dagegen unser Kommentar zum Bild und bleiben in rem. */
+function Leiste({ seite }: { seite: Seite }) {
+  const alt = seite === "vorher";
   return (
-    <div className="absolute inset-0 bg-[#e9e9e4] text-[#1a1a1a] font-[Arial,sans-serif] overflow-hidden">
-      <div className="h-7 bg-[#2a4a7a] flex items-center px-3">
-        <span className="text-[9px] text-white font-bold tracking-wide">
-          MUSTERBETRIEB GMBH
-        </span>
-      </div>
-      <div className="h-5 bg-[#3d6099] flex items-center gap-3 px-3">
-        {["Startseite", "Über uns", "Leistungen", "Kontakt", "Impressum"].map((n) => (
-          <span key={n} className="text-[7px] text-white underline">
-            {n}
-          </span>
+    <div
+      aria-hidden
+      className={`flex h-[max(19px,3.4cqw)] shrink-0 items-center gap-[max(6px,1.1cqw)] px-[max(8px,1.5cqw)] ${
+        alt
+          ? "bg-[#dedbd4] text-[#4a463f]"
+          : "bg-[#0c1216] text-[rgba(238,241,242,0.52)]"
+      }`}
+    >
+      <span className="flex gap-[max(3px,0.55cqw)]">
+        {(alt
+          ? ["#b9b5ac", "#b9b5ac", "#b9b5ac"]
+          : ["#3a4249", "#3a4249", "#3a4249"]
+        ).map((farbe, i) => (
+          <span
+            key={i}
+            className="block h-[max(4px,0.75cqw)] w-[max(4px,0.75cqw)] rounded-full"
+            style={{ background: farbe }}
+          />
         ))}
-      </div>
-      <div className="p-3">
-        <div className="text-[13px] font-bold text-[#2a4a7a] mb-1.5 underline">
-          Herzlich Willkommen auf unserer Homepage!
-        </div>
-        <div className="text-[7.5px] leading-[1.5] mb-2 max-w-[85%]">
-          Wir freuen uns, dass Sie den Weg auf unsere Internetpräsenz gefunden
-          haben. Seit über 40 Jahren sind wir Ihr zuverlässiger Partner rund um
-          Zimmerei und Innenausbau. Bitte beachten Sie unsere Öffnungszeiten.
-        </div>
-        <div className="flex gap-2 mb-2">
-          <div className="w-16 h-12 bg-[#b9b9b0] border border-[#8a8a80]" />
-          <div className="w-16 h-12 bg-[#b9b9b0] border border-[#8a8a80]" />
-          <div className="w-16 h-12 bg-[#b9b9b0] border border-[#8a8a80]" />
-        </div>
-        <div className="text-[7px] text-[#0000ee] underline mb-1">
-          » Hier klicken für mehr Informationen
-        </div>
-        <div className="text-[6.5px] text-[#666]">
-          Letzte Aktualisierung: 14.03.2011 | Besucher: 004821
-        </div>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#2a4a7a] flex items-center justify-center">
-        <span className="text-[6px] text-white">
-          © 2011 Musterbetrieb GmbH – Alle Rechte vorbehalten
-        </span>
-      </div>
+      </span>
+      <span
+        className={`flex-1 truncate rounded-[2px] px-[max(5px,0.9cqw)] py-[max(2px,0.35cqw)] text-[max(6.5px,1.02cqw)] leading-none ${
+          alt ? "bg-[#f4f3ef] text-[#55514a]" : "bg-[#151d22]"
+        }`}
+      >
+        {alt
+          ? "http://www.nordwerk-handwerk.de/index.htm"
+          : "nordwerk-handwerk.de"}
+      </span>
     </div>
   );
 }
 
-function NewSite() {
+/* Zwei Bildfassungen, nicht eine skalierte.
+
+   Ein auf 340 Pixel geschrumpftes Bildschirmfoto vom Rechner zeigt nichts
+   — und verschenkt das stärkste Argument: Der alte Auftritt wird auf dem
+   Handy genau so ausgeliefert, wie ein Telefon eine Seite ohne eigene
+   Sichtfeldangabe ausliefert, nämlich 980 Pixel breit in den Bildschirm
+   gequetscht. Der neue hat dort eine eigene Ordnung. Die Umschaltung
+   übernimmt <picture media> — ohne JavaScript, ohne Sprung im Aufbau. */
+function Aufnahme({ seite, alt }: { seite: Seite; alt: string }) {
+  const breit = medien(`/images/vergleich/${seite}`);
+  const schmal = medien(`/images/vergleich/${seite}-handy`);
   return (
-    <div className="absolute inset-0 bg-[#12181c] overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-[#d9a44122]">
-        <span className="text-[9px] font-semibold tracking-[0.16em] text-[#d9a441]">
-          MUSTERBETRIEB
-        </span>
-        <div className="flex items-center gap-2.5">
-          {["Leistungen", "Referenzen", "Kontakt"].map((n) => (
-            <span key={n} className="text-[6.5px] text-[#eef1f280]">
-              {n}
-            </span>
-          ))}
-          <span className="text-[6px] px-2 py-[3px] rounded-sm bg-[#d9a441] text-[#12181c]">
-            Angebot
-          </span>
-        </div>
-      </div>
-      <div className="relative h-[118px]">
-        <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_70%_20%,#3c4a52_0%,transparent_55%),radial-gradient(90%_70%_at_20%_80%,#6a5433_0%,transparent_60%),linear-gradient(155deg,#1d262c,#12181c)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.7),rgba(0,0,0,0.3)_55%,transparent)]" />
-        <div className="relative h-full flex flex-col justify-center px-4 max-w-[72%]">
-          <span className="text-[5.5px] tracking-[0.28em] text-[#d9a441] mb-1.5">
-            ZIMMEREI &amp; INNENAUSBAU
-          </span>
-          <p className="text-[12.5px] font-bold uppercase leading-[1.16] text-[#eef1f2] mb-1.5">
-            Meisterarbeit seit
-            <br />
-            drei Generationen
-          </p>
-          <p className="text-[6px] leading-[1.7] text-[#eef1f280] mb-2.5">
-            Termintreu ausgeführt von einem eingespielten Team aus der Region.
-          </p>
-          <div className="flex gap-1.5">
-            <span className="text-[6px] px-2.5 py-[5px] rounded-sm bg-[#d9a441] text-[#12181c] font-medium">
-              Angebot anfragen
-            </span>
-            <span className="text-[6px] px-2.5 py-[5px] rounded-sm border border-[#d9a44166] text-[#eef1f2]">
-              Referenzen
-            </span>
-          </div>
-        </div>
-      </div>
-      <div className="px-4 py-3.5">
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            ["40+", "Jahre"],
-            ["250", "Projekte"],
-            ["12", "Mitarbeiter"],
-          ].map(([v, l]) => (
-            <div
-              key={l}
-              className="py-2 text-center rounded-sm bg-[#1b242a] border border-[#d9a4411f]"
-            >
-              <div className="text-[11px] font-bold text-[#d9a441] leading-none mb-1">
-                {v}
-              </div>
-              <div className="text-[5px] uppercase tracking-[0.14em] text-[#eef1f280]">
-                {l}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div
+      className="relative flex-1 overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: `url(${STANDBILD[seite]})` }}
+    >
+      <picture className="block h-full w-full">
+        <source
+          media={SCHMAL}
+          type="image/avif"
+          sizes={MASS_SCHMAL}
+          srcSet={`${schmal}-480.avif 480w, ${schmal}-900.avif 900w`}
+        />
+        <source
+          media={SCHMAL}
+          type="image/webp"
+          sizes={MASS_SCHMAL}
+          srcSet={`${schmal}-480.webp 480w, ${schmal}-900.webp 900w`}
+        />
+        <source
+          type="image/avif"
+          sizes={MASS_BREIT}
+          srcSet={`${breit}-900.avif 900w, ${breit}-1600.avif 1600w`}
+        />
+        <source
+          type="image/webp"
+          sizes={MASS_BREIT}
+          srcSet={`${breit}-900.webp 900w, ${breit}-1600.webp 1600w`}
+        />
+        <img
+          src={`${breit}-1600.webp`}
+          alt={alt}
+          width={1600}
+          height={1000}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="h-full w-full object-cover object-top"
+        />
+      </picture>
     </div>
   );
 }
 
 export default function BeforeAfter() {
-  const [pos, setPos] = useState(4);
-  const ref = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const dragging = useRef(false);
-  const touched = useRef(false);
-  const reduce = useReducedMotion();
+  const abschnitt = useRef<HTMLElement>(null);
+  const rahmen = useRef<HTMLDivElement>(null);
+  const knopf = useRef<HTMLButtonElement>(null);
+  const saum = useRef<GoldSaumGriff>(null);
+  const ziehen = useRef(false);
+  const uebernommen = useRef(false);
+  const reduziert = useReduzierteBewegung();
 
-  /* Der Bereich bleibt beim Scrollen stehen, der Regler wandert dabei
+  /* Die Reglerstellung ist bewusst kein React-Zustand.
+
+     Sie ändert sich bei jedem Bild, während jemand zieht. Als Zustand
+     hätte das den ganzen Abschnitt sechzigmal je Sekunde neu abgeglichen —
+     für eine Zahl, die genau drei Dinge interessiert: eine Schnittkante,
+     eine Position und den Goldstaub. Alle drei werden direkt geschrieben. */
+  const stand = useMotionValue(ANFANG);
+  const rest = useTransform(stand, (v) => 100 - v);
+  const schnitt = useMotionTemplate`inset(0 ${rest}% 0 0)`;
+  const kante = useMotionTemplate`${stand}%`;
+
+  /* Der Abschnitt bleibt beim Scrollen stehen, der Regler wandert dabei
      von links nach rechts — sobald jemand selbst zieht, übernimmt er. */
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    target: abschnitt,
     offset: ["start start", "end end"],
   });
-  const driven = useTransform(scrollYProgress, [0.12, 0.78], [4, 96]);
+  const gefuehrt = useTransform(scrollYProgress, [0.12, 0.78], [ANFANG, 4]);
+
+  useMotionValueEvent(gefuehrt, "change", (v) => {
+    if (!uebernommen.current && reduziert === false) stand.set(v);
+  });
+
+  /* Eine Quelle, drei Empfänger. Die Vorlesehilfe bekommt ihren Wert hier
+     als Attribut statt über React — aus demselben Grund wie oben. */
+  useMotionValueEvent(stand, "change", (v) => {
+    saum.current?.saeen(v);
+    const el = knopf.current;
+    if (!el) return;
+    const ganz = Math.round(v);
+    el.setAttribute("aria-valuenow", String(ganz));
+    el.setAttribute("aria-valuetext", `${ganz} Prozent des alten Auftritts sichtbar`);
+  });
 
   useEffect(() => {
-    if (reduce) {
-      setPos(50);
-      return;
-    }
-    return driven.on("change", (v) => {
-      if (!touched.current) setPos(Math.max(0, Math.min(100, v)));
-    });
-  }, [driven, reduce]);
+    if (reduziert) stand.set(50);
+  }, [reduziert, stand]);
 
-  const setFromClientX = useCallback((clientX: number) => {
-    if (!ref.current) return;
-    touched.current = true;
-    const r = ref.current.getBoundingClientRect();
-    setPos(Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100)));
-  }, []);
+  const setzen = useCallback(
+    (wert: number) => {
+      uebernommen.current = true;
+      stand.set(Math.min(100, Math.max(0, wert)));
+    },
+    [stand],
+  );
+
+  const ausX = useCallback(
+    (clientX: number) => {
+      const r = rahmen.current?.getBoundingClientRect();
+      if (!r || r.width === 0) return;
+      setzen(((clientX - r.left) / r.width) * 100);
+    },
+    [setzen],
+  );
+
+  /* Zeigerereignisse statt getrennter Maus- und Berührungspfade: Ein Weg
+     für Maus, Stift und Finger. Das Einfangen des Zeigers ist der Punkt —
+     ohne es reißt der Zug ab, sobald die Maus den Rahmen verlässt. */
+  const beginnen = (e: React.PointerEvent<HTMLElement>) => {
+    ziehen.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    ausX(e.clientX);
+  };
+  const bewegen = (e: React.PointerEvent<HTMLElement>) => {
+    if (ziehen.current) ausX(e.clientX);
+  };
+  const beenden = (e: React.PointerEvent<HTMLElement>) => {
+    ziehen.current = false;
+    if (e.currentTarget.hasPointerCapture(e.pointerId))
+      e.currentTarget.releasePointerCapture(e.pointerId);
+  };
+
+  const taste = (e: React.KeyboardEvent) => {
+    const schritt = e.shiftKey ? 10 : 2;
+    const jetzt = stand.get();
+    const ziele: Record<string, number> = {
+      ArrowLeft: jetzt - schritt,
+      ArrowRight: jetzt + schritt,
+      ArrowDown: jetzt - schritt,
+      ArrowUp: jetzt + schritt,
+      PageDown: jetzt - 20,
+      PageUp: jetzt + 20,
+      Home: 0,
+      End: 100,
+    };
+    if (!(e.key in ziele)) return;
+    e.preventDefault();
+    setzen(ziele[e.key]);
+  };
 
   return (
     <section
-      ref={sectionRef}
+      ref={abschnitt}
       aria-label="Vorher-Nachher-Vergleich"
-      className="relative bg-[rgba(0,0,0,0.10)] fade-edges h-auto lg:h-[230vh]"
+      className="relative h-auto bg-[rgba(0,0,0,0.10)] fade-edges lg:h-[230vh]"
     >
-      <div className="lg:sticky lg:top-0 lg:h-screen lg:flex lg:items-center py-24 lg:py-0">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 w-full">
-        <m.header
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-12"
-        >
-          <p className="text-[0.78rem] tracking-[0.22em] uppercase text-gold-text mb-4">
-            Relaunch
-          </p>
-          <h2 className="font-serif-display text-shadow-elegant text-[clamp(2rem,3.6vw,2.9rem)] text-parchment mb-5">
-            Aus alt wird zeitgemäß
-          </h2>
-          <div className="rule-gold w-24 mx-auto mb-5" />
-          <p className="text-silver leading-relaxed">
-            Ziehen Sie den Regler, um den Unterschied zu sehen — links ein
-            typischer Auftritt von vor zehn Jahren, rechts eine heutige Umsetzung.
-          </p>
-        </m.header>
-
-        <m.div
-          initial={{ opacity: 0, y: 26 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          ref={ref}
-          onMouseDown={(e) => {
-            dragging.current = true;
-            setFromClientX(e.clientX);
-          }}
-          onMouseMove={(e) => dragging.current && setFromClientX(e.clientX)}
-          onMouseUp={() => (dragging.current = false)}
-          onMouseLeave={() => (dragging.current = false)}
-          onTouchStart={(e) => setFromClientX(e.touches[0].clientX)}
-          onTouchMove={(e) => setFromClientX(e.touches[0].clientX)}
-          role="group"
-          aria-label="Vergleich: alte gegenüber neuer Website"
-          className="panel relative rounded-lg overflow-hidden aspect-[16/9] select-none cursor-ew-resize touch-none"
-        >
-          <NewSite />
-          <div
-            className="absolute inset-0 overflow-hidden"
-            style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
+      <div className="py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0 lg:pt-20">
+        <div className="mx-auto w-full max-w-5xl px-6 lg:px-8">
+          <m.header
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "80px" }}
+            transition={{ duration: 0.7 }}
+            className="mx-auto mb-10 max-w-2xl text-center lg:mb-8"
           >
-            <OldSite />
+            <p className="mb-4 text-[0.78rem] uppercase tracking-[0.22em] text-gold-text">
+              Relaunch
+            </p>
+            <h2 className="font-serif-display text-shadow-elegant mb-5 text-[clamp(2rem,3.6vw,2.9rem)] text-parchment">
+              Aus alt wird zeitgemäß
+            </h2>
+            <div className="rule-gold mx-auto mb-5 w-24" />
+            <p className="leading-relaxed text-silver">
+              Derselbe Betrieb, dieselbe Adresse, fünfzehn Jahre dazwischen.
+              Ziehen Sie den Regler — oder scrollen Sie einfach weiter.
+            </p>
+          </m.header>
+
+          {/* Die Breite ist am Rechner an die verfügbare Höhe gekoppelt.
+
+              Grund: Der Abschnitt steht beim Scrollen fest. Passte der
+              Rahmen nicht in den Bildschirm, schöbe er die Überschrift
+              unter die Kopfzeile — und niemand könnte weiterscrollen, um
+              sie zu sehen, weil der Abschnitt ja gerade steht. */}
+          <div className="mx-auto lg:max-w-[calc((100vh-26rem)*1.6)]">
+            <m.div
+              initial={{ opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "80px" }}
+              transition={{ duration: 0.7 }}
+              ref={rahmen}
+              onPointerDown={(e) => {
+                /* Auf dem Handy soll ein Wisch über das Bild weiterhin die
+                   Seite scrollen. Deshalb löst dort nur der Griff den Zug aus. */
+                if (e.pointerType !== "touch") beginnen(e);
+              }}
+              onPointerMove={bewegen}
+              onPointerUp={beenden}
+              onPointerCancel={beenden}
+              style={{ containerType: "inline-size", touchAction: "pan-y" }}
+              className="relative aspect-[9/16] cursor-ew-resize select-none sm:aspect-[16/10]"
+            >
+              {/* Beschnitten wird nur hier drin — der Griff liegt bewusst
+                  außerhalb, sonst wäre er an beiden Enden halb abgesägt. */}
+              <div className="panel absolute inset-0 overflow-hidden rounded-lg">
+                {/* Der heutige Auftritt liegt unten und ist immer vollständig da */}
+                <div className="absolute inset-0 flex flex-col">
+                  <Leiste seite="nachher" />
+                  <Aufnahme
+                    seite="nachher"
+                    alt="Der heutige Auftritt von Nordwerk Handwerk: ein großflächiges Werkstattfoto, eine ruhige Überschrift und ein sichtbarer Weg zur Anfrage."
+                  />
+                </div>
+
+                {/* Der alte Auftritt liegt darüber und wird beschnitten */}
+                <m.div
+                  className="absolute inset-0 flex flex-col"
+                  style={{ clipPath: schnitt }}
+                >
+                  <Leiste seite="vorher" />
+                  <Aufnahme
+                    seite="vorher"
+                    alt="Der frühere Auftritt desselben Betriebs von 2011: eine schmale Textspalte auf blauem Kachelhintergrund, kleine gequetschte Fotos, Besucherzähler und Gästebuch."
+                  />
+                </m.div>
+
+                {/* Der Goldstaub am Schnitt — der eine überraschende Moment:
+                    Der alte Auftritt zerfällt zu Gold, aus dem der neue entsteht. */}
+                <GoldSaum ref={saum} />
+
+                <span className="pointer-events-none absolute bottom-3 left-3 z-[var(--ebene-ueberlagerung)] rounded-full border border-line bg-black/60 px-2.5 py-1 text-[0.58rem] uppercase tracking-[0.16em] text-silver-bright backdrop-blur-sm">
+                  Vorher · 2011
+                </span>
+                <span className="pointer-events-none absolute bottom-3 right-3 z-[var(--ebene-ueberlagerung)] rounded-full border border-gold/30 bg-black/60 px-2.5 py-1 text-[0.58rem] uppercase tracking-[0.16em] text-gold-bright backdrop-blur-sm">
+                  Nachher · heute
+                </span>
+              </div>
+
+              <m.div
+                className="pointer-events-none absolute top-0 bottom-0 z-[var(--ebene-ueberlagerung)] w-px -translate-x-1/2 bg-gold-bright/80"
+                style={{ left: kante }}
+              >
+                <button
+                  ref={knopf}
+                  type="button"
+                  role="slider"
+                  aria-label="Vergleich zwischen dem Auftritt von 2011 und heute"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={ANFANG}
+                  aria-valuetext={`${ANFANG} Prozent des alten Auftritts sichtbar`}
+                  onPointerDown={beginnen}
+                  onPointerMove={bewegen}
+                  onPointerUp={beenden}
+                  onPointerCancel={beenden}
+                  onKeyDown={taste}
+                  style={{ touchAction: "none" }}
+                  className="pointer-events-auto absolute top-1/2 left-1/2 flex h-[max(40px,4.6cqw)] w-[max(40px,4.6cqw)] -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-[linear-gradient(160deg,#f2d894,#c9a227)] shadow-[0_6px_18px_rgba(0,0,0,0.45)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-bright"
+                >
+                  <MoveHorizontal
+                    className="h-[45%] w-[45%] text-[#2b2723]"
+                    strokeWidth={2.2}
+                  />
+                </button>
+              </m.div>
+            </m.div>
           </div>
 
-          <span className="absolute top-3 left-3 text-[0.58rem] tracking-[0.16em] uppercase bg-black/60 backdrop-blur-sm text-silver-bright px-2.5 py-1 rounded-full border border-line pointer-events-none">
-            Vorher
-          </span>
-          <span className="absolute top-3 right-3 text-[0.58rem] tracking-[0.16em] uppercase bg-black/60 backdrop-blur-sm text-gold-bright px-2.5 py-1 rounded-full border border-gold/30 pointer-events-none">
-            Nachher
-          </span>
-
-
-          {/* Der Goldstaub am Schnitt — der eine überraschende Moment:
-
-              Der alte Auftritt zerfällt zu Gold, aus dem der neue entsteht. */}
-
-          <GoldSaum position={pos} />
-
-
-          <div
-            className="absolute top-0 bottom-0 w-px bg-gold-bright pointer-events-none"
-            style={{ left: `${pos}%` }}
-          >
-            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[linear-gradient(160deg,#f2d894,#c9a227)] shadow-[0_6px_18px_rgba(0,0,0,0.45)] flex items-center justify-center">
-              <MoveHorizontal size={17} className="text-[#2b2723]" strokeWidth={2.2} />
-            </span>
-          </div>
-
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={pos}
-            onChange={(e) => { touched.current = true; setPos(Number(e.target.value)); }}
-            aria-label="Vergleich zwischen alter und neuer Website"
-            className="absolute inset-x-0 bottom-0 w-full opacity-0 h-10 cursor-ew-resize focus-visible:opacity-100"
-          />
-        </m.div>
-
-        <p className="text-center text-[0.76rem] text-silver mt-5">
-          Beispielhafte Gegenüberstellung zur Veranschaulichung — weiterscrollen
-          oder den Regler selbst ziehen.
-        </p>
-      </div>
+          <p className="mx-auto mt-5 max-w-xl lg:mt-4 text-center text-[0.76rem] text-silver">
+            „Nordwerk Handwerk“ ist ein erfundener Betrieb — die Gegenüberstellung
+            zeigt das Vorgehen, nicht einen echten Auftrag.
+          </p>
+        </div>
       </div>
     </section>
   );
