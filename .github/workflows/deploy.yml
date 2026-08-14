@@ -33,11 +33,13 @@ jobs:
         run: npm ci
 
       - name: Bauen
-        env:
-          # Sobald eine eigene Domain eingetragen ist (public/CNAME), läuft
-          # die Seite in der Wurzel — der Unterpfad entfällt und muss auch
-          # entfallen, sonst zeigen alle Bilder ins Leere.
-          NEXT_PUBLIC_BASE_PATH: ${{ hashFiles('public/CNAME') != '' && '' || format('/{0}', github.event.repository.name) }}
+        # Kein Unterpfad: Die Seite läuft unter eigener Domain in der Wurzel.
+        #
+        # Hier stand eine Wenn-dann-Bedingung, deren Dann-Zweig eine leere
+        # Zeichenkette lieferte. Das sieht richtig aus, ist aber falsch:
+        # Leer gilt in solchen Ausdrücken als unwahr, deshalb fiel der
+        # Ausdruck auf den Sonst-Zweig durch. Der Bau nahm den Unterpfad, alle
+        # Stildateien zeigten ins Leere, und die Seite erschien weiß.
         run: npm run build
 
       - name: Vorschau für Suchmaschinen sperren
