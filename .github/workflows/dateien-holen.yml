@@ -120,17 +120,32 @@ jobs:
       #
       # Ohne Ton: Ein Hintergrundvideo, das ungefragt Ton mitbringt,
       # waere ein Fehler - und die Tonspur kostet Bytes fuer nichts.
+      # Der Schritt darf nicht abbrechen, sondern schreibt seinen Befund
+      # in den Bericht - die Laufprotokolle liegen auf einem Speicher,
+      # den die Bauumgebung nicht erreicht. Zweimal hat dieser Schritt
+      # bereits fehlgeschlagen, ohne dass von hier aus erkennbar war,
+      # woran.
       - name: Video verkleinern
         if: always()
+        continue-on-error: true
         run: |
+          set +e
           shopt -s nullglob
+          if ! command -v ffmpeg >/dev/null; then
+            echo "ffmpeg fehlt, wird nachinstalliert" >> werkzeug/holen-bericht.txt
+            sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          fi
+          echo "ffmpeg: $(ffmpeg -version 2>&1 | head -1)" >> werkzeug/holen-bericht.txt
           mkdir -p public/videos
           for f in werkzeug/roh/*.mp4; do
             n=$(basename "$f" .mp4)
             ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" -c:v libx264 -crf 30 -preset slow -movflags +faststart "public/videos/$n.mp4"
             ffmpeg -v error -y -i "$f" -an -vf "scale='min(1600,iw)':-2" -c:v libvpx-vp9 -crf 40 -b:v 0 -row-mt 1 "public/videos/$n.webm" || echo "VP9 nicht verfuegbar, nur H.264"
-            ls -la "public/videos/$n."* || true
+            for a in "public/videos/$n".*; do
+              echo "VIDEO $a  $(stat -c%s "$a") Bytes" >> werkzeug/holen-bericht.txt
+            done
           done
+          exit 0
 
       - name: Festschreiben
         run: |
