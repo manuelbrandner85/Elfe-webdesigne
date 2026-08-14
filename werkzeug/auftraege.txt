@@ -10,3 +10,4 @@
 2026-08-14 20:44:52  atelier-lobby  97cc115078a13e5f5b2b41bcb025d21f
 2026-08-14 20:48:17  atelier-privathaus  0b9a24df8778b62b6672b3aa92105b4d
 2026-08-14 20:49:44  atelier-restaurant  84eaec102f2bfd5dddb70ba24656ac47
+2026-08-14 20:54:06  atelier-restaurant  d7f191ca107dce23e5f6b9700b5b88ef

@@ -102,10 +102,16 @@ AUFTRAEGE = {
          "A private living room at dusk: dark green walls, an open fireplace, a low "
          "linen sofa, oak floor, brass floor lamp, tall windows with heavy curtains, "
          "warm intimate light."),
+        # Ohne Referenzbild und bewusst anders gebaut: Mit der Referenz
+        # zog es das Modell zurueck in dieselbe Bar wie bei der Lobby -
+        # zwei Bilder, ein Raum. Genau das sollte hier abgestellt werden.
         ("restaurant",
-         "A small restaurant interior in the evening: dark timber ceiling, banquette "
-         "seating in deep leather, marble tables, pendant lights low over the tables, "
-         "a bar with backlit bottles blurred at the rear."),
+         "A narrow bistro dining room at lunchtime, warm daylight from a large "
+         "street window on the left. Bottle-green leather banquette along one wall, "
+         "small round marble tables with bentwood chairs, white tablecloths, a "
+         "black-and-white chequerboard tile floor, aged mirror panels and brass "
+         "picture lights on the far wall. No bar, no bar stools, no chandelier, "
+         "no armchairs, no city skyline, no evening light."),
     ],
 }
 
@@ -118,7 +124,8 @@ def erzeugen(konzept, name, prompt, aufloesung="2K"):
 
     eingabe = {
         "prompt": prompt + " " + STIL,
-        "image_input": [f"{ROH}/public/images/concept-{konzept}.webp"],
+        "image_input": ([] if name == "restaurant"
+                        else [f"{ROH}/public/images/concept-{konzept}.webp"]),
         "aspect_ratio": "4:3",
         "resolution": aufloesung,
         "output_format": "png",
