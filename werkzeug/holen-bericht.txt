@@ -1,5 +1,8 @@
-OK         werkzeug/roh/konzept-nordwerk.mp4  4138 KB
+OK         werkzeug/roh/konzept-verde.mp4  3791 KB
+OK         werkzeug/roh/konzept-atelier.mp4  4915 KB
 ffmpeg fehlt, wird nachinstalliert
 ffmpeg: ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers
-VIDEO public/videos/konzept-nordwerk.mp4  808163 Bytes
-VIDEO public/videos/konzept-nordwerk.webm  946941 Bytes
+VIDEO public/videos/konzept-atelier.mp4  472895 Bytes
+VIDEO public/videos/konzept-atelier.webm  466479 Bytes
+VIDEO public/videos/konzept-verde.mp4  337469 Bytes
+VIDEO public/videos/konzept-verde.webm  236207 Bytes
