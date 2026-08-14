@@ -19,13 +19,13 @@
 #
 # Aufruf: bash werkzeug/schleife.sh <eingabe.mp4> <name> <sekunden>
 set -e
-EIN="$1"; NAME="${2:-schleife}"; DAUER="${3:-2.4}"
+EIN="$1"; NAME="${2:-schleife}"; DAUER="${3:-2.4}"; SCHNITT="${4:-crop=1280:560:0:80}"
 ZIEL="public/videos"
 mkdir -p "$ZIEL"
 
 # Schwarze Balken weg (der Clip kommt im Breitwandformat in einem
 # 16:9-Rahmen), auf 1280 begrenzen, 24 Bilder je Sekunde.
-FILTER="crop=1280:560:0:80,scale=1280:-2,fps=24"
+FILTER="$SCHNITT,scale=1280:-2,fps=24"
 
 ffmpeg -v error -y -t "$DAUER" -i "$EIN" \
   -filter_complex "[0:v]$FILTER,split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0" \

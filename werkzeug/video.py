@@ -33,18 +33,26 @@ def guthaben():
     return float(ruf("/chat/credit")["data"])
 
 
-def erzeugen(name, prompt, verhaeltnis="16:9"):
+def erzeugen(name, prompt, verhaeltnis="16:9", referenz=None):
     stand = guthaben()
     print(f"[Guthaben] {stand:.1f}", flush=True)
     if stand < MINDEST:
         sys.exit(f"Abbruch: {stand:.1f} unter Puffer {MINDEST}")
 
-    auf = ruf("/veo/generate", {
+    leib = {
         "prompt": prompt,
         "model": "veo3_fast",
         "aspectRatio": verhaeltnis,
         "generationType": "TEXT_2_VIDEO",
-    }, "POST")
+    }
+    if referenz:
+        # Aus dem vorhandenen Standbild wird Bewegung, statt eine neue
+        # Szene zu erfinden. Nur so passen Video, Poster und Kacheln
+        # desselben Konzepts noch zusammen - sie zeigen dann buchstaeblich
+        # denselben Raum.
+        leib["imageUrls"] = [referenz]
+        leib["generationType"] = "REFERENCE_2_VIDEO"
+    auf = ruf("/veo/generate", leib, "POST")
     print(json.dumps(auf)[:300], flush=True)
     tid = (auf.get("data") or {}).get("taskId")
     if not tid:
@@ -73,7 +81,8 @@ def erzeugen(name, prompt, verhaeltnis="16:9"):
 if __name__ == "__main__":
     name, prompt = sys.argv[1], sys.argv[2]
     verh = sys.argv[3] if len(sys.argv) > 3 else "16:9"
-    u = erzeugen(name, prompt, verh)
+    ref = sys.argv[4] if len(sys.argv) > 4 else None
+    u = erzeugen(name, prompt, verh, ref)
     ziel = HIER / "holen-eingabe.json"
     ziel.write_text(json.dumps(
         [{"url": u, "ziel": f"werkzeug/roh/{name}.mp4"}], indent=1), encoding="utf-8")
