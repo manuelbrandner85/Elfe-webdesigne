@@ -18,8 +18,14 @@
   --dauer-ui: 400ms;
   --dauer-inhalt: 600ms;
   --dauer-filmisch: 900ms;
-  --kurve-haupt: var(--kurve-haupt);
-  --kurve-weich: var(--kurve-weich);
+  /* Die Werte stehen genauso in src/lib/marken.ts — dort für
+     JavaScript, hier für CSS. Hier stand vorher `var(--kurve-haupt)`
+     als eigener Wert, also ein Selbstbezug. Der ist nach Norm
+     „ungültig zum Zeitpunkt der Wertberechnung": Die Variable wird
+     leer, und jede Kurzschreibweise, die sie benutzt, fällt komplett
+     weg. Was das angerichtet hat, steht im Festschreibungstext. */
+  --kurve-haupt: cubic-bezier(0.22, 1, 0.36, 1);
+  --kurve-weich: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* warm stone base — wie in der Ursprungsversion */
   --color-stone-950: #5e5a55;
