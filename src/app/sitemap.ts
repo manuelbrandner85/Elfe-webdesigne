@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...subPages.map((p) => eintrag(`/${p.slug}/`, 0.9, "monthly")),
     ...paketDetails.map((p) => eintrag(`/pakete/${p.slug}/`, 0.8, "monthly")),
     ...caseStudies.map((c) => eintrag(`/referenzen/${c.slug}/`, 0.7, "yearly")),
+    eintrag("/geschichte/", 0.6, "yearly"),
     eintrag("/impressum/", 0.3, "yearly"),
     eintrag("/datenschutz/", 0.3, "yearly"),
     eintrag("/agb/", 0.3, "yearly"),

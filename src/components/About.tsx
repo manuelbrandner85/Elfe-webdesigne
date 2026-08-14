@@ -3,6 +3,7 @@
 import { medien } from "@/lib/pfad";
 
 import Bild from "@/components/Bild";
+import Verweis from "@/components/Verweis";
 import SplitHeading from "@/components/SplitHeading";
 import { about } from "@/data/content";
 
@@ -50,6 +51,31 @@ export default function About() {
             <span className="block text-[0.72rem] tracking-[0.16em] uppercase text-gold-text mt-1">
               Ihre Ansprechpartnerin
             </span>
+
+            {/* Der Weg zur Geschichte steht direkt unter dem Gesicht, nicht
+                irgendwo im Fließtext daneben.
+
+                Wer bei „Über mich“ stehen bleibt und das Porträt ansieht,
+                will wissen, wer da arbeitet — genau dort ist die Frage
+                offen, und genau dort gehört die Antwort hin. Der Pfeil
+                zeigt, dass es weitergeht; die feine Goldlinie darüber
+                trennt Bildunterschrift und Einladung, damit es nicht wie
+                ein Berufstitel aussieht. */}
+            <Verweis
+              href="/geschichte/"
+              data-magnetisch
+              className="group mt-4 inline-flex items-center gap-2 border-t border-gold/30 pt-4 text-[0.78rem] text-gold-bright transition-colors duration-300 hover:text-gold"
+            >
+              <span className="border-b border-gold/40 group-hover:border-gold">
+                Warum ich klein angefangen habe
+              </span>
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </Verweis>
           </figcaption>
         </figure>
 
