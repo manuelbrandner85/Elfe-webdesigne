@@ -1,12 +1,13 @@
 import Verweis from "@/components/Verweis";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { contact } from "@/data/content";
+import { contact, site } from "@/data/content";
 
 export const metadata = {
   title: "Impressum — Webdesign Elfe",
   description:
     "Anbieterkennzeichnung nach § 5 DDG für Webdesign Elfe, Ulrike Elferich, Jork.",
+  alternates: { canonical: `${site.url}/impressum/` },
   robots: { index: true, follow: true },
 };
 

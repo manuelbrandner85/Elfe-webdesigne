@@ -1,12 +1,13 @@
 import Verweis from "@/components/Verweis";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { contact } from "@/data/content";
+import { contact, site } from "@/data/content";
 
 export const metadata = {
   title: "Datenschutzerklärung — Webdesign Elfe",
   description:
     "Informationen zur Verarbeitung personenbezogener Daten auf webdesign-elfe.de.",
+  alternates: { canonical: `${site.url}/datenschutz/` },
   robots: { index: true, follow: true },
 };
 
