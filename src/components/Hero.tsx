@@ -13,6 +13,7 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
+import KopfSchleife from "@/components/KopfSchleife";
 import { hero } from "@/data/content";
 import { Check } from "lucide-react";
 
@@ -88,6 +89,7 @@ export default function Hero() {
       {/* Bewegter Goldschimmer statt starrem Verlauf. Bei reduzierter
           Bewegung und ohne WebGL bleibt der Steinton stehen. */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,252,245,0.05),transparent_62%)]" />
+      <KopfSchleife />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 items-center relative z-10 w-full">
         <m.div style={{ y: textY, opacity: heroFade }} className="text-center lg:text-left">
