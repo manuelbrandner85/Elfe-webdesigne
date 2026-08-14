@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import SplitHeading from "@/components/SplitHeading";
 import StickyCta from "@/components/StickyCta";
 import BackToTop from "@/components/BackToTop";
+import Bild from "@/components/Bild";
+import { medien } from "@/lib/pfad";
 import { caseStudies, demoConcepts, site } from "@/data/content";
 
 export function generateStaticParams() {
@@ -27,6 +29,10 @@ export async function generateMetadata({
       title: c.metaTitle,
       description: c.metaDescription,
       url: `${site.url}/referenzen/${c.slug}/`,
+      /* Ohne Bild zeigt jede geteilte Verknüpfung nur graue Schrift —
+         bei einem Fallbeispiel, das von Gestaltung handelt, ist das
+         die denkbar schlechteste Visitenkarte. */
+      images: [{ url: `${site.url}/images/poster-${c.slug}.webp`, width: 1280, height: 720 }],
     },
   };
 }
@@ -40,6 +46,15 @@ export default async function CasePage({
   const c = caseStudies.find((x) => x.slug === projekt);
   const concept = demoConcepts.find((d) => d.slug === projekt);
   if (!c || !concept) return null;
+
+  /* Die Unterschriften stehen im Konzept, nicht in der Fallstudie — so
+     bleibt es bei EINER Quelle, und Bild und Text koennen nicht
+     auseinanderlaufen. */
+  const galerieSchirm = concept.screens.find((x) => x.type === "gallery");
+  const galerie =
+    galerieSchirm && "items" in galerieSchirm && concept.galerie.length
+      ? galerieSchirm.items
+      : [];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -113,6 +128,34 @@ export default async function CasePage({
               realen Auftrag.
             </p>
           </div>
+
+          {/* Ein Fallbeispiel über Gestaltung, das keine Gestaltung zeigt,
+              ist ein Widerspruch. Bis hierher stand auf diesen Seiten von
+              oben bis unten nur Text.
+
+              Das Bild steht breiter als die Textspalte, aber nicht ganz
+              über die Seite: So bleibt der Lesefluss erhalten und das Bild
+              bekommt trotzdem Gewicht. */}
+          <figure className="enthuellung enthuellung-weit mx-auto mt-14 max-w-5xl px-6 lg:px-8">
+            <div className="relative overflow-hidden rounded-sm border border-gold/30 shadow-[0_1px_0_rgba(255,250,240,0.12)_inset,0_30px_64px_rgba(0,0,0,0.45)]">
+              <Bild
+                src={medien(`/images/poster-${c.slug}.webp`)}
+                alt={`Startseite des Designkonzepts ${concept.title} — ${concept.headline.replace(/\n/g, " ")}`}
+                width={1280}
+                height={720}
+                sizes="(min-width: 1024px) 62rem, calc(100vw - 3rem)"
+                priority
+                className="block w-full h-auto"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(30,27,24,0.35),transparent_45%)]"
+              />
+            </div>
+            <figcaption className="mt-3 text-[0.78rem] text-silver/80">
+              {concept.domain} — Startseite des Konzepts
+            </figcaption>
+          </figure>
         </section>
 
         <section className="py-16 bg-[rgba(0,0,0,0.10)] fade-edges">
@@ -171,6 +214,41 @@ export default async function CasePage({
               Ergebnis
             </h2>
             <p className="text-silver leading-relaxed mb-10">{c.ergebnis}</p>
+          </div>
+
+          {/* Die drei Aufnahmen aus der Galerie des Konzepts, mit denselben
+              Unterschriften. Sie belegen den Text, statt ihn zu wiederholen. */}
+          {galerie.length > 0 && (
+            <div className="max-w-5xl mx-auto px-6 lg:px-8 mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                {galerie.map((g, i) => (
+                  <figure
+                    key={g.title}
+                    className="enthuellung"
+                    style={{ ["--stufe" as string]: i }}
+                  >
+                    <div className="relative overflow-hidden rounded-sm border border-line">
+                      <Bild
+                        src={concept.galerie[i]}
+                        alt={`${g.title} — ${g.meta}, Aufnahme aus dem Designkonzept ${concept.title}`}
+                        width={640}
+                        height={480}
+                        breiten={[360, 640]}
+                        sizes="(min-width: 640px) 20rem, calc(100vw - 3rem)"
+                        className="block w-full h-auto"
+                      />
+                    </div>
+                    <figcaption className="mt-2.5">
+                      <span className="block text-[0.9rem] text-parchment">{g.title}</span>
+                      <span className="block text-[0.78rem] text-silver/80">{g.meta}</span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="max-w-3xl mx-auto px-6 lg:px-8">
 
             <div className="flex flex-wrap gap-4">
               <Verweis
