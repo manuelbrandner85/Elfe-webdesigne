@@ -1,7 +1,7 @@
 "use client";
 
 import SplitHeading from "@/components/SplitHeading";
-import { Check, HardDrive, BookOpen } from "lucide-react";
+import { Check, HardDrive, BookOpen, Download } from "lucide-react";
 import { pricing, pricingNote, addons, addonNote } from "@/data/content";
 
 export default function Pricing() {
@@ -144,6 +144,37 @@ export default function Pricing() {
                     {a.title}
                   </h4>
                   <p className="text-silver text-sm leading-relaxed mb-6">{a.text}</p>
+
+                  {/* Die Anleitung liegt zum Ansehen bereit, bevor jemand
+                      sich entscheidet. Wer selbst hosten will, will vorher
+                      wissen, worauf er sich einlässt - eine Aufzählung mit
+                      drei Stichpunkten beantwortet das nicht.
+
+                      Das Ziel-Attribut, weil ein PDF sonst die Seite
+                      ersetzt und der Zurück-Weg im Betrachter endet. */}
+                  {a.datei && (
+                    <a
+                      href={a.datei.pfad}
+                      target="_blank"
+                      rel="noopener"
+                      download
+                      className="group mb-6 flex items-center gap-3 rounded-sm border border-gold/40 bg-[linear-gradient(160deg,rgba(201,162,39,0.10),rgba(0,0,0,0.18))] px-4 py-3 transition-colors duration-300 hover:border-gold/75"
+                    >
+                      <Download
+                        size={16}
+                        strokeWidth={1.8}
+                        className="text-gold-bright shrink-0 transition-transform duration-300 group-hover:translate-y-0.5"
+                      />
+                      <span className="min-w-0">
+                        <span className="block text-[0.84rem] text-parchment truncate">
+                          {a.datei.name}
+                        </span>
+                        <span className="block text-[0.72rem] text-silver">
+                          Anleitung ansehen · {a.datei.groesse}
+                        </span>
+                      </span>
+                    </a>
+                  )}
 
                   <ul className="space-y-2 border-t border-line pt-5 mt-auto">
                     {a.points.map((pt) => (

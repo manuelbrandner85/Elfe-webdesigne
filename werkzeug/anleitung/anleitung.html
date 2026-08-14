@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Hosting selbst in der Hand — Webdesign Elfe</title>
+<style>
+  /* Quelle der herunterladbaren Anleitung.
+
+     WARUM HELL UND NICHT IM SEITENDESIGN
+
+     Die Website ist dunkel. Ein dunkles PDF ist auf dem Bildschirm
+     schön und beim Ausdrucken eine Zumutung: eine halbe Patrone Toner
+     je Seite, und auf Papier bricht der Kontrast zusammen. Diese
+     Anleitung wird ausgedruckt neben den Rechner gelegt — dafür ist
+     Papierweiß das richtige Format. Die Marke trägt hier die Schrift
+     und das Gold, nicht der Hintergrund.
+
+     WARUM ZEICHNUNGEN UND KEINE BILDSCHIRMFOTOS
+
+     Bildschirmfotos von Strato, IONOS oder All-Inkl wären in sechs
+     Monaten falsch — die Anbieter bauen ihre Oberflächen ständig um.
+     Und sie wären fremdes Material. Die Zeichnungen hier erklären, WAS
+     einzutragen ist; wo der Knopf beim jeweiligen Anbieter sitzt, steht
+     in der zugeschnittenen Fassung, die zum Projekt gehört. */
+
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-500-normal.woff2) format('woff2'); font-weight: 500; }
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+  @font-face { font-family: Cormorant; src: url(schrift/cormorant-garamond-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+  @font-face { font-family: Cormorant; src: url(schrift/cormorant-garamond-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+
+  :root {
+    --gold: #a4801d;
+    --gold-hell: #cfae4e;
+    --tinte: #2a2724;
+    --grau: #5f5a54;
+    --linie: #ded7c9;
+    --flaeche: #faf7f0;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 18mm 22mm 18mm;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Jost, system-ui, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.62;
+    color: var(--tinte);
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1, h2, h3 { font-family: Cormorant, Georgia, serif; font-weight: 600; margin: 0; }
+  h1 { font-size: 30pt; line-height: 1.1; letter-spacing: -0.01em; }
+  h2 {
+    font-size: 17pt; margin: 0 0 4mm; padding-bottom: 2mm;
+    border-bottom: 0.4pt solid var(--linie);
+    /* Überschriften reißen nicht vom Text ab, den sie ankündigen. */
+    break-after: avoid;
+  }
+  h3 { font-size: 12.5pt; margin: 0 0 1.5mm; }
+  p { margin: 0 0 3mm; }
+  strong { font-weight: 600; }
+
+  .kicker {
+    font-size: 8pt; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500;
+  }
+
+  /* ---------- Deckblatt ---------- */
+  .deckblatt {
+    height: 253mm; display: flex; flex-direction: column; justify-content: space-between;
+    break-after: page;
+  }
+  .deckblatt .marke { display: flex; align-items: center; gap: 5mm; }
+  .deckblatt .marke img { width: 22mm; height: 22mm; object-fit: contain; }
+  .deckblatt .wort { font-family: Cormorant, serif; font-size: 17pt; }
+  .deckblatt .wort span { color: var(--gold); font-style: italic; }
+  .deckblatt .titel { max-width: 135mm; }
+  .deckblatt .titel p { color: var(--grau); font-size: 11.5pt; margin-top: 5mm; }
+  .strich { width: 26mm; height: 1.2pt; background: var(--gold); margin: 6mm 0; }
+
+  .inhalt { border-top: 0.4pt solid var(--linie); padding-top: 5mm; }
+  .inhalt ol { margin: 0; padding-left: 5mm; columns: 2; column-gap: 10mm; }
+  .inhalt li { margin-bottom: 1.5mm; break-inside: avoid; }
+
+  /* ---------- Bausteine ---------- */
+  section { break-inside: auto; }
+  .schritt { break-inside: avoid; margin-bottom: 7mm; }
+  .schritt-kopf { display: flex; align-items: baseline; gap: 4mm; margin-bottom: 2mm; }
+  .nummer {
+    font-family: Cormorant, serif; font-size: 20pt; color: var(--gold);
+    line-height: 1; min-width: 11mm;
+  }
+
+  .kasten {
+    background: var(--flaeche); border: 0.4pt solid var(--linie);
+    border-left: 1.6pt solid var(--gold); padding: 4mm 5mm; margin: 3mm 0 4mm;
+    break-inside: avoid;
+  }
+  .kasten p:last-child { margin-bottom: 0; }
+  .kasten .kicker { display: block; margin-bottom: 1.5mm; }
+
+  table { width: 100%; border-collapse: collapse; margin: 3mm 0 5mm; font-size: 9.5pt; }
+  th, td { text-align: left; padding: 2mm 3mm; border-bottom: 0.4pt solid var(--linie); vertical-align: top; }
+  th { font-weight: 600; font-size: 8.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grau); }
+  td code, .code {
+    font-family: "DejaVu Sans Mono", monospace; font-size: 9pt;
+    background: var(--flaeche); padding: 0.6mm 1.4mm; border: 0.3pt solid var(--linie);
+  }
+  tr { break-inside: avoid; }
+
+  ul.haken { list-style: none; padding: 0; margin: 0; }
+  ul.haken li {
+    position: relative; padding-left: 7mm; margin-bottom: 2mm; break-inside: avoid;
+  }
+  ul.haken li::before {
+    content: ""; position: absolute; left: 0; top: 1.2mm;
+    width: 3.6mm; height: 3.6mm; border: 0.5pt solid var(--gold);
+  }
+
+  figure { margin: 4mm 0 5mm; break-inside: avoid; }
+  figcaption { font-size: 8.5pt; color: var(--grau); margin-top: 1.5mm; }
+
+  .fuss {
+    margin-top: 8mm; padding-top: 4mm; border-top: 0.4pt solid var(--linie);
+    font-size: 9pt; color: var(--grau);
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= Deckblatt ================= -->
+<div class="deckblatt">
+  <div class="marke">
+    <img src="logo.webp" alt="">
+    <span class="wort">Webdesign <span>Elfe</span></span>
+  </div>
+
+  <div class="titel">
+    <p class="kicker">Anleitung für Selbstversorger</p>
+    <div class="strich"></div>
+    <h1>Hosting selbst<br>in der Hand</h1>
+    <p>
+      Sie führen Domain und Hosting lieber selbst? Dann entfällt der
+      monatliche Beitrag. Diese Anleitung führt Sie durch alles, was
+      dafür nötig ist — in der Reihenfolge, in der es zu tun ist.
+    </p>
+  </div>
+
+  <div class="inhalt">
+    <p class="kicker">Inhalt</p>
+    <ol>
+      <li>Was Sie überhaupt brauchen</li>
+      <li>Anbieter auswählen</li>
+      <li>Domain und Webspace bestellen</li>
+      <li>Dateien hochladen</li>
+      <li>Die Domain auf den Speicherplatz zeigen lassen</li>
+      <li>Verschlüsselung einschalten</li>
+      <li>E-Mail-Adresse einrichten</li>
+      <li>Prüfliste zum Abhaken</li>
+      <li>Wenn etwas klemmt</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ================= 1 ================= -->
+<section>
+  <h2>1 · Was Sie überhaupt brauchen</h2>
+  <p>
+    Eine Website im Netz besteht aus drei Dingen, die oft verwechselt
+    werden. Wer sie einmal auseinanderhält, versteht jede Rechnung und
+    jedes Formular beim Anbieter.
+  </p>
+
+  <figure>
+    <svg viewBox="0 0 700 190" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif">
+      <!-- Domain -->
+      <rect x="4" y="30" width="200" height="88" fill="#faf7f0" stroke="#ded7c9"/>
+      <text x="20" y="56" font-size="15" fill="#a4801d">Die Domain</text>
+      <text x="20" y="78" font-size="12" fill="#5f5a54">ihr-betrieb.de</text>
+      <text x="20" y="96" font-size="11" fill="#5f5a54">Die Adresse. Läuft</text>
+      <text x="20" y="110" font-size="11" fill="#5f5a54">immer auf Ihren Namen.</text>
+
+      <!-- Pfeil -->
+      <line x1="212" y1="74" x2="244" y2="74" stroke="#a4801d" stroke-width="1.2"/>
+      <polygon points="244,74 236,70 236,78" fill="#a4801d"/>
+
+      <!-- Webspace -->
+      <rect x="252" y="30" width="200" height="88" fill="#faf7f0" stroke="#ded7c9"/>
+      <text x="268" y="56" font-size="15" fill="#a4801d">Der Webspace</text>
+      <text x="268" y="78" font-size="12" fill="#5f5a54">Speicherplatz</text>
+      <text x="268" y="96" font-size="11" fill="#5f5a54">Hier liegen die Dateien</text>
+      <text x="268" y="110" font-size="11" fill="#5f5a54">Ihrer Website.</text>
+
+      <!-- Pfeil -->
+      <line x1="460" y1="74" x2="492" y2="74" stroke="#a4801d" stroke-width="1.2"/>
+      <polygon points="492,74 484,70 484,78" fill="#a4801d"/>
+
+      <!-- Zertifikat -->
+      <rect x="500" y="30" width="196" height="88" fill="#faf7f0" stroke="#ded7c9"/>
+      <text x="516" y="56" font-size="15" fill="#a4801d">Das Zertifikat</text>
+      <text x="516" y="78" font-size="12" fill="#5f5a54">SSL / https</text>
+      <text x="516" y="96" font-size="11" fill="#5f5a54">Das Schloss in der</text>
+      <text x="516" y="110" font-size="11" fill="#5f5a54">Adresszeile.</text>
+
+      <text x="4" y="152" font-size="11" fill="#5f5a54">Alle drei kommen meist vom selben Anbieter und stehen auf einer Rechnung —</text>
+      <text x="4" y="168" font-size="11" fill="#5f5a54">es sind aber drei verschiedene Dinge, und man kann sie einzeln wechseln.</text>
+    </svg>
+    <figcaption>Domain, Webspace und Zertifikat — drei Bausteine, eine Rechnung.</figcaption>
+  </figure>
+
+  <div class="kasten">
+    <span class="kicker">Was das kostet</span>
+    <p>
+      Rechnen Sie mit <strong>3 bis 8 € im Monat</strong> für Webspace und
+      <strong>10 bis 20 € im Jahr</strong> für die Domain. Das Zertifikat ist
+      bei allen hier genannten Anbietern kostenlos enthalten. Wer Ihnen
+      dafür Geld berechnet, hat einen veralteten Tarif.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 2 ================= -->
+<section>
+  <h2>2 · Anbieter auswählen</h2>
+  <p>
+    Ihre Website ist eine statische Seite. Das heißt: Sie braucht keine
+    Datenbank, kein PHP und keinen besonderen Tarif. Fast jedes
+    Einsteigerpaket reicht — achten Sie nur auf diese fünf Punkte.
+  </p>
+
+  <ul class="haken">
+    <li><strong>Speicherplatz ab 1 GB.</strong> Ihre Seite belegt wenige Megabyte. Jedes Paket reicht.</li>
+    <li><strong>SSL-Zertifikat inklusive</strong> (meist „Let’s Encrypt" genannt).</li>
+    <li><strong>SFTP-Zugang.</strong> Damit werden die Dateien hochgeladen. Steht manchmal als „FTP über SSH".</li>
+    <li><strong>Eigene DNS-Verwaltung.</strong> Sie müssen A- und CNAME-Einträge selbst setzen können.</li>
+    <li><strong>Serverstandort EU.</strong> Erspart Ihnen Kapitel in der Datenschutzerklärung.</li>
+  </ul>
+
+  <table>
+    <thead>
+      <tr><th>Anbieter</th><th>Etwa</th><th>Anmerkung</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>All-Inkl</td><td>ab 5 € / Monat</td><td>Sehr guter Telefonsupport auf Deutsch. Für Einsteiger die ruhigste Wahl.</td></tr>
+      <tr><td>Netcup</td><td>ab 3 € / Monat</td><td>Günstig und technisch solide. Oberfläche etwas sachlicher.</td></tr>
+      <tr><td>IONOS</td><td>ab 4 € / Monat</td><td>Sehr verbreitet. Achten Sie auf den Preis nach dem ersten Jahr.</td></tr>
+      <tr><td>Strato</td><td>ab 4 € / Monat</td><td>Ebenfalls verbreitet. Gleiche Anmerkung zum zweiten Jahr.</td></tr>
+      <tr><td>Hetzner</td><td>ab 3 € / Monat</td><td>Für technisch Interessierte. Weniger Handhalten.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="kasten">
+    <span class="kicker">Ehrlicher Hinweis</span>
+    <p>
+      Diese Übersicht ist eine Orientierung, keine Empfehlung und keine
+      Werbung — ich verdiene an keinem dieser Anbieter mit. Preise und
+      Leistungen ändern sich; prüfen Sie sie vor dem Abschluss. Und
+      achten Sie auf die <strong>Verlängerungspreise</strong>: Der Betrag im
+      ersten Jahr sagt wenig über den zweiten.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 3 ================= -->
+<section>
+  <h2>3 · Domain und Webspace bestellen</h2>
+
+  <div class="schritt">
+    <div class="schritt-kopf"><span class="nummer">01</span><h3>Domain prüfen und bestellen</h3></div>
+    <p>
+      Bestellen Sie die Domain <strong>auf Ihren eigenen Namen</strong>, nicht
+      auf den einer Agentur. Als Inhaber („Domaininhaber" oder „Owner-C")
+      müssen Sie selbst eingetragen sein — sonst gehört die Adresse
+      jemand anderem, und ein Wechsel wird mühsam.
+    </p>
+  </div>
+
+  <div class="schritt">
+    <div class="schritt-kopf"><span class="nummer">02</span><h3>Webspace dazubuchen</h3></div>
+    <p>
+      Das kleinste Paket genügt. Wenn Sie gefragt werden, welche
+      PHP-Version Sie möchten: Es ist egal, Ihre Seite braucht kein PHP.
+    </p>
+  </div>
+
+  <div class="schritt">
+    <div class="schritt-kopf"><span class="nummer">03</span><h3>Zugangsdaten sicher ablegen</h3></div>
+    <p>
+      Sie bekommen mehrere Daten. Legen Sie sie an einem Ort ab, den Sie
+      in zwei Jahren noch finden — nicht in einer E-Mail, die im
+      Papierkorb landet.
+    </p>
+    <table>
+      <thead><tr><th>Sie brauchen später</th><th>Steht beim Anbieter unter</th></tr></thead>
+      <tbody>
+        <tr><td>SFTP-Server, Benutzer, Passwort</td><td>„FTP-Zugänge" oder „Zugangsdaten"</td></tr>
+        <tr><td>Zugang zur DNS-Verwaltung</td><td>„Domain" → „DNS" oder „Nameserver"</td></tr>
+        <tr><td>Kundennummer und Kundenpasswort</td><td>Bestätigungsmail des Anbieters</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 4 ================= -->
+<section>
+  <h2>4 · Dateien hochladen</h2>
+  <p>
+    Von mir bekommen Sie einen Ordner — meist als ZIP-Datei. Darin liegt
+    Ihre fertige Website. Dieser <strong>Inhalt</strong> kommt auf den
+    Webspace, nicht der Ordner selbst.
+  </p>
+
+  <figure>
+    <svg viewBox="0 0 700 200" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif">
+      <text x="4" y="16" font-size="11" fill="#a4801d">RICHTIG</text>
+      <rect x="4" y="26" width="330" height="150" fill="#faf7f0" stroke="#ded7c9"/>
+      <text x="20" y="48" font-size="11.5" fill="#5f5a54">htdocs/   (oder www/ oder public_html/)</text>
+      <text x="36" y="70" font-size="11.5" fill="#2a2724">index.html</text>
+      <text x="36" y="90" font-size="11.5" fill="#2a2724">impressum/</text>
+      <text x="36" y="110" font-size="11.5" fill="#2a2724">_next/</text>
+      <text x="36" y="130" font-size="11.5" fill="#2a2724">images/</text>
+      <text x="20" y="158" font-size="10.5" fill="#5f5a54">index.html liegt ganz oben.</text>
+
+      <text x="366" y="16" font-size="11" fill="#8a3b2f">FALSCH</text>
+      <rect x="366" y="26" width="330" height="150" fill="#fdf5f3" stroke="#e8d5cf"/>
+      <text x="382" y="48" font-size="11.5" fill="#5f5a54">htdocs/</text>
+      <text x="398" y="70" font-size="11.5" fill="#8a3b2f">website-fertig/</text>
+      <text x="414" y="90" font-size="11.5" fill="#2a2724">index.html</text>
+      <text x="414" y="110" font-size="11.5" fill="#2a2724">impressum/</text>
+      <text x="382" y="146" font-size="10.5" fill="#5f5a54">Ein Ordner zu tief — die Seite</text>
+      <text x="382" y="162" font-size="10.5" fill="#5f5a54">wäre nur unter /website-fertig/ da.</text>
+    </svg>
+    <figcaption>Der häufigste Fehler beim Hochladen: eine Ordnerebene zu tief.</figcaption>
+  </figure>
+
+  <div class="schritt">
+    <div class="schritt-kopf"><span class="nummer">01</span><h3>Programm installieren</h3></div>
+    <p>
+      <strong>FileZilla</strong> ist kostenlos und läuft auf Windows und Mac
+      (filezilla-project.org). Laden Sie es von der Herstellerseite,
+      nicht von einem Download-Portal.
+    </p>
+  </div>
+
+  <div class="schritt">
+    <div class="schritt-kopf"><span class="nummer">02</span><h3>Verbinden</h3></div>
+    <p>
+      Server, Benutzername und Passwort aus den Zugangsdaten eintragen.
+      Wählen Sie als Verbindungsart <strong>SFTP</strong>, nicht das einfache
+      FTP — bei FTP geht Ihr Passwort unverschlüsselt durchs Netz.
+    </p>
+  </div>
+
+  <div class="schritt">
+    <div class="schritt-kopf"><span class="nummer">03</span><h3>Inhalt hineinziehen</h3></div>
+    <p>
+      Wechseln Sie rechts in den Ordner <span class="code">htdocs</span>
+      (je nach Anbieter <span class="code">www</span> oder
+      <span class="code">public_html</span>). Ziehen Sie den
+      <strong>Inhalt</strong> des entpackten Ordners hinein. Danach muss
+      <span class="code">index.html</span> direkt dort liegen.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 5 ================= -->
+<section>
+  <h2>5 · Die Domain auf den Speicherplatz zeigen lassen</h2>
+  <p>
+    Liegt Domain und Webspace beim selben Anbieter, ist dieser Schritt
+    meist schon erledigt. Nur wenn beides getrennt ist, tragen Sie die
+    folgenden Einträge in der DNS-Verwaltung ein.
+  </p>
+
+  <table>
+    <thead><tr><th>Name</th><th>Typ</th><th>Wert</th><th>Wofür</th></tr></thead>
+    <tbody>
+      <tr><td><span class="code">@</span></td><td>A</td><td>IP-Adresse Ihres Webspace</td><td>ihr-betrieb.de</td></tr>
+      <tr><td><span class="code">www</span></td><td>CNAME</td><td><span class="code">ihr-betrieb.de.</span></td><td>www.ihr-betrieb.de</td></tr>
+    </tbody>
+  </table>
+
+  <div class="kasten">
+    <span class="kicker">Zwei Dinge, die oft schiefgehen</span>
+    <p>
+      <strong>Der Punkt am Ende.</strong> Bei einem CNAME gehört hinter den Wert
+      ein Punkt: <span class="code">ihr-betrieb.de.</span> Fehlt er, hängen
+      manche Anbieter die eigene Domain noch einmal an.
+    </p>
+    <p>
+      <strong>Geduld.</strong> Änderungen brauchen bis zu 24 Stunden, bis sie
+      überall angekommen sind. Wenn es nach zehn Minuten noch nicht geht,
+      ist das normal und kein Fehler.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 6 ================= -->
+<section>
+  <h2>6 · Verschlüsselung einschalten</h2>
+  <p>
+    Ohne Zertifikat zeigt der Browser „Nicht sicher" neben Ihrer Adresse
+    — und Besucher springen ab. Bei allen genannten Anbietern ist das ein
+    Schalter, kein Kauf.
+  </p>
+
+  <figure>
+    <svg viewBox="0 0 700 96" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Jost, sans-serif">
+      <rect x="4" y="12" width="330" height="40" rx="20" fill="#faf7f0" stroke="#ded7c9"/>
+      <path d="M28 28 v-4 a5 5 0 0 1 10 0 v4" fill="none" stroke="#3d7a4a" stroke-width="1.6"/>
+      <rect x="25" y="28" width="16" height="12" rx="2" fill="#3d7a4a"/>
+      <text x="52" y="37" font-size="12.5" fill="#2a2724">https://ihr-betrieb.de</text>
+      <text x="4" y="74" font-size="10.5" fill="#3d7a4a">So soll es aussehen</text>
+
+      <rect x="366" y="12" width="330" height="40" rx="20" fill="#fdf5f3" stroke="#e8d5cf"/>
+      <circle cx="392" cy="32" r="9" fill="none" stroke="#8a3b2f" stroke-width="1.6"/>
+      <line x1="392" y1="27" x2="392" y2="33" stroke="#8a3b2f" stroke-width="1.6"/>
+      <circle cx="392" cy="37" r="1" fill="#8a3b2f"/>
+      <text x="414" y="37" font-size="12.5" fill="#8a3b2f">Nicht sicher</text>
+      <text x="497" y="37" font-size="12.5" fill="#2a2724">ihr-betrieb.de</text>
+      <text x="366" y="74" font-size="10.5" fill="#8a3b2f">So sieht es ohne Zertifikat aus</text>
+    </svg>
+  </figure>
+
+  <ul class="haken">
+    <li>Im Kundenbereich nach <strong>„SSL"</strong> oder <strong>„Zertifikate"</strong> suchen.</li>
+    <li>Das kostenlose Zertifikat („Let’s Encrypt") für Ihre Domain aktivieren.</li>
+    <li>Falls vorhanden: <strong>„HTTPS erzwingen"</strong> einschalten — dann werden alle Aufrufe automatisch auf die verschlüsselte Fassung geleitet.</li>
+    <li>Warten. Die Ausstellung dauert wenige Minuten bis zu einer Stunde.</li>
+  </ul>
+</section>
+
+<!-- ================= 7 ================= -->
+<section>
+  <h2>7 · E-Mail-Adresse einrichten</h2>
+  <p>
+    Zu jedem Webspace gehören E-Mail-Postfächer. Eine Adresse auf der
+    eigenen Domain wirkt anders als eine Freemail-Adresse — und kostet
+    nichts extra.
+  </p>
+  <ul class="haken">
+    <li>Im Kundenbereich unter <strong>„E-Mail"</strong> ein Postfach anlegen, etwa <span class="code">info@ihr-betrieb.de</span>.</li>
+    <li>Die Zugangsdaten notieren: Posteingangs- und Postausgangsserver, Benutzername, Passwort.</li>
+    <li>Im Mailprogramm oder auf dem Telefon einrichten — die Anbieter halten dafür fertige Anleitungen bereit.</li>
+    <li>Prüfen: sich selbst eine Nachricht schreiben und antworten.</li>
+  </ul>
+</section>
+
+<!-- ================= 8 ================= -->
+<section>
+  <h2>8 · Prüfliste zum Abhaken</h2>
+  <p>Wenn alle Punkte stimmen, ist Ihre Website vollständig eingerichtet.</p>
+  <ul class="haken">
+    <li>Die Domain läuft auf <strong>Ihren</strong> Namen.</li>
+    <li><span class="code">index.html</span> liegt direkt im Webordner, nicht in einem Unterordner.</li>
+    <li><span class="code">https://ihr-betrieb.de</span> zeigt Ihre Seite mit Schloss.</li>
+    <li><span class="code">https://www.ihr-betrieb.de</span> funktioniert ebenfalls.</li>
+    <li>Ohne <span class="code">https</span> aufgerufen, wird automatisch umgeleitet.</li>
+    <li>Impressum und Datenschutzerklärung sind erreichbar.</li>
+    <li>Das Kontaktformular kommt an — einmal selbst ausprobiert.</li>
+    <li>Die Seite sieht auf dem Telefon richtig aus.</li>
+    <li>Zugangsdaten liegen an einem sicheren, wiederauffindbaren Ort.</li>
+  </ul>
+</section>
+
+<!-- ================= 9 ================= -->
+<section>
+  <h2>9 · Wenn etwas klemmt</h2>
+
+  <table>
+    <thead><tr><th>Sie sehen</th><th>Meistens liegt es daran</th></tr></thead>
+    <tbody>
+      <tr><td>„Diese Seite ist nicht erreichbar"</td><td>Die DNS-Änderung ist noch nicht durch. Bis zu 24 Stunden warten.</td></tr>
+      <tr><td>Eine Liste von Dateien statt der Seite</td><td><span class="code">index.html</span> liegt eine Ebene zu tief.</td></tr>
+      <tr><td>„Nicht sicher" in der Adresszeile</td><td>Das Zertifikat ist nicht aktiviert oder noch in Ausstellung.</td></tr>
+      <tr><td>Seite ohne Gestaltung, nur Text</td><td>Der Ordner <span class="code">_next</span> wurde nicht mit hochgeladen.</td></tr>
+      <tr><td>Bilder fehlen</td><td>Der Ordner <span class="code">images</span> fehlt oder der Upload brach ab.</td></tr>
+      <tr><td>Alte Fassung trotz neuem Upload</td><td>Zwischenspeicher des Browsers. Mit Strg+F5 neu laden.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="kasten">
+    <span class="kicker">Sie kommen nicht weiter?</span>
+    <p>
+      Melden Sie sich — auch wenn Sie das Hosting selbst führen. Eine
+      kurze Frage beantworte ich ohne Berechnung. Wird daraus mehr,
+      sage ich Ihnen vorher, was es kostet.
+    </p>
+    <p>
+      <strong>Ulrike Elferich</strong> · Webdesign Elfe<br>
+      info@webdesign-elfe.de · 0157 74214544<br>
+      webdesign-elfe.de
+    </p>
+  </div>
+
+  <div class="fuss">
+    Diese Anleitung beschreibt den allgemeinen Weg und ist bewusst
+    anbieterunabhängig gehalten — Oberflächen ändern sich, Bildschirmfotos
+    veralten. Gehört die Einrichtung zu einem Projekt von mir, bekommen
+    Sie zusätzlich die auf Ihren Anbieter zugeschnittene Fassung mit den
+    konkreten Menüpunkten. Stand dieser Ausgabe: siehe Fußzeile.
+  </div>
+</section>
+
+</body>
+</html>

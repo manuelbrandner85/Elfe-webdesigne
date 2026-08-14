@@ -535,6 +535,9 @@ export type Addon = {
   points: string[];
   icon: "server" | "book";
   included?: boolean;
+  /* Herunterladbare Anleitung, falls vorhanden. Erzeugt aus
+     werkzeug/anleitung/anleitung.html. */
+  datei?: { pfad: string; name: string; groesse: string };
 };
 
 export const addons: Addon[] = [
@@ -557,10 +560,15 @@ export const addons: Addon[] = [
     text: "Sie möchten Hosting und Vertrag selbst führen? Dann entfällt der Monatsbeitrag und Sie erhalten eine verständliche Anleitung für Ihren Anbieter.",
     points: [
       "Bebilderte Schritt-für-Schritt-Anleitung",
-      "Auf Ihren Anbieter zugeschnitten",
+      "Zum Projekt zusätzlich auf Ihren Anbieter zugeschnitten",
       "Die Domain läuft ohnehin immer auf Sie",
     ],
     included: true,
+    datei: {
+      pfad: medien("/downloads/hosting-anleitung.pdf"),
+      name: "Hosting selbst in der Hand",
+      groesse: "PDF, 6 Seiten",
+    },
   },
 ];
 
