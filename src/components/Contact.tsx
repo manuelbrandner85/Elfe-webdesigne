@@ -94,12 +94,8 @@ export default function Contact() {
   return (
     <section id="kontakt" className="py-24 lg:py-28 scroll-mt-[100px]">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        <m.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-10"
+        <div
+          className="auftritt text-center mb-10"
         >
           <p className="text-[0.78rem] tracking-[0.2em] uppercase text-gold-text mb-3">
             {contact.kicker}
@@ -110,14 +106,10 @@ export default function Contact() {
           <p className="text-silver max-w-xl mx-auto">
 {contact.intro}
           </p>
-        </m.div>
+        </div>
 
-        <m.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex flex-wrap gap-4 justify-center mb-14"
+        <div
+          className="auftritt flex flex-wrap gap-4 justify-center mb-14"
         >
           <a
             data-magnetisch href="#kontaktformular"
@@ -131,7 +123,7 @@ export default function Contact() {
           >
             Kontakt aufnehmen
           </a>
-        </m.div>
+        </div>
 
         <div
           id="kontaktformular"

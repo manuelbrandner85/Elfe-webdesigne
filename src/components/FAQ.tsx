@@ -11,12 +11,8 @@ export default function FAQ() {
   return (
     <section id="faq" className="py-24 lg:py-28 scroll-mt-[100px] bg-[rgba(0,0,0,0.10)] fade-edges watermark">
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
-        <m.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-12"
+        <div
+          className="auftritt text-center mb-12"
         >
           <p className="text-[0.78rem] tracking-[0.2em] uppercase text-gold-text mb-3">
             FAQ
@@ -25,20 +21,16 @@ export default function FAQ() {
             Häufige Fragen zu Webdesign &amp; Kosten
           </h2>
           <div className="rule-gold w-24 mx-auto" />
-        </m.div>
+        </div>
 
         <div className="flex flex-col gap-3.5">
           {faqItems.map((item, i) => {
             const isOpen = openIndex === i;
             return (
-              <m.div
+              <div
                 key={item.q}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "80px" }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="panel rounded-md overflow-hidden transition-colors duration-300 hover:border-gold/35"
-              >
+                className="auftritt panel rounded-md overflow-hidden transition-colors duration-300 hover:border-gold/35"
+        style={{ ["--stufe" as string]: i }}>
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className="w-full flex items-center justify-between gap-4 px-6 py-5.5 text-left"
@@ -70,7 +62,7 @@ export default function FAQ() {
                     </m.div>
                   )}
                 </AnimatePresence>
-              </m.div>
+              </div>
             );
           })}
         </div>

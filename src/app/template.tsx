@@ -1,27 +1,22 @@
 "use client";
 
-import { m } from "framer-motion";
+/* Der Inhaltsbereich jeder Seite.
 
-/* Sanfter Übergang beim Wechsel zwischen Seiten. */
+   Hier lag bisher ein Goldschimmer plus Einblenden bei jedem Wechsel —
+   ein Effekt ÜBER dem Wechsel, während die Seite darunter trotzdem
+   schlagartig ausgetauscht wurde. Der Übergang selbst liegt jetzt in
+   globals.css und läuft über die View-Transitions-Schnittstelle.
+
+   Warum hier kein eigener Übergangsname sitzt: Ein Element mit
+   `view-transition-name` bildet in Chromium einen Bezugsrahmen für
+   fest positionierte Nachfahren. Ein Wrapper um den gesamten Inhalt
+   hätte also jedes `position: fixed` darin an sich gebunden — und
+   `display: contents` scheidet ohnehin aus, weil ein Element ohne
+   eigenen Kasten gar nicht erfasst werden kann.
+
+   Stattdessen bekommen umgekehrt die bleibenden Teile — Kopfzeile,
+   Fußzeile — eigene Namen und werden stillgestellt. Was übrig bleibt,
+   ist der Inhalt, und genau der bewegt sich. */
 export default function Template({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {/* Goldschimmer, der beim Seitenwechsel einmal durchläuft */}
-      <m.span
-        aria-hidden
-        initial={{ opacity: 0.9, x: "-30%" }}
-        animate={{ opacity: 0, x: "130%" }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-none fixed inset-y-0 left-0 w-1/3 z-[var(--ebene-menue)] bg-[linear-gradient(90deg,transparent,rgba(242,216,148,0.16),transparent)]"
-      />
-      <m.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="contents"
-      >
-        {children}
-      </m.div>
-    </>
-  );
+  return <>{children}</>;
 }

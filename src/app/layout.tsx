@@ -162,8 +162,20 @@ export default function RootLayout({
       lang="de"
       className="h-full scroll-smooth"
       /* Der Unterpfad wird einmal als Variable durchgereicht — CSS kann
-         Umgebungswerte nicht selbst lesen. */
-      style={{ ["--logo-quelle" as string]: `url('${medien("/images/logo.webp")}')` }}
+         Umgebungswerte nicht selbst lesen.
+
+         Eigene, kleine Fassung für Wasserzeichen und Eröffnung. Beide
+         zeigen das Logo klein oder bei 3,5 Prozent Deckkraft — und
+         luden dafür bisher die 161-KB-Fassung aus dem Kopfbereich.
+         340 Pixel und 17 KB sind an beiden Stellen nicht zu
+         unterscheiden, und es ist derselbe Abruf für beide.
+
+         image-set mit Typangabe, damit auch hier AVIF zuerst greift. */
+      style={{
+        ["--logo-quelle" as string]:
+          `image-set(url('${medien("/images/logo-schemen.avif")}') type("image/avif"), ` +
+          `url('${medien("/images/logo-schemen.webp")}') type("image/webp"))`,
+      }}
     >
       <head>
         {/* Entscheidet VOR dem ersten Bild, ob die Eröffnung läuft, und
@@ -183,11 +195,22 @@ export default function RootLayout({
               "setTimeout(f,900);}catch(e){document.documentElement.className+=' ohne-eroeffnung';}})()",
           }}
         />
+        {/* Vorgeladen wird die AVIF-Fassung — dieselbe, die <picture> im
+            Kopfbereich anschließend auswählt.
+
+            Vorher stand hier WebP. Das Vorladen ist blind für <picture>:
+            Es holte die 161-KB-Fassung, während das Bauteil daneben die
+            76-KB-Fassung anforderte. Die Seite lud das Logo also zweimal,
+            in zwei Formaten, und das schwerere davon mit hoher Priorität.
+
+            `imageSrcSet` mit Typangabe statt `href`: Wer AVIF nicht
+            versteht, lädt hier nichts vor und holt das Logo regulär als
+            WebP nach — statt es vorzuladen und dann zu verwerfen. */}
         <link
           rel="preload"
           as="image"
-          href={medien("/images/logo.webp")}
-          type="image/webp"
+          href={medien("/images/logo.avif")}
+          type="image/avif"
           fetchPriority="high"
         />
         {/* Schriften blockieren den Seitenaufbau nicht mehr: Sie werden
@@ -220,9 +243,14 @@ export default function RootLayout({
             gesehene Seite legt, ist schlimmer als keiner. */}
         <div className="eroeffnung" aria-hidden>
           <span className="eroeffnung-staub" />
+          {/* Dieselbe kleine Fassung wie beim Wasserzeichen, nicht das
+              große Logo aus dem Kopfbereich. Die Eröffnung zeigt es bei
+              höchstens 136 Pixeln und blendet es aus Unschärfe herein —
+              dafür 161 KB zu laden, und zwar als allererstes, war der
+              teuerste Abruf der ganzen Startseite. */}
           <span
             className="eroeffnung-logo"
-            style={{ backgroundImage: `url('${medien("/images/logo.webp")}')` }}
+            style={{ backgroundImage: "var(--logo-quelle)" }}
           />
           <span className="eroeffnung-linie" />
         </div>

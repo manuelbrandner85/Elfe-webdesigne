@@ -1,7 +1,6 @@
 "use client";
 
 import SplitHeading from "@/components/SplitHeading";
-import { m } from "framer-motion";
 import { Check, HardDrive, BookOpen } from "lucide-react";
 import { pricing, pricingNote, addons, addonNote } from "@/data/content";
 
@@ -9,12 +8,8 @@ export default function Pricing() {
   return (
     <section id="preise" className="py-24 lg:py-32 scroll-mt-[100px] bg-[rgba(0,0,0,0.10)] fade-edges">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <m.header
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-14"
+        <header
+          className="auftritt text-center max-w-2xl mx-auto mb-14"
         >
           <p className="text-[0.78rem] tracking-[0.22em] uppercase text-gold-text mb-4">
             Preise
@@ -25,7 +20,7 @@ export default function Pricing() {
             Sie wissen vorher, was Ihr Auftritt kostet — keine Stundenabrechnung,
             keine Überraschungen auf der Schlussrechnung.
           </p>
-        </m.header>
+        </header>
 
         {/* Bewusst KEIN Stapel-Effekt auf dem Handy: Die Karten sind
             durchscheinend gestaltet, und beim Übereinanderschieben las man
@@ -33,16 +28,12 @@ export default function Pricing() {
             unleserlich macht, ist keiner. */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {pricing.map((p, i) => (
-            <m.div
+            <div
               key={p.name}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "80px" }}
-              transition={{ duration: 0.6, delay: i * 0.09 }}
-              className={`panel panel-hover rounded-sm p-8 h-full flex flex-col relative ${
+              className={`auftritt panel panel-hover rounded-sm p-8 h-full flex flex-col relative ${
                 p.highlight ? "border-gold/55" : ""
               }`}
-            >
+        style={{ ["--stufe" as string]: i }}>
               {p.highlight && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[0.6rem] tracking-[0.18em] uppercase px-3 py-1 rounded-full bg-[linear-gradient(160deg,#f2d894,#c9a227)] text-[#2b2723] font-medium whitespace-nowrap">
                   Am häufigsten gewählt
@@ -97,7 +88,7 @@ export default function Pricing() {
               >
                 Was ist enthalten?
               </a>
-            </m.div>
+            </div>
           ))}
         </div>
 
@@ -128,16 +119,12 @@ export default function Pricing() {
             {addons.map((a, i) => {
               const Icon = a.icon === "server" ? HardDrive : BookOpen;
               return (
-                <m.div
+                <div
                   key={a.title}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "80px" }}
-                  transition={{ duration: 0.6, delay: i * 0.08 }}
-                  className={`panel panel-hover rounded-sm p-8 h-full flex flex-col ${
+                  className={`auftritt panel panel-hover rounded-sm p-8 h-full flex flex-col ${
                     a.included ? "" : "border-gold/45"
                   }`}
-                >
+        style={{ ["--stufe" as string]: i }}>
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
                     <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[radial-gradient(circle_at_30%_25%,rgba(242,216,148,0.22),rgba(0,0,0,0.25))] border border-gold/35 shrink-0">
                       <Icon size={19} strokeWidth={1.5} className="text-gold-bright" />
@@ -169,7 +156,7 @@ export default function Pricing() {
                       </li>
                     ))}
                   </ul>
-                </m.div>
+                </div>
               );
             })}
           </div>

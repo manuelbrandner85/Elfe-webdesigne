@@ -50,20 +50,16 @@ export default function Stats() {
     <section aria-label="Kennzahlen" className="py-16 border-y border-line">
       <div className="max-w-5xl mx-auto px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-6 text-center">
         {stats.map((s, i) => (
-          <m.div
+          <div className="auftritt"
             key={s.label}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "80px" }}
-            transition={{ duration: 0.6, delay: i * 0.1 }}
-          >
+        style={{ ["--stufe" as string]: i }}>
             <p className="font-serif-display text-[2.6rem] leading-none text-gold-gradient mb-3">
               <Counter to={s.value} suffix={s.suffix} />
             </p>
             <p className="text-[0.82rem] text-silver leading-relaxed max-w-[16rem] mx-auto">
               {s.label}
             </p>
-          </m.div>
+          </div>
         ))}
       </div>
     </section>

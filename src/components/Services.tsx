@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import { m } from "framer-motion";
+import Bild from "@/components/Bild";
 import { Sparkles, LayoutTemplate, Code2, Sun } from "lucide-react";
 import SplitHeading from "@/components/SplitHeading";
-import Link from "next/link";
+import Verweis from "@/components/Verweis";
 import { services } from "@/data/content";
 
 const icons = { sparkles: Sparkles, layout: LayoutTemplate, code: Code2, sun: Sun };
@@ -24,11 +23,10 @@ function CardVisual({
   if (src && !failed) {
     return (
       <div className="relative -mx-8 -mt-8 mb-7 h-40 overflow-hidden">
-        <Image
+        <Bild
           src={src}
           alt=""
           fill
-          loading="lazy"
           sizes="(max-width: 640px) 100vw, 25vw"
           onError={() => setFailed(true)}
           className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
@@ -53,12 +51,8 @@ export default function Services() {
   return (
     <section id="leistungen" className="py-24 lg:py-28 scroll-mt-[100px]">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <m.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-14"
+        <div
+          className="auftritt text-center max-w-2xl mx-auto mb-14"
         >
           <p className="text-[0.78rem] tracking-[0.2em] uppercase text-gold-text mb-3">
             Leistungen
@@ -73,20 +67,16 @@ export default function Services() {
             Logo, Website und laufende Betreuung aus einer Hand — abgestimmt auf
             Ihre Branche, Ihre Zielgruppe und Ihr Budget.
           </p>
-        </m.div>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           {services.map((s, i) => {
             const Icon = icons[s.icon as keyof typeof icons];
             return (
-              <m.article
+              <article
                 key={s.title}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "80px" }}
-                transition={{ duration: 0.6, delay: i * 0.08 }}
-                className="panel panel-hover group rounded-sm p-8 h-full flex flex-col overflow-hidden"
-              >
+                className="enthuellung panel panel-hover group rounded-sm p-8 h-full flex flex-col overflow-hidden"
+        style={{ ["--stufe" as string]: i }}>
                 <CardVisual src={s.image} Icon={Icon} />
 
                 <h3 className="font-serif-display text-xl text-parchment mb-2.5">
@@ -95,12 +85,12 @@ export default function Services() {
                 <p className="text-silver text-sm leading-relaxed mb-5">{s.text}</p>
 
                 {s.href && (
-                  <Link
+                  <Verweis
                     href={s.href}
                     className="text-[0.78rem] tracking-[0.12em] uppercase text-gold-text hover:text-gold-bright transition-colors mb-4 inline-flex items-center gap-1.5"
                   >
                     Mehr erfahren <span aria-hidden>→</span>
-                  </Link>
+                  </Verweis>
                 )}
                 <ul className="space-y-1.5 border-t border-line pt-4 mt-auto">
                   {s.points.map((pt) => (
@@ -113,7 +103,7 @@ export default function Services() {
                     </li>
                   ))}
                 </ul>
-              </m.article>
+              </article>
             );
           })}
         </div>

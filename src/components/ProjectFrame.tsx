@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Bild from "@/components/Bild";
 import { m } from "framer-motion";
 
 /* Browserfenster für echte Kundenprojekte — gleicher Rahmen wie bei den
@@ -31,13 +31,9 @@ export default function ProjectFrame({
   const Frame = href ? m.a : m.div;
 
   return (
-    <m.figure
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "80px" }}
-      transition={{ duration: 0.7, delay: index * 0.08 }}
-      className="group relative flex flex-col"
-    >
+    <figure
+      className="enthuellung enthuellung-weit group relative flex flex-col"
+        style={{ ["--stufe" as string]: index }}>
       <Frame
         {...(href
           ? { href, target: "_blank", rel: "noopener" }
@@ -80,11 +76,10 @@ export default function ProjectFrame({
           className="relative flex-1 min-h-[260px] sm:min-h-[300px] lg:min-h-0"
           style={{ backgroundColor: surface }}
         >
-          <Image
+          <Bild
             src={image}
             alt={alt}
             fill
-            loading="lazy"
             sizes="(max-width: 768px) 100vw, 33vw"
             className={`${
               fit === "cover"
@@ -116,6 +111,6 @@ export default function ProjectFrame({
           {domain || note}
         </span>
       </figcaption>
-    </m.figure>
+    </figure>
   );
 }

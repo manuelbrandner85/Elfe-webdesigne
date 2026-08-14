@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Verweis from "@/components/Verweis";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { contact } from "@/data/content";
@@ -130,9 +130,9 @@ export default function Impressum() {
         </p>
 
         <p className="text-silver text-sm mt-14">
-          <Link href="/" className="text-gold-bright hover:underline">
+          <Verweis href="/" className="text-gold-bright hover:underline">
             ← Zurück zur Startseite
-          </Link>
+          </Verweis>
         </p>
       </main>
       <Footer />

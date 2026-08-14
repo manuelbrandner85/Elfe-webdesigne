@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Verweis from "@/components/Verweis";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -129,12 +129,12 @@ export default async function PaketSeite({
             auseinanderlaufen. */}
         <p className="mt-6 text-[0.92rem] text-silver">
           Der vollständige Wortlaut steht in den{" "}
-          <Link
+          <Verweis
             href="/agb"
             className="text-gold-text underline underline-offset-4 hover:text-parchment transition-colors"
           >
             Allgemeinen Geschäftsbedingungen
-          </Link>
+          </Verweis>
           .
         </p>
 
@@ -149,24 +149,24 @@ export default async function PaketSeite({
         </div>
 
         <div className="mt-14 flex flex-wrap gap-4">
-          <Link
+          <Verweis
             href="/#kontakt"
             className="inline-flex items-center gap-2 border border-gold/70 text-gold-bright text-[0.8rem] tracking-[0.14em] uppercase px-8 py-4 rounded-sm bg-[linear-gradient(160deg,rgba(201,162,39,0.16),rgba(0,0,0,0.28))] hover:bg-[linear-gradient(160deg,#f2d894,#c9a227)] hover:text-[#2b2723] transition-all duration-400"
           >
             Kostenloses Erstgespräch
-          </Link>
-          <Link
+          </Verweis>
+          <Verweis
             href="/#preise"
             className="inline-flex items-center gap-2 border border-line text-silver-bright text-[0.8rem] tracking-[0.14em] uppercase px-8 py-4 rounded-sm hover:border-gold/70 hover:text-gold-bright transition-all duration-400"
           >
             Pakete vergleichen
-          </Link>
+          </Verweis>
         </div>
 
         <p className="text-silver text-sm mt-12">
-          <Link href="/" className="text-gold-bright hover:underline">
+          <Verweis href="/" className="text-gold-bright hover:underline">
             ← Zurück zur Startseite
-          </Link>
+          </Verweis>
         </p>
       </main>
       <Footer />

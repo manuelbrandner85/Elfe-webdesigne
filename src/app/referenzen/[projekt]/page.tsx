@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Verweis from "@/components/Verweis";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import SplitHeading from "@/components/SplitHeading";
@@ -85,13 +85,13 @@ export default async function CasePage({
         <section className="pt-[150px] pb-16">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <nav aria-label="Brotkrumen" className="mb-8 text-[0.75rem] text-silver">
-              <Link href="/" className="hover:text-gold-bright transition-colors">
+              <Verweis href="/" className="hover:text-gold-bright transition-colors">
                 Startseite
-              </Link>
+              </Verweis>
               <span className="mx-2 text-gold/60">/</span>
-              <Link href="/#portfolio" className="hover:text-gold-bright transition-colors">
+              <Verweis href="/#portfolio" className="hover:text-gold-bright transition-colors">
                 Referenzen
-              </Link>
+              </Verweis>
               <span className="mx-2 text-gold/60">/</span>
               <span className="text-gold-text">{concept.title}</span>
             </nav>
@@ -173,18 +173,18 @@ export default async function CasePage({
             <p className="text-silver leading-relaxed mb-10">{c.ergebnis}</p>
 
             <div className="flex flex-wrap gap-4">
-              <Link
+              <Verweis
                 href="/#kontakt"
                 className="inline-flex items-center gap-2 border border-gold/70 text-gold-bright text-[0.8rem] tracking-[0.14em] uppercase px-8 py-4 rounded-sm bg-[linear-gradient(160deg,rgba(201,162,39,0.16),rgba(0,0,0,0.18))] hover:bg-[linear-gradient(160deg,#f2d894,#c9a227)] hover:text-[#2b2723] transition-all duration-400"
               >
                 Projekt besprechen
-              </Link>
-              <Link
+              </Verweis>
+              <Verweis
                 href="/#portfolio"
                 className="inline-flex items-center gap-2 border border-line text-silver-bright text-[0.8rem] tracking-[0.14em] uppercase px-8 py-4 rounded-sm bg-[linear-gradient(160deg,rgba(255,250,240,0.05),rgba(0,0,0,0.16))] hover:border-gold/70 hover:text-gold-bright transition-all duration-400"
               >
                 Weitere Arbeiten
-              </Link>
+              </Verweis>
             </div>
           </div>
         </section>

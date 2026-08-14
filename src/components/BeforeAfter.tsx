@@ -54,9 +54,9 @@ const MASS_BREIT = "(min-width: 1024px) min(62rem, (100vh - 26rem) * 1.6), calc(
    Byte teurer wäre als die Bytes selbst. */
 const STANDBILD: Record<Seite, string> = {
   vorher:
-    "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAAAQAgCdASoQAAoAA4BaJZQCdIIjGAHkIpUgAPaXa4mKnfQ33VsTRM//dGiJn5G3Qah09PCgAAA=",
+    "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAAAwAgCdASoQAAoAA4BaJZQCdIIjGAHzZQKGAAD2l0dCy8sa4fxNQGqe67oAciHWKRV6oEAA",
   nachher:
-    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADwAQCdASoQAAoAA4BaJZQAAugx9FSaMAAA/vEQkKzG0NhnmFsMddHAAAA=",
+    "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAQCdASoQAAoAA4BaJZwAAujbg7njQAD+8Wpv7PiDVbMzopSRMk/wAAA=",
 };
 
 type Seite = "vorher" | "nachher";
@@ -176,7 +176,18 @@ export default function BeforeAfter() {
   const stand = useMotionValue(ANFANG);
   const rest = useTransform(stand, (v) => 100 - v);
   const schnitt = useMotionTemplate`inset(0 ${rest}% 0 0)`;
-  const kante = useMotionTemplate`${stand}%`;
+  /* Die Kante wandert per transform, nicht per left.
+
+     `left` in Prozent ist eine Layout-Eigenschaft: Jede Bewegung erzeugt
+     einen Layoutdurchlauf und wird vom Browser als Layout-Sprung gezählt
+     — im Messlauf tauchte der Griff tatsächlich als CLS-Beitrag auf.
+     `translateX` läuft im Compositor, kostet keinen Durchlauf und
+     erscheint in keiner Sprungmessung.
+
+     cqw statt %, weil der Rahmen ein Größenkontext ist: 1cqw ist ein
+     Prozent seiner Breite — dieselbe Zahl, aber als Länge, und damit
+     in transform überhaupt erst zulässig. */
+  const kante = useMotionTemplate`translateX(${stand}cqw)`;
 
   /* Der Abschnitt bleibt beim Scrollen stehen, der Regler wandert dabei
      von links nach rechts — sobald jemand selbst zieht, übernimmt er. */
@@ -185,6 +196,16 @@ export default function BeforeAfter() {
     offset: ["start start", "end end"],
   });
   const gefuehrt = useTransform(scrollYProgress, [0.12, 0.78], [ANFANG, 4]);
+
+  /* Eine sehr langsame Annäherung über den ganzen Abschnitt — 2,5 Prozent,
+     mehr nicht. Ein Standbild, das exakt stillsteht, wirkt tot; eines,
+     das sichtbar zoomt, wirkt billig. Der Wert liegt bewusst an der
+     Wahrnehmungsschwelle.
+
+     Beide Ebenen bekommen denselben Wert. Bekämen sie verschiedene, sähe
+     es räumlicher aus — und wäre gelogen: Der Vergleich lebt davon, dass
+     beide Aufnahmen exakt deckungsgleich liegen. */
+  const atem = useTransform(scrollYProgress, [0, 1], [1.025, 1]);
 
   useMotionValueEvent(gefuehrt, "change", (v) => {
     if (!uebernommen.current && reduziert === false) stand.set(v);
@@ -265,13 +286,7 @@ export default function BeforeAfter() {
     >
       <div className="py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0 lg:pt-20">
         <div className="mx-auto w-full max-w-5xl px-6 lg:px-8">
-          <m.header
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "80px" }}
-            transition={{ duration: 0.7 }}
-            className="mx-auto mb-10 max-w-2xl text-center lg:mb-8"
-          >
+          <header className="auftritt mx-auto mb-10 max-w-2xl text-center lg:mb-8">
             <p className="mb-4 text-[0.78rem] uppercase tracking-[0.22em] text-gold-text">
               Relaunch
             </p>
@@ -283,7 +298,7 @@ export default function BeforeAfter() {
               Derselbe Betrieb, dieselbe Adresse, fünfzehn Jahre dazwischen.
               Ziehen Sie den Regler — oder scrollen Sie einfach weiter.
             </p>
-          </m.header>
+          </header>
 
           {/* Die Breite ist am Rechner an die verfügbare Höhe gekoppelt.
 
@@ -291,12 +306,8 @@ export default function BeforeAfter() {
               Rahmen nicht in den Bildschirm, schöbe er die Überschrift
               unter die Kopfzeile — und niemand könnte weiterscrollen, um
               sie zu sehen, weil der Abschnitt ja gerade steht. */}
-          <div className="mx-auto lg:max-w-[calc((100vh-26rem)*1.6)]">
+          <div className="enthuellung enthuellung-weit mx-auto lg:max-w-[calc((100vh-26rem)*1.6)]">
             <m.div
-              initial={{ opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "80px" }}
-              transition={{ duration: 0.7 }}
               ref={rahmen}
               onPointerDown={(e) => {
                 /* Auf dem Handy soll ein Wisch über das Bild weiterhin die
@@ -311,20 +322,23 @@ export default function BeforeAfter() {
             >
               {/* Beschnitten wird nur hier drin — der Griff liegt bewusst
                   außerhalb, sonst wäre er an beiden Enden halb abgesägt. */}
-              <div className="panel absolute inset-0 overflow-hidden rounded-lg">
+              <div className="panel vignette absolute inset-0 overflow-hidden rounded-lg">
                 {/* Der heutige Auftritt liegt unten und ist immer vollständig da */}
-                <div className="absolute inset-0 flex flex-col">
+                <m.div
+                  className="absolute inset-0 flex flex-col"
+                  style={{ scale: atem }}
+                >
                   <Leiste seite="nachher" />
                   <Aufnahme
                     seite="nachher"
                     alt="Der heutige Auftritt von Nordwerk Handwerk: ein großflächiges Werkstattfoto, eine ruhige Überschrift und ein sichtbarer Weg zur Anfrage."
                   />
-                </div>
+                </m.div>
 
                 {/* Der alte Auftritt liegt darüber und wird beschnitten */}
                 <m.div
                   className="absolute inset-0 flex flex-col"
-                  style={{ clipPath: schnitt }}
+                  style={{ clipPath: schnitt, scale: atem }}
                 >
                   <Leiste seite="vorher" />
                   <Aufnahme
@@ -346,9 +360,27 @@ export default function BeforeAfter() {
               </div>
 
               <m.div
-                className="pointer-events-none absolute top-0 bottom-0 z-[var(--ebene-ueberlagerung)] w-px -translate-x-1/2 bg-gold-bright/80"
-                style={{ left: kante }}
+                className="pointer-events-none absolute top-0 bottom-0 left-0 z-[var(--ebene-ueberlagerung)] w-px"
+                style={{ transform: kante }}
               >
+                {/* Die Kante ist kein Strich, sondern eine Materialkante.
+
+                    Drei Lagen: ein warmer Lichtsaum links, wo der alte
+                    Auftritt aufliegt; die Lichtlinie selbst; und rechts
+                    ein weicher Schlagschatten auf den neuen Auftritt.
+                    Erst der Schatten macht aus zwei übereinanderliegenden
+                    Bildern eine Lage mit Dicke — ohne dass die beiden
+                    Aufnahmen ihre Deckungsgleichheit verlieren, die den
+                    Vergleich überhaupt glaubwürdig macht. */}
+                <span
+                  aria-hidden
+                  className="absolute inset-y-0 right-0 w-[max(10px,1.6cqw)] bg-[linear-gradient(90deg,transparent,rgba(242,216,148,0.14))]"
+                />
+                <span aria-hidden className="absolute inset-y-0 left-0 w-px bg-gold-bright/85" />
+                <span
+                  aria-hidden
+                  className="absolute inset-y-0 left-px w-[max(18px,2.6cqw)] bg-[linear-gradient(90deg,rgba(0,0,0,0.42),transparent)]"
+                />
                 <button
                   ref={knopf}
                   type="button"

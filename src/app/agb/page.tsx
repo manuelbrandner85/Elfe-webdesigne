@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Verweis from "@/components/Verweis";
 import { paketBedingungen, pricing, site } from "@/data/content";
 
 /* Allgemeine Geschäftsbedingungen.
@@ -217,12 +217,12 @@ export default function AGB() {
           </p>
           <p>
             Wie diese Website selbst mit Daten umgeht, steht in der{" "}
-            <Link
+            <Verweis
               href="/datenschutz/"
               className="text-gold-text underline underline-offset-4 hover:text-parchment transition-colors"
             >
               Datenschutzerklärung
-            </Link>
+            </Verweis>
             .
           </p>
         </Absatz>
@@ -284,18 +284,18 @@ export default function AGB() {
           <p className="text-[0.85rem] text-silver/70 mr-auto">Stand: {heute}</p>
           {/* Rückweg zu den Paketen: Wer die Bedingungen gelesen hat, will
               meist wissen, worauf sie sich beziehen. */}
-          <Link
+          <Verweis
             href="/#preise"
             className="text-[0.8rem] tracking-[0.12em] uppercase text-gold-text hover:text-parchment transition-colors"
           >
             Pakete im Überblick
-          </Link>
-          <Link
+          </Verweis>
+          <Verweis
             href="/#kontakt"
             className="text-[0.8rem] tracking-[0.12em] uppercase text-gold-text hover:text-parchment transition-colors"
           >
             Frage stellen
-          </Link>
+          </Verweis>
         </div>
       </div>
     </main>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Verweis from "@/components/Verweis";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import SplitHeading from "@/components/SplitHeading";
@@ -87,9 +87,9 @@ export default async function LeistungPage({
         <section className="pt-[150px] pb-20 lg:pb-24">
           <div className="max-w-3xl mx-auto px-6 lg:px-8">
             <nav aria-label="Brotkrumen" className="mb-8 text-[0.75rem] text-silver">
-              <Link href="/" className="hover:text-gold-bright transition-colors">
+              <Verweis href="/" className="hover:text-gold-bright transition-colors">
                 Startseite
-              </Link>
+              </Verweis>
               <span className="mx-2 text-gold/60">/</span>
               <span className="text-gold-text">{page.title}</span>
             </nav>
@@ -150,18 +150,18 @@ export default async function LeistungPage({
             </dl>
 
             <div className="mt-12 flex flex-wrap gap-4">
-              <Link
+              <Verweis
                 href="/#kontakt"
                 className="inline-flex items-center gap-2 border border-gold/70 text-gold-bright text-[0.8rem] tracking-[0.14em] uppercase px-8 py-4 rounded-sm bg-[linear-gradient(160deg,rgba(201,162,39,0.16),rgba(0,0,0,0.18))] hover:bg-[linear-gradient(160deg,#f2d894,#c9a227)] hover:text-[#2b2723] transition-all duration-400"
               >
                 Unverbindlich anfragen
-              </Link>
-              <Link
+              </Verweis>
+              <Verweis
                 href="/#preise"
                 className="inline-flex items-center gap-2 border border-line text-silver-bright text-[0.8rem] tracking-[0.14em] uppercase px-8 py-4 rounded-sm bg-[linear-gradient(160deg,rgba(255,250,240,0.05),rgba(0,0,0,0.16))] hover:border-gold/70 hover:text-gold-bright transition-all duration-400"
               >
                 Preise ansehen
-              </Link>
+              </Verweis>
             </div>
           </div>
         </section>

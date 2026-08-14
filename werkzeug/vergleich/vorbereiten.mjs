@@ -4,7 +4,7 @@
    Repository: Die Schriften liegen ohnehin in node_modules, die Fotos
    entstehen aus public/images. Was hier landet, ist reproduzierbar. */
 import sharp from "sharp";
-import { copyFileSync, mkdirSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -27,8 +27,16 @@ for (const [paket, datei] of SCHRIFTEN) {
 }
 
 /* Quelle ist das vorhandene Werkstattbild des Konzepts Nordwerk — damit
-   der Vergleich in derselben Bildwelt bleibt wie der Rest der Seite. */
-const QUELLE = join(WURZEL, "public", "images", "concept-nordwerk.webp");
+   der Vergleich in derselben Bildwelt bleibt wie der Rest der Seite.
+
+   Bevorzugt die hochgerechnete Fassung: Das Original hat 720 x 402 und
+   wurde fuer die Aufnahme auf 3200 Pixel gestreckt — im Buehnenbild
+   deutlich weich. werkzeug/hochrechnen.py liefert dieselbe Aufnahme mit
+   1920 Pixeln Breite, echtes Detail statt Interpolation. */
+const HOCH = join(WURZEL, "public", "images", "concept-nordwerk-gross.png");
+const QUELLE = existsSync(HOCH)
+  ? HOCH
+  : join(WURZEL, "public", "images", "concept-nordwerk.webp");
 const ZIEL = join(HIER, "fotos");
 
 await sharp(QUELLE).resize(2400, 1350, { fit: "cover", kernel: "lanczos3" })
@@ -40,9 +48,17 @@ await sharp(QUELLE).resize(2400, 1350, { fit: "cover", kernel: "lanczos3" })
 await sharp(QUELLE).resize(320, 240, { fit: "cover" })
   .jpeg({ quality: 32 }).toFile(join(ZIEL, "hero-alt.jpg"));
 
-const AUSSCHNITTE = [[0, 20, 300, 225], [230, 80, 300, 225], [410, 60, 300, 225]];
-for (let i = 0; i < AUSSCHNITTE.length; i++) {
-  const [left, top, width, height] = AUSSCHNITTE[i];
+/* Die Ausschnitte sind in Anteilen der Quelle angegeben, nicht in
+   Pixeln: Sonst zeigt derselbe Aufruf bei 720 und bei 1920 Pixeln
+   Quellbreite zwei verschiedene Bildausschnitte. */
+const ANTEILE = [[0, 0.05, 0.42, 0.56], [0.32, 0.20, 0.42, 0.56], [0.57, 0.15, 0.42, 0.56]];
+const masse = await sharp(QUELLE).metadata();
+for (let i = 0; i < ANTEILE.length; i++) {
+  const [al, at, ab, ah] = ANTEILE[i];
+  const left = Math.round(al * masse.width);
+  const top = Math.round(at * masse.height);
+  const width = Math.round(ab * masse.width);
+  const height = Math.round(ah * masse.height);
   const teil = () => sharp(QUELLE).extract({ left, top, width, height });
   await teil().resize(900, 675, { kernel: "lanczos3" })
     .jpeg({ quality: 86 }).toFile(join(ZIEL, `g${i + 1}.jpg`));

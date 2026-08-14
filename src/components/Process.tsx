@@ -16,12 +16,8 @@ export default function Process() {
   return (
     <section id="ablauf" className="py-24 lg:py-28 scroll-mt-[100px] bg-[rgba(0,0,0,0.10)] fade-edges">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <m.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+        <div
+          className="auftritt text-center max-w-2xl mx-auto mb-16"
         >
           <p className="text-[0.78rem] tracking-[0.2em] uppercase text-gold-text mb-3">
             Ablauf
@@ -32,7 +28,7 @@ export default function Process() {
             Ein klarer Ablauf mit festen Ansprechpartnern, planbaren Terminen und
             transparenten Kosten — von der ersten Idee bis zur Veröffentlichung.
           </p>
-        </m.div>
+        </div>
 
         <div ref={gridRef} className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-6">
           <div className="hidden lg:block absolute top-6 left-[12.5%] right-[12.5%] h-px bg-line overflow-hidden">
@@ -42,14 +38,10 @@ export default function Process() {
             />
           </div>
           {process.map((step, i) => (
-            <m.div
+            <div
               key={step.number}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "80px" }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="relative text-center lg:text-left"
-            >
+              className="auftritt relative text-center lg:text-left"
+        style={{ ["--stufe" as string]: i }}>
               <div className="relative z-10 w-12 h-12 rounded-full border border-gold/50 bg-stone-950 flex items-center justify-center font-serif-display text-base text-gold-bright mx-auto lg:mx-0 mb-5">
                 {step.number}
               </div>
@@ -57,7 +49,7 @@ export default function Process() {
                 {step.title}
               </h3>
               <p className="text-silver text-sm leading-relaxed">{step.text}</p>
-            </m.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import Bild from "@/components/Bild";
+import Verweis from "@/components/Verweis";
 import { m, useInView } from "framer-motion";
 import type { DemoConcept } from "@/data/content";
 
@@ -475,12 +475,12 @@ export default function DemoConceptCard({
         <div>
           <h3 className="font-serif-display text-lg text-parchment leading-tight">
             {concept.hasCase ? (
-              <Link
+              <Verweis
                 href={`/referenzen/${concept.slug}/`}
                 className="hover:text-gold-bright transition-colors"
               >
                 {concept.title}
-              </Link>
+              </Verweis>
             ) : (
               concept.title
             )}
@@ -490,12 +490,12 @@ export default function DemoConceptCard({
           </p>
         </div>
         {concept.hasCase ? (
-          <Link
+          <Verweis
             href={`/referenzen/${concept.slug}/`}
             className="text-[0.7rem] text-gold-text hover:text-gold-bright transition-colors shrink-0 inline-flex items-center gap-1"
           >
             Fallbeispiel <span aria-hidden>→</span>
-          </Link>
+          </Verweis>
         ) : (
           <span className="text-[0.7rem] text-silver shrink-0">{concept.domain}</span>
         )}
@@ -525,7 +525,7 @@ function Tile({
   }
   return (
     <span className={`relative block overflow-hidden ${className}`} style={{ borderRadius: t.radius }}>
-      <Image src={src} alt={alt} fill sizes="140px" loading="lazy" className="object-cover" />
+      <Bild src={src} alt={alt} fill sizes="140px" className="object-cover" />
     </span>
   );
 }

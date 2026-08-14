@@ -3,7 +3,7 @@
 import { medien } from "@/lib/pfad";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import Bild from "@/components/Bild";
 import { AnimatePresence, m } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { nav } from "@/data/content";
@@ -49,7 +49,7 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[var(--ebene-kopfzeile)] transition-all duration-400 ${
+        className={`uebergang-kopf fixed top-0 left-0 right-0 z-[var(--ebene-kopfzeile)] transition-all duration-400 ${
           scrolled
             ? "bg-[rgba(53,49,44,0.86)] backdrop-blur-xl py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.4)] border-b border-[rgba(201,162,39,0.22)]"
             : "py-5.5"
@@ -57,7 +57,7 @@ export default function Nav() {
       >
         <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center justify-between gap-6">
           <a href="#top" className="flex items-center gap-3 shrink-0">
-            <Image
+            <Bild
               src={medien("/images/logo-klein.webp")}
               alt="Webdesign Elfe Logo"
               width={42}

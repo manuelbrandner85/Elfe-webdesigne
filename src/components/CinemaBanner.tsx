@@ -31,7 +31,7 @@ export default function CinemaBanner() {
     <section
       ref={ref}
       aria-label="Designkonzept im Großformat"
-      className="relative h-[75vh] min-h-[420px] overflow-hidden"
+      className="vignette relative h-[75vh] min-h-[420px] overflow-hidden"
     >
       <m.div style={{ scale, y }} className="absolute inset-[-6%]">
         <video
@@ -55,12 +55,8 @@ export default function CinemaBanner() {
 
       <div className="relative h-full flex items-center">
         <div className="max-w-6xl mx-auto px-6 lg:px-8 w-full">
-          <m.div
-            initial={{ opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "80px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-xl"
+          <div
+            className="auftritt max-w-xl"
           >
             <p className="text-[0.72rem] tracking-[0.24em] uppercase text-gold-text mb-4">
               Designkonzept
@@ -82,7 +78,7 @@ export default function CinemaBanner() {
             >
               Konzepte ansehen
             </a>
-          </m.div>
+          </div>
         </div>
       </div>
     </section>

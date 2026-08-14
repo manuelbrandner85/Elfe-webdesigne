@@ -2,7 +2,6 @@
 
 import { medien } from "@/lib/pfad";
 
-import { m } from "framer-motion";
 import WerkstattGL from "@/components/WerkstattGL";
 import { realProjects, demoConcepts } from "@/data/content";
 import KonzeptKapitel from "@/components/KonzeptKapitel";
@@ -13,12 +12,8 @@ export default function Portfolio() {
   return (
     <section id="portfolio" className="py-24 lg:py-32 scroll-mt-[100px]">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <m.header
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+        <header
+          className="auftritt text-center max-w-2xl mx-auto mb-16"
         >
           <p className="text-[0.78rem] tracking-[0.22em] uppercase text-gold-text mb-4">
             Referenzen
@@ -34,7 +29,7 @@ export default function Portfolio() {
             nach Branche und Zielgruppe aussehen kann — vom ersten Entwurf bis zur
             fertigen Seite.
           </p>
-        </m.header>
+        </header>
 
         {/* Kundenprojekte — der Block erscheint nur, wenn eines vorliegt.
             Eine leere Rubrik mit Überschrift wirkt wie eine Lücke. */}

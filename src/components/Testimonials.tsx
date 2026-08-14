@@ -1,7 +1,6 @@
 "use client";
 
 import SplitHeading from "@/components/SplitHeading";
-import { m } from "framer-motion";
 import { Check, Quote } from "lucide-react";
 import { testimonials, zusagen } from "@/data/content";
 
@@ -9,12 +8,8 @@ export default function Testimonials() {
   return (
     <section aria-label="Kundenstimmen" className="py-24 lg:py-28">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <m.header
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center max-w-2xl mx-auto mb-14"
+        <header
+          className="auftritt text-center max-w-2xl mx-auto mb-14"
         >
           <p className="text-[0.78rem] tracking-[0.22em] uppercase text-gold-text mb-4">
             {testimonials.length ? "Kundenstimmen" : "Was Sie erwarten können"}
@@ -23,7 +18,7 @@ export default function Testimonials() {
             as="h2"
             text={testimonials.length ? "Was Kunden sagen" : "Vier Zusagen, die vorher feststehen"} className="font-serif-display text-shadow-elegant text-[clamp(2rem,3.6vw,2.9rem)] text-parchment mb-5" />
           <div className="rule-gold w-24 mx-auto" />
-        </m.header>
+        </header>
 
         {/* Erst wenn echte Stimmen vorliegen, werden sie gezeigt. Bis dahin
             stehen hier Zusagen, die jede für sich aus den Paketbedingungen
@@ -32,14 +27,10 @@ export default function Testimonials() {
         {testimonials.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {testimonials.map((t, i) => (
-            <m.figure
+            <figure
               key={i}
-              initial={{ opacity: 0, y: 26 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "80px" }}
-              transition={{ duration: 0.6, delay: i * 0.09 }}
-              className="panel panel-hover rounded-sm p-8 h-full flex flex-col"
-            >
+              className="auftritt panel panel-hover rounded-sm p-8 h-full flex flex-col"
+        style={{ ["--stufe" as string]: i }}>
               <Quote
                 size={22}
                 className="text-gold/70 mb-5 shrink-0"
@@ -54,20 +45,16 @@ export default function Testimonials() {
                   {t.role}
                 </span>
               </figcaption>
-            </m.figure>
+            </figure>
           ))}
         </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-stretch">
             {zusagen.map((z, i) => (
-              <m.div
+              <div
                 key={z.titel}
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "80px" }}
-                transition={{ duration: 0.6, delay: i * 0.08 }}
-                className="panel panel-hover rounded-sm p-8 h-full flex flex-col text-left"
-              >
+                className="auftritt panel panel-hover rounded-sm p-8 h-full flex flex-col text-left"
+        style={{ ["--stufe" as string]: i }}>
                 <Check
                   size={20}
                   className="text-gold/80 mb-5 shrink-0"
@@ -79,7 +66,7 @@ export default function Testimonials() {
                 <p className="text-silver text-[0.95rem] leading-relaxed">
                   {z.text}
                 </p>
-              </m.div>
+              </div>
             ))}
           </div>
         )}

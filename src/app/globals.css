@@ -41,9 +41,48 @@
   --color-silver-bright: #efe9dc;
   --color-line: rgba(255, 250, 240, 0.16);
 
-  --font-serif: "Cormorant Garamond", serif;
+  --font-serif: "Cormorant Garamond", "Cormorant Ersatz", serif;
   --font-script: "Tangerine", cursive;
-  --font-sans: "Jost", sans-serif;
+  --font-sans: "Jost", "Jost Ersatz", sans-serif;
+}
+
+/* ---------- Metrikgleiche Ersatzschriften ----------
+
+   Die Webschriften werden bewusst nicht blockierend geladen — die Seite
+   soll sofort lesbar sein. Der Preis dafuer war ein Sprung: Sobald Jost
+   und Cormorant eintrafen, aenderte sich die Zeilenhoehe, der
+   Kopfbereich ist senkrecht zentriert, und der ganze Inhaltsblock
+   ruckte um 50 Pixel nach oben. Gemessen bei 1076 ms, Sprungwert 0,257 —
+   in etwa jedem zehnten Lauf. Genau die Sorte Fehler, die man ohne
+   Messung nie findet, weil sie meistens nicht auftritt.
+
+   Die Loesung ist nicht, spaeter oder frueher zu laden, sondern dafuer
+   zu sorgen, dass der Wechsel nichts an der Groesse aendert. Diese
+   beiden Schriften sind Arial und Times mit angepassten Kennzahlen:
+   size-adjust gleicht die Laufweite an, die Ueberschreibungen die
+   Zeilenhoehe. Die Werte stammen nicht aus dem Netz, sondern aus den
+   Schriftdateien selbst — Laufweite ueber eine Probezeile aus dem
+   tatsaechlichen Text, Ober- und Unterlaenge aus der hhea-Tabelle.
+
+   Liberation Sans und Liberation Serif sind metrikgleich zu Arial und
+   Times, deshalb gelten die Werte auch fuer Linux-Besucher. */
+
+@font-face {
+  font-family: "Jost Ersatz";
+  src: local("Arial"), local("Liberation Sans"), local("Helvetica");
+  size-adjust: 96.38%;
+  ascent-override: 111.01%;
+  descent-override: 38.91%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Cormorant Ersatz";
+  src: local("Times New Roman"), local("Liberation Serif"), local("Times");
+  size-adjust: 97.56%;
+  ascent-override: 94.71%;
+  descent-override: 29.42%;
+  line-gap-override: 0%;
 }
 
 html {
@@ -201,6 +240,138 @@ body::after {
   .watermark::before { width: 84vw; right: -18%; opacity: 0.028; }
 }
 
+/* ---------- Auftritte beim Scrollen ----------
+
+   Bisher lief jede dieser Einblendungen über JavaScript: framer-motion
+   hängt je Element einen IntersectionObserver an, führt beim Auslösen
+   eine Zeitschleife im Hauptstrang und schreibt jedes Bild einen neuen
+   Stil. Auf der Startseite sind das über dreißig Elemente. Auf einem
+   schnellen Rechner fällt das nicht auf; auf einem drei Jahre alten
+   Telefon schon, weil derselbe Hauptstrang gleichzeitig scrollt, Video
+   dekodiert und den Goldstaub zeichnet.
+
+   Scroll-Zeitleisten laufen stattdessen im Compositor. Sie brauchen
+   keinen Beobachter, keine Schleife und keinen Frame im Hauptstrang.
+
+   Drei Absicherungen, in dieser Reihenfolge:
+
+   1. @supports — wer keine Scroll-Zeitleisten kennt, sieht die Elemente
+      schlicht sofort. Der schlimmste Fehler bei solchen Effekten ist
+      unsichtbarer Inhalt, nicht fehlende Bewegung.
+   2. prefers-reduced-motion — dann gar keine Animation.
+   3. Die Ausgangslage steht im Keyframe, nicht in der Grundregel. Stünde
+      opacity: 0 fest im Element, bliebe es ohne Unterstützung leer. */
+
+@keyframes auftreten {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Enthüllung unter einer Kante hervor statt Aufblenden.
+
+   Der Unterschied ist nicht Geschmack: Aufblenden wirkt, als läge etwas
+   schon da und werde sichtbar gemacht. Eine wandernde Maske wirkt, als
+   entstünde es. Für eine Seite, die Handwerk verkauft, ist das die
+   passendere Aussage — und es ist dieselbe Bewegungsrichtung wie beim
+   Goldsaum im Vergleich. */
+@keyframes enthuellen {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translate3d(0, 14px, 0) scale(1.012);
+  }
+  60% { opacity: 1; }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .auftritt,
+    .enthuellung {
+      animation-timeline: view();
+      animation-fill-mode: both;
+      animation-timing-function: var(--kurve-haupt);
+      /* Der Bereich endet innerhalb von `entry`, nicht in `cover`.
+
+         Das ist kein Feinschliff, sondern der Unterschied zwischen
+         sichtbar und unsichtbar: `cover` misst den Weg des Elements
+         durch das gesamte Sichtfeld und hängt damit an seiner Höhe. Eine
+         hohe Textspalte auf dem Handy stand deshalb bereits mitten im
+         Bild und war immer noch bei sechs Prozent Deckkraft — gemessen,
+         nicht vermutet. `entry` endet, sobald das Element vollständig
+         eingetreten ist, unabhängig davon, wie hoch es ist.
+
+         Gestaffelt wird über den Startpunkt, nicht über eine
+         Verzögerung: Bei Scroll-Zeitleisten gibt es keine Zeit, an der
+         eine Verzögerung hängen könnte. Das Ende bleibt für alle
+         gleich, damit auch die letzte Karte sicher fertig wird. */
+      animation-range: entry calc(4% + var(--stufe, 0) * 7%) entry 92%;
+    }
+    .auftritt { animation-name: auftreten; }
+    .enthuellung { animation-name: enthuellen; }
+
+    /* Große Flächen — Bilder, Rahmen — brauchen einen längeren Weg,
+       sonst ist die Bewegung vorbei, bevor das Auge sie erfasst hat. */
+    .enthuellung-weit { animation-range: entry 0% entry 100%; }
+  }
+}
+
+/* ---------- Seitenwechsel ----------
+
+   Nur der Inhalt bewegt sich. Kopfzeile, Fußzeile und der bewegte
+   Hintergrund sind bei Next dieselben Elemente über den Wechsel hinweg —
+   sie mitzublenden hieße, etwas zu animieren, das sich gar nicht
+   ändert. Genau daran erkennt man geliehene Übergänge.
+
+   Die Richtung ist dieselbe wie bei den Auftritten beim Scrollen: von
+   unten herauf. Ein Auftritt, der auf jeder Seite anders herum läuft,
+   ist kein System, sondern eine Sammlung. */
+::view-transition-old(root) {
+  animation: inhalt-ab var(--dauer-ui) var(--kurve-haupt) both;
+}
+::view-transition-new(root) {
+  animation: inhalt-auf var(--dauer-inhalt) var(--kurve-haupt) both;
+}
+@keyframes inhalt-ab {
+  to { opacity: 0; transform: translate3d(0, -14px, 0); }
+}
+@keyframes inhalt-auf {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); }
+}
+
+/* Kopf- und Fußzeile sind über den Wechsel hinweg dieselben Elemente.
+   Sie bekommen eigene Namen und werden stillgestellt — sonst blendet
+   der Browser sie mit, und das sieht aus wie ein Neuladen. */
+.uebergang-kopf { view-transition-name: kopf; }
+.uebergang-fuss { view-transition-name: fuss; }
+/* Beide Aufnahmen stillzustellen genügt nicht: Der Browser legt dann
+   alte und neue Kopfzeile übereinander, beide voll deckend — bei 70 ms
+   war die Navigation doppelt zu lesen, weil sich die Unterstreichung des
+   aktiven Punktes unterscheidet. Die alte Aufnahme muss weg, nicht nur
+   stehen bleiben. */
+::view-transition-old(kopf),
+::view-transition-old(fuss) {
+  display: none;
+}
+::view-transition-new(kopf),
+::view-transition-new(fuss) {
+  animation: none;
+  opacity: 1;
+}
+::view-transition-group(kopf),
+::view-transition-group(fuss) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
 /* Weiche Übergänge zwischen den Abschnitten */
 .fade-edges {
   position: relative;
@@ -224,6 +395,60 @@ body::after {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.10), transparent);
 }
 
+
+/* ---------- Filmische Tiefe ----------
+
+   Zwei Dinge, die eine Seite von „sauber gebaut" nach „gefilmt" heben,
+   und beide kosten fast nichts:
+
+   Korn. Ein völlig rauschfreies Bild wirkt digital. Echte Optik hat
+   Korn. Hier liegt es als ein einziges, gekacheltes SVG-Rauschen über
+   der ganzen Seite — keine Datei, kein Abruf, kein JavaScript. Es
+   bewegt sich bewusst NICHT: wanderndes Korn zieht den Blick auf sich
+   und kostet in jedem Bild eine Neuberechnung.
+
+   Vignette. Sie führt den Blick zur Mitte und trennt den Inhalt vom
+   Fensterrand. Beides zusammen ist das, was ein Farbkorrektur-Pass am
+   Ende einer Filmproduktion macht — und aus demselben Grund kommt es
+   hier zuletzt, über allem anderen. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--ebene-vorhang);
+  pointer-events: none;
+  /* Kein mix-blend-mode.
+
+     Der erste Versuch lag als `overlay` über der Seite. Das sieht besser
+     aus und ist eine Falle: Eine feste, bildschirmfüllende Ebene mit
+     Mischmodus zwingt den Browser, die gesamte Seite in einer Ebene zu
+     halten und bei jedem Scrollbild neu zu verrechnen. Gemessen stieg
+     das 95. Perzentil der Bildabstände von 150 auf 750 Millisekunden —
+     für einen Effekt, den bei 3,5 Prozent Deckkraft niemand benennen
+     kann, aber jeder spürt, wenn er fehlt.
+
+     Schlichte Deckkraft auf einer eigenen Ebene kostet nichts. */
+  opacity: 0.038;
+  will-change: transform;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23k)'/%3E%3C/svg%3E");
+}
+
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    120% 90% at 50% 45%,
+    transparent 42%,
+    rgba(0, 0, 0, 0.28) 100%
+  );
+}
+
+@media print {
+  body::after { display: none !important; }
+}
 
 /* ---------- Druckansicht ---------- */
 @media print {

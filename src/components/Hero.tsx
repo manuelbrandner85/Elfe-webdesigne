@@ -3,7 +3,7 @@
 import { medien } from "@/lib/pfad";
 
 import dynamic from "next/dynamic";
-import Image from "next/image";
+import Bild from "@/components/Bild";
 import { useRef } from "react";
 import {
   m,
@@ -18,12 +18,36 @@ import { Check } from "lucide-react";
 
 const GoldDust = dynamic(() => import("@/components/GoldDust"), { ssr: false });
 
+/* Die Eröffnung dauert 900 Millisekunden. Genau so lange lief der
+   Auftritt des Kopfbereichs bisher dahinter ab — unsichtbar, hinter dem
+   Vorhang. Wer die Seite zum ersten Mal öffnete, sah den Vorhang
+   aufgehen und darunter eine Seite, die bereits fertig dastand.
+
+   Der Vorlauf verschiebt die Kette so, dass sie beginnt, wenn der
+   Vorhang verschwindet. Wer die Eröffnung schon gesehen hat oder
+   reduzierte Bewegung eingestellt hat, bekommt sie nicht — dann ist der
+   Vorlauf null. Die Entscheidung trifft dasselbe Skript im Kopf der
+   Seite, das auch den Vorhang steuert; hier wird sie nur gelesen. */
+const VORHANG_MS = 900;
+
+function vorlauf(): number {
+  if (typeof document === "undefined") return 0;
+  const k = document.documentElement.classList;
+  return k.contains("ohne-eroeffnung") || k.contains("eroeffnung-fertig")
+    ? 0
+    : VORHANG_MS / 1000;
+}
+
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 26 },
   show: (i: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as const },
+    transition: {
+      duration: 0.8,
+      delay: vorlauf() + i * 0.12,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
   }),
 };
 
@@ -164,7 +188,7 @@ export default function Hero() {
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
               className="relative w-[68%] max-w-[330px] aspect-square"
             >
-              <Image
+              <Bild
                 src={medien("/images/logo.webp")}
                 alt="Webdesign Elfe"
                 fill
