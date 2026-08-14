@@ -43,31 +43,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Der Schritt bricht bewusst NICHT ab, sondern schreibt einen
+      # Bericht ins Repository. Grund: Die Laufprotokolle liegen auf
+      # einem Azure-Speicher, den die Bauumgebung nicht erreicht - ein
+      # fehlgeschlagener Lauf waere von dort aus eine schwarze Kiste.
+      # Der Bericht kommt mit dem naechsten git fetch mit.
       - name: Herunterladen
         env:
           DATEIEN: ${{ inputs.dateien }}
         run: |
           python3 - <<'PY'
-          import json, os, pathlib, urllib.request, sys
+          import json, os, pathlib, urllib.request
 
           liste = json.loads(os.environ["DATEIEN"])
-          fehler = []
+          zeilen = []
           for e in liste:
               ziel = pathlib.Path(e["ziel"])
-              # Nur innerhalb des Projekts schreiben - eine Zieldatei mit
-              # ".." darin waere ein Einfallstor.
               if ".." in ziel.parts or ziel.is_absolute():
-                  sys.exit(f"unzulaessiges Ziel: {ziel}")
+                  zeilen.append(f"ABGELEHNT  {ziel}  (unzulaessiger Pfad)")
+                  continue
               ziel.parent.mkdir(parents=True, exist_ok=True)
               try:
-                  with urllib.request.urlopen(e["url"], timeout=180) as r:
+                  a = urllib.request.Request(e["url"], headers={"User-Agent": "Mozilla/5.0"})
+                  with urllib.request.urlopen(a, timeout=180) as r:
                       daten = r.read()
                   ziel.write_bytes(daten)
-                  print(f"{ziel}  {len(daten)/1024:.0f} KB")
+                  zeilen.append(f"OK         {ziel}  {len(daten)/1024:.0f} KB")
               except Exception as x:
-                  fehler.append(f"{e['url']}: {x}")
-          if fehler:
-              sys.exit("Fehlgeschlagen:\n" + "\n".join(fehler))
+                  zeilen.append(f"FEHLER     {ziel}  {type(x).__name__}: {x}")
+          bericht = "\n".join(zeilen)
+          print(bericht)
+          pathlib.Path("werkzeug/holen-bericht.txt").write_text(bericht + "\n", encoding="utf-8")
           PY
 
       - name: Festschreiben
