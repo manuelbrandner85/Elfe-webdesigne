@@ -24,6 +24,9 @@ type Grund = {
   /** true für Bilder oberhalb der Falz — lädt sofort statt verzögert */
   priority?: boolean;
   style?: CSSProperties;
+  /* Mehrere Breiten derselben Datei, z. B. [360, 640]. Erwartet wird die
+     Benennung `name-BREITE.webp`; der Pfad in `src` nennt eine davon. */
+  breiten?: number[];
   /* Fehlt die Datei, soll der Aufrufer umschalten können — die
      Dienstleistungskarten zeigen dann ihr Goldmedaillon statt einer
      kaputten Bildkachel. */
@@ -41,11 +44,20 @@ export default function Bild({
   priority = false,
   style,
   onError,
+  breiten,
   fill,
   width,
   height,
 }: Fuellend | Fest) {
   const avif = src.replace(/\.(webp|jpe?g|png)$/i, ".avif");
+
+  /* Aus `bild-640.webp` wird `bild-360.avif 360w, bild-640.avif 640w`.
+     Ohne Breitenliste bleibt es bei einer Datei — dann steht kein
+     srcSet im Markup und der Browser nimmt schlicht `src`. */
+  const satz = (endung: string) =>
+    breiten
+      ?.map((b) => `${src.replace(/-\d+\.(webp|jpe?g|png)$/i, `-${b}.${endung}`)} ${b}w`)
+      .join(", ");
 
   /* Die füllende Betriebsart braucht die Maße als Stil, nicht als
      Attribut — sonst überschreibt das Attribut die Positionierung. */

@@ -326,14 +326,20 @@ export default function DemoConceptCard({
                 {current.type === "gallery" && (
                   <div className="h-full px-6 py-5 flex flex-col">
                     <SectionTitle t={t} label={current.kicker} />
-                    <div className="grid grid-cols-3 gap-2 mt-2.5">
+                    {/* Die Kacheln fuellen die Hoehe, die uebrig ist.
+
+                        Vorher standen sie auf festem 4:3 im oberen
+                        Drittel, darunter blieb ein Handbreit leere
+                        Flaeche — der Entwurf sah aus, als fehlte etwas.
+                        Jetzt waechst die Reihe mit dem Fenster. */}
+                    <div className="grid grid-cols-3 gap-2 mt-2.5 flex-1 min-h-0">
                       {current.items.map((it, i) => (
-                        <div key={it.title}>
+                        <div key={it.title} className="flex flex-col min-h-0">
                           <Tile
                             src={tileFor(tileOffset(si) + i)}
                             t={t}
                             alt={`${it.title} – ${it.meta}, Bildbeispiel aus dem Designkonzept ${concept.title}`}
-                            className="aspect-[4/3] mb-1"
+                            className="flex-1 min-h-0 mb-1"
                           />
                           <div className="text-[7px] truncate" style={{ color: t.text, fontFamily: headFont }}>
                             {it.title}
@@ -344,7 +350,7 @@ export default function DemoConceptCard({
                         </div>
                       ))}
                     </div>
-                    <div className="mt-auto flex items-center gap-1.5 pt-2">
+                    <div className="flex items-center gap-1.5 pt-2.5">
                       <span className="h-px flex-1" style={{ background: `${t.accent}33` }} />
                       <span className="text-[6.5px]" style={{ color: t.muted }}>
                         Weitere Projekte
@@ -525,7 +531,14 @@ function Tile({
   }
   return (
     <span className={`relative block overflow-hidden ${className}`} style={{ borderRadius: t.radius }}>
-      <Bild src={src} alt={alt} fill sizes="140px" className="object-cover" />
+      <Bild
+        src={src}
+        alt={alt}
+        fill
+        breiten={[360, 640]}
+        sizes="(max-width: 640px) 24vw, 210px"
+        className="object-cover"
+      />
     </span>
   );
 }

@@ -101,7 +101,21 @@ export default function KonzeptKapitel({ konzepte }: { konzepte: Konzept[] }) {
       ref={huelle}
       className="grid grid-cols-1 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] gap-10 lg:gap-16 items-start"
     >
-      <div ref={text} className="min-w-0 lg:pt-6">
+      {/* Die Einleitung bleibt stehen, solange die Entwürfe laufen.
+
+          Vorher stand sie oben und war nach dem ersten Entwurf durch —
+          daneben blieben über anderthalb Bildschirme leere Fläche und
+          zwei Entwürfe ohne jede Erklärung. Wer beim dritten Entwurf
+          ankommt, hat den Satz, warum es drei sind, längst aus dem Bild
+          verloren. Als stehende Spalte begleitet sie alle drei.
+
+          Nur ab „lg": Darunter liegen die Entwürfe ohnehin untereinander,
+          und eine klebende Textspalte auf dem Telefon nimmt dem Inhalt
+          den halben Bildschirm. */}
+      <div
+        ref={text}
+        className="min-w-0 lg:pt-6 lg:sticky lg:top-[136px] lg:self-start"
+      >
         <p className="text-[0.72rem] tracking-[0.24em] uppercase text-gold-text mb-4">
           Drei Richtungen
         </p>

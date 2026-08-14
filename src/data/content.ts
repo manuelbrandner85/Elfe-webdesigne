@@ -266,17 +266,24 @@ export const demoConcepts: DemoConcept[] = [
     },
     showcase: "gallery",
     media: { poster: medien("/images/concept-atelier.webp"), video: medien("/videos/concept-atelier.mp4"), videoWebm: medien("/videos/concept-atelier.webm") },
-    tiles: [medien("/images/tiles/atelier-1.webp"), medien("/images/tiles/atelier-2.webp"), medien("/images/tiles/atelier-3.webp"), medien("/images/tiles/atelier-4.webp"), medien("/images/tiles/atelier-5.webp"), medien("/images/tiles/atelier-6.webp")],
+    tiles: [medien("/images/tiles/atelier-1-640.webp"), medien("/images/tiles/atelier-2-640.webp"), medien("/images/tiles/atelier-3-640.webp"), medien("/images/tiles/atelier-4-640.webp"), medien("/images/tiles/atelier-5-640.webp"), medien("/images/tiles/atelier-6-640.webp")],
     screens: [
       { nav: "Studio", type: "hero" },
       {
         nav: "Arbeiten",
         type: "gallery",
-        kicker: "Ausgewählte Projekte",
+        /* Drei Ansichten EINES Projekts, nicht drei behauptete Projekte.
+
+           Die Bilder stammen aus einer Aufnahme derselben Bar. Sie als
+           „Hotel Lumière", „Casa Verde" und „Nordlicht" zu beschriften
+           hiess, drei Auftraege zu behaupten, die man auf einen Blick
+           als denselben Raum erkennt. Ein Fallbeispiel mit drei Blicken
+           wirkt fuer ein Innenarchitekturbuero ohnehin staerker. */
+        kicker: "Hotel Lumière — Lobby & Bar",
         items: [
-          { title: "Hotel Lumière", meta: "Lobby & Bar" },
-          { title: "Casa Verde", meta: "Privathaus" },
-          { title: "Nordlicht", meta: "Restaurant" },
+          { title: "Lichtkonzept", meta: "Messing, warmweiß" },
+          { title: "Sitzbereich", meta: "Samt und Eiche" },
+          { title: "Kaminzone", meta: "Rückzug im Raum" },
         ],
       },
       {
@@ -322,7 +329,7 @@ export const demoConcepts: DemoConcept[] = [
     },
     showcase: "menu",
     media: { poster: medien("/images/concept-verde.webp"), video: medien("/videos/concept-verde.mp4"), videoWebm: medien("/videos/concept-verde.webm") },
-    tiles: [medien("/images/tiles/verde-1.webp"), medien("/images/tiles/verde-2.webp"), medien("/images/tiles/verde-3.webp"), medien("/images/tiles/verde-4.webp"), medien("/images/tiles/verde-5.webp"), medien("/images/tiles/verde-6.webp")],
+    tiles: [medien("/images/tiles/verde-1-640.webp"), medien("/images/tiles/verde-2-640.webp"), medien("/images/tiles/verde-3-640.webp"), medien("/images/tiles/verde-4-640.webp"), medien("/images/tiles/verde-5-640.webp"), medien("/images/tiles/verde-6-640.webp")],
     screens: [
       { nav: "Karte", type: "hero" },
       {
@@ -330,9 +337,9 @@ export const demoConcepts: DemoConcept[] = [
         type: "gallery",
         kicker: "Aus unserer Küche",
         items: [
+          { title: "Weine", meta: "aus der Region" },
+          { title: "Brot", meta: "täglich frisch" },
           { title: "Antipasti", meta: "della casa" },
-          { title: "Pasta", meta: "alla Norma" },
-          { title: "Dolci", meta: "Cannoli" },
         ],
       },
       {
@@ -378,7 +385,7 @@ export const demoConcepts: DemoConcept[] = [
     },
     showcase: "stats",
     media: { poster: medien("/images/concept-nordwerk.webp"), video: medien("/videos/concept-nordwerk.mp4"), videoWebm: medien("/videos/concept-nordwerk.webm") },
-    tiles: [medien("/images/tiles/nordwerk-1.webp"), medien("/images/tiles/nordwerk-2.webp"), medien("/images/tiles/nordwerk-3.webp"), medien("/images/tiles/nordwerk-4.webp"), medien("/images/tiles/nordwerk-5.webp"), medien("/images/tiles/nordwerk-6.webp")],
+    tiles: [medien("/images/tiles/nordwerk-1-640.webp"), medien("/images/tiles/nordwerk-2-640.webp"), medien("/images/tiles/nordwerk-3-640.webp"), medien("/images/tiles/nordwerk-4-640.webp"), medien("/images/tiles/nordwerk-5-640.webp"), medien("/images/tiles/nordwerk-6-640.webp")],
     screens: [
       { nav: "Leistungen", type: "hero" },
       {
@@ -386,9 +393,9 @@ export const demoConcepts: DemoConcept[] = [
         type: "gallery",
         kicker: "Aus der Werkstatt",
         items: [
-          { title: "Dachstuhl", meta: "Altbau, Lübeck" },
-          { title: "Innenausbau", meta: "Praxisräume" },
-          { title: "Sanierung", meta: "Fachwerk" },
+          { title: "Holzlager", meta: "Eiche und Lärche" },
+          { title: "Werkstatt", meta: "Hof von 1890" },
+          { title: "Zuschnitt", meta: "Balken für den Dachstuhl" },
         ],
       },
       {
