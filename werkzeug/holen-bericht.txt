@@ -1,11 +1,5 @@
-OK         werkzeug/roh/concept-nordwerk-neu.mp4  6324 KB
-OK         werkzeug/roh/concept-verde-neu.mp4  2173 KB
-OK         werkzeug/roh/concept-atelier-neu.mp4  3566 KB
+OK         werkzeug/roh/konzept-nordwerk.mp4  4138 KB
 ffmpeg fehlt, wird nachinstalliert
 ffmpeg: ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers
-VIDEO public/videos/concept-atelier-neu.mp4  873464 Bytes
-VIDEO public/videos/concept-atelier-neu.webm  1127777 Bytes
-VIDEO public/videos/concept-nordwerk-neu.mp4  1568168 Bytes
-VIDEO public/videos/concept-nordwerk-neu.webm  2306863 Bytes
-VIDEO public/videos/concept-verde-neu.mp4  537089 Bytes
-VIDEO public/videos/concept-verde-neu.webm  484734 Bytes
+VIDEO public/videos/konzept-nordwerk.mp4  808163 Bytes
+VIDEO public/videos/konzept-nordwerk.webm  946941 Bytes
