@@ -336,7 +336,7 @@ export default function DemoConceptCard({
                       {current.items.map((it, i) => (
                         <div key={it.title} className="flex flex-col min-h-0">
                           <Tile
-                            src={tileFor(tileOffset(si) + i)}
+                            src={concept.galerie[i] ?? tileFor(tileOffset(si) + i)}
                             t={t}
                             alt={`${it.title} – ${it.meta}, Bildbeispiel aus dem Designkonzept ${concept.title}`}
                             className="flex-1 min-h-0 mb-1"

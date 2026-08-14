@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Rohmaterial der Bilderzeugung: 72 MB PNG, aus denen die
+# ausgelieferten 2,3 MB entstehen. Die Auftragskennungen in
+# werkzeug/auftraege.txt genuegen, um jede Datei wiederzubeschaffen -
+# Git muss sie nicht fuer immer mitschleppen.
+werkzeug/roh/
