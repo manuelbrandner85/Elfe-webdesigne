@@ -27,6 +27,7 @@ function CardVisual({
           src={src}
           alt=""
           fill
+          breiten={[360, 640]}
           sizes="(max-width: 640px) 100vw, 25vw"
           onError={() => setFailed(true)}
           className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"

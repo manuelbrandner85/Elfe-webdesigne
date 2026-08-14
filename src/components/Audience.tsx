@@ -9,6 +9,7 @@ import {
   Stethoscope,
   Users,
 } from "lucide-react";
+import Bild from "@/components/Bild";
 import { audiences } from "@/data/content";
 
 /* Sechs Karten mit einem Satz Nutzen statt zehn Schlagwörtern:
@@ -44,22 +45,48 @@ export default function Audience() {
             return (
               <article
                 key={a.titel}
-                className="auftritt group relative rounded-sm border border-line bg-[linear-gradient(160deg,rgba(255,250,240,0.045),rgba(0,0,0,0.22))] px-6 py-7 hover:border-gold/50 transition-colors duration-500"
+                className="auftritt group relative overflow-hidden rounded-sm border border-line bg-[linear-gradient(160deg,rgba(255,250,240,0.045),rgba(0,0,0,0.22))] hover:border-gold/50 transition-colors duration-500"
         style={{ ["--stufe" as string]: i }}>
-                <span className="inline-flex items-center justify-center w-11 h-11 rounded-full border border-gold/35 bg-[radial-gradient(circle_at_35%_30%,rgba(242,216,148,0.16),transparent_70%)] mb-4">
-                  <Icon
-                    size={19}
-                    strokeWidth={1.4}
-                    className="text-gold-bright"
-                    aria-hidden
+                {/* Ein Bild sagt in einer halben Sekunde, was ein Piktogramm
+                    erst nach dem Lesen der Überschrift sagt. Ein Tischler
+                    erkennt eine Werkbank; ein Hammer-Zeichen erkennt er als
+                    Zeichen. Das Symbol bleibt trotzdem — als Medaillon auf
+                    dem Bild, damit die Karte ihre Ordnung behält. */}
+                <div className="relative h-36 overflow-hidden">
+                  <Bild
+                    src={a.bild}
+                    alt=""
+                    fill
+                    breiten={[360, 640]}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                   />
-                </span>
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 bg-[linear-gradient(to_top,rgba(30,27,24,0.94),rgba(30,27,24,0.30)_58%,transparent)]"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(to_right,transparent,rgba(201,162,39,0.5),transparent)]"
+                  />
+                  <span className="absolute bottom-4 left-6 inline-flex items-center justify-center w-11 h-11 rounded-full border border-gold/45 bg-[radial-gradient(circle_at_35%_30%,rgba(242,216,148,0.22),rgba(0,0,0,0.45))] backdrop-blur-[2px]">
+                    <Icon
+                      size={19}
+                      strokeWidth={1.4}
+                      className="text-gold-bright"
+                      aria-hidden
+                    />
+                  </span>
+                </div>
+
+                <div className="px-6 pt-5 pb-7">
                 <h3 className="font-serif-display text-[1.15rem] text-parchment mb-2">
                   {a.titel}
                 </h3>
                 <p className="text-silver text-[0.92rem] leading-relaxed">
                   {a.nutzen}
                 </p>
+                </div>
                 <span
                   aria-hidden
                   className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(201,162,39,0.5),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"

@@ -59,6 +59,7 @@ export const services: Service[] = [
     icon: "sparkles",
     href: "/logodesign",
     title: "Logo & Corporate Design",
+    image: medien("/images/tiles/foto-leistung-logo-640.webp"),
     text:
       "Ein unverwechselbares Erscheinungsbild als Fundament Ihrer Marke: Wortmarke, Farbwelt und Typografie – konsequent aufeinander abgestimmt.",
     points: ["Logoentwicklung", "Farb- & Schriftkonzept", "Geschäftsausstattung"],
@@ -67,6 +68,7 @@ export const services: Service[] = [
     icon: "layout",
     href: "/webdesign",
     title: "Webdesign",
+    image: medien("/images/tiles/foto-leistung-webdesign-640.webp"),
     text:
       "Individuelles Seitendesign statt Baukasten von der Stange. Klar strukturiert, auf Ihre Zielgruppe zugeschnitten und auf jedem Bildschirm stimmig.",
     points: ["Individuelles Design", "Responsive Layout", "Barrierearme Umsetzung"],
@@ -74,6 +76,7 @@ export const services: Service[] = [
   {
     icon: "code",
     title: "Entwicklung & Technik",
+    image: medien("/images/tiles/foto-leistung-technik-640.webp"),
     href: "/entwicklung",
     text:
       "Sauber programmierte Websites mit kurzen Ladezeiten, sicherer Technik und einer Struktur, die Suchmaschinen zuverlässig erfassen können.",
@@ -82,6 +85,7 @@ export const services: Service[] = [
   {
     icon: "sun",
     title: "Pflege & Betreuung",
+    image: medien("/images/tiles/foto-leistung-betreuung-640.webp"),
     href: "/betreuung",
     text:
       "Nach dem Launch bleibe ich Ihr fester Ansprechpartner: Inhalte aktualisieren, Erweiterungen umsetzen, Technik im Blick behalten.",
@@ -119,29 +123,35 @@ export const process = [
 /* Bewusst wenige Einträge mit einem Satz Nutzen statt einer langen Liste:
    Eine Aufzählung von zehn Begriffen liest niemand, sechs klare Fälle
    schon. */
-export const audiences: { titel: string; nutzen: string }[] = [
+export const audiences: { titel: string; nutzen: string; bild: string }[] = [
   {
     titel: "Handwerk & Bau",
+    bild: medien("/images/tiles/foto-wen-handwerk-640.webp"),
     nutzen: "Sichtbar für Kunden, die in Ihrer Region nach Ihrem Gewerk suchen.",
   },
   {
     titel: "Selbstständige & Freiberufler",
+    bild: medien("/images/tiles/foto-wen-selbststaendig-640.webp"),
     nutzen: "Ein Auftritt, der Ihre Arbeit so ernst nimmt wie Sie selbst.",
   },
   {
     titel: "Gastronomie & Hotellerie",
+    bild: medien("/images/tiles/foto-wen-gastro-640.webp"),
     nutzen: "Speisekarte, Öffnungszeiten und Reservierung ohne Umwege.",
   },
   {
     titel: "Existenzgründung",
+    bild: medien("/images/tiles/foto-wen-gruendung-640.webp"),
     nutzen: "Vom Logo bis zur Website — alles aus einer Hand, von Anfang an.",
   },
   {
     titel: "Praxen & Beratung",
+    bild: medien("/images/tiles/foto-wen-praxis-640.webp"),
     nutzen: "Vertrauen entsteht vor dem ersten Termin, auf Ihrer Seite.",
   },
   {
     titel: "Vereine & Kultur",
+    bild: medien("/images/tiles/foto-wen-verein-640.webp"),
     nutzen: "Termine, Mitglieder und Förderer an einem Ort gebündelt.",
   },
 ];
