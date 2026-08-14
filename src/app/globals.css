@@ -52,6 +52,21 @@
   --font-sans: "Jost", "Jost Ersatz", sans-serif;
 }
 
+/* ---------- Ersatzwerte in Kurzschreibweisen ----------
+
+   Jede Variable in einer Kurzschreibweise hat einen Ersatzwert. Das ist
+   keine Vorsicht, sondern die Lehre aus einem konkreten Fehler: Eine
+   leere Variable laesst in einer Kurzschreibweise die GANZE Deklaration
+   wegfallen — `animation: x .9s var(--leer) forwards` wird zu
+   `animation-name: none`. Sechs Abschnittsueberschriften waren deshalb
+   unsichtbar, ohne dass irgendwo eine Warnung erschien.
+
+   In der Langschreibweise passiert das nicht, dort greift der
+   Anfangswert. Deshalb betrifft die Regel nur Kurzschreibweisen.
+
+   Geprueft wird das von werkzeug/kurzschreibweisen.mjs, aufrufbar ueber
+   `npm run pruefen:css`. */
+
 /* ---------- Metrikgleiche Ersatzschriften ----------
 
    Die Webschriften werden bewusst nicht blockierend geladen — die Seite
@@ -144,7 +159,7 @@ body::after {
 }
 
 ::selection {
-  background: var(--color-gold);
+  background: var(--color-gold, #c9a227);
   color: #2b2723;
 }
 
@@ -203,7 +218,7 @@ body::after {
   background:
     linear-gradient(160deg, rgba(255, 250, 240, 0.055), rgba(0, 0, 0, 0.14)),
     var(--color-stone-900);
-  border: 1px solid var(--color-line);
+  border: 1px solid var(--color-line, rgba(255, 250, 240, 0.16));
   box-shadow:
     0 1px 0 rgba(255, 250, 240, 0.06) inset,
     0 18px 38px rgba(0, 0, 0, 0.34),
@@ -227,14 +242,14 @@ body::after {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-stone-deep);
+  background: var(--color-stone-deep, #423e3a);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-gold-deep);
+  background: var(--color-gold-deep, #8a6d1f);
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold);
+  background: var(--color-gold, #c9a227);
 }
 
 
@@ -251,7 +266,7 @@ body::after {
   transform: translateY(-50%);
   width: min(46vw, 520px);
   aspect-ratio: 1 / 1;
-  background: var(--logo-quelle) center / contain no-repeat;
+  background: var(--logo-quelle, none) center / contain no-repeat;
   opacity: 0.035;
   pointer-events: none;
   z-index: -1;
@@ -351,10 +366,10 @@ body::after {
    unten herauf. Ein Auftritt, der auf jeder Seite anders herum läuft,
    ist kein System, sondern eine Sammlung. */
 ::view-transition-old(root) {
-  animation: inhalt-ab var(--dauer-ui) var(--kurve-haupt) both;
+  animation: inhalt-ab var(--dauer-ui, 400ms) var(--kurve-haupt, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 ::view-transition-new(root) {
-  animation: inhalt-auf var(--dauer-inhalt) var(--kurve-haupt) both;
+  animation: inhalt-auf var(--dauer-inhalt, 600ms) var(--kurve-haupt, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
 @keyframes inhalt-ab {
   to { opacity: 0; transform: translate3d(0, -14px, 0); }
@@ -597,7 +612,7 @@ body::after {
   display: grid;
   place-items: center;
   background: #100e0c;
-  animation: vorhang 1320ms var(--kurve-haupt) forwards;
+  animation: vorhang 1320ms var(--kurve-haupt, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
 }
 
 @keyframes vorhang {
@@ -628,7 +643,7 @@ body::after {
     radial-gradient(circle at 58% 46%, rgba(242,216,148,0.35) 0 1.6px, transparent 2.2px),
     radial-gradient(circle at 38% 22%, rgba(242,216,148,0.4) 0 1.4px, transparent 2px),
     radial-gradient(circle, rgba(201,162,39,0.18), transparent 62%);
-  animation: staub 900ms var(--kurve-haupt) forwards;
+  animation: staub 900ms var(--kurve-haupt, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
 }
 
 @keyframes staub {
@@ -641,8 +656,8 @@ body::after {
 .eroeffnung::after {
   width: 7rem;
   height: 7rem;
-  background: var(--logo-quelle) center / contain no-repeat;
-  animation: logo-treten 900ms var(--kurve-haupt) forwards;
+  background: var(--logo-quelle, none) center / contain no-repeat;
+  animation: logo-treten 900ms var(--kurve-haupt, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
 }
 
 @keyframes logo-treten {
@@ -661,7 +676,7 @@ html.eroeffnung-fertig .eroeffnung {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 380ms var(--kurve-haupt);
+  transition: opacity 380ms var(--kurve-haupt, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 html.ohne-eroeffnung .eroeffnung {
@@ -689,7 +704,7 @@ html.ohne-eroeffnung .eroeffnung {
 }
 
 [data-geteilt="ja"][data-sichtbar="ja"] .zeile {
-  animation: zeile-heben 0.9s var(--kurve-weich) forwards;
+  animation: zeile-heben 0.9s var(--kurve-weich, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
   animation-delay: calc(var(--verzug, 0s) + var(--zeile) * 0.09s);
 }
 
