@@ -32,7 +32,20 @@ const GERAETE = [
 
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM || "/home/claude/chromium",
-  args: ["--no-sandbox", "--force-color-profile=srgb"],
+  /* WebGL2 muss an sein, sonst misst man eine Seite ohne Atmosphaere und
+     ohne die Werkstatt-Kamerafahrt — also nicht die Seite, die
+     ausgeliefert wird. In dieser Umgebung gibt es keine Grafikkarte,
+     gerechnet wird auf der CPU. Das ist ein sehr harter Grenzfall: Jedes
+     echte Geraet ist um ein Vielfaches schneller. Die Zahlen taugen zum
+     Vergleich vorher/nachher, nicht als absolute Aussage. */
+  args: [
+    "--no-sandbox",
+    "--force-color-profile=srgb",
+    "--use-angle=swiftshader",
+    "--enable-unsafe-swiftshader",
+    "--ignore-gpu-blocklist",
+    "--disable-gpu-sandbox",
+  ],
 });
 
 const ergebnis = {};

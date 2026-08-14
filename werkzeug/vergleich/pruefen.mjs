@@ -31,9 +31,18 @@ for (const [name, breite, hoehe] of GROESSEN) {
   const meldungen = [];
   seite.on("console", (m) => m.type() === "error" && meldungen.push("Konsole: " + m.text()));
   seite.on("pageerror", (e) => meldungen.push("Laufzeit: " + e.message));
-  seite.on("requestfailed", (r) =>
-    meldungen.push("Abruf: " + r.url().split("/").pop() + " — " + r.failure()?.errorText),
-  );
+  seite.on("requestfailed", (r) => {
+    /* Abgebrochene Videoabrufe sind kein Fehler, sondern gewolltes
+       Verhalten: Die Konzeptkarten halten ihr Video an, sobald sie aus
+       dem Bild scrollen — und genau das tut dieser Test, wenn er zum
+       Vergleich springt. Der Browser meldet den offenen Bereichsabruf
+       dann als ERR_ABORTED. Wer das als Fehler zaehlt, faerbt die
+       Pruefung rot fuer etwas, das auf der Seite richtig laeuft. */
+    const abgebrochen = r.failure()?.errorText === "net::ERR_ABORTED";
+    const medien = /\.(webm|mp4)$/.test(new URL(r.url()).pathname);
+    if (abgebrochen && medien) return;
+    meldungen.push("Abruf: " + r.url().split("/").pop() + " — " + r.failure()?.errorText);
+  });
 
   await seite.goto("http://127.0.0.1:8099/", { waitUntil: "load" });
 

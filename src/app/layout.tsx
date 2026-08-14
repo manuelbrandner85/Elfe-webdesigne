@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { medien } from "@/lib/pfad";
+import Atmosphaere from "@/components/Atmosphaere";
 import SanftesScrollen from "@/components/SanftesScrollen";
 import BewegungsRahmen from "@/components/BewegungsRahmen";
 import MagnetischeElemente from "@/components/MagnetischeElemente";
@@ -255,6 +256,7 @@ export default function RootLayout({
           <span className="eroeffnung-linie" />
         </div>
 
+        <Atmosphaere />
         <SanftesScrollen />
         <MagnetischeElemente />
         <BewegungsRahmen>{children}</BewegungsRahmen>

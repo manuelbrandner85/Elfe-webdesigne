@@ -111,6 +111,20 @@ body::before {
   mix-blend-mode: overlay;
 }
 
+/* Läuft die Atmosphäre, treten die beiden Ersatzebenen ab.
+
+   Nicht nur, weil sie doppelt wären: Die Körnungsebene liegt als
+   `mix-blend-mode: overlay` fest über dem Fenster. Ein
+   bildschirmfüllender Mischmodus zwingt den Browser, die ganze Seite in
+   einer Ebene zu halten und bei jedem Scrollbild neu zu verrechnen —
+   dieselbe Falle, die weiter unten beim Vorhang schon einmal gemessen
+   und dokumentiert wurde. Der Shader bringt seine eigene Körnung mit,
+   in der Tiefe stärker als im Licht, und kostet dafür nichts extra. */
+.mit-atmosphaere body::before,
+.mit-atmosphaere body::after {
+  display: none;
+}
+
 /* Warme Lichtquelle oben, sanfte Abdunklung zu den Rändern */
 body::after {
   content: "";
