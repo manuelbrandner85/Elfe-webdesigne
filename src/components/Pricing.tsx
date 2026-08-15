@@ -2,6 +2,7 @@
 
 import SplitHeading from "@/components/SplitHeading";
 import { Check, HardDrive, BookOpen, Download } from "lucide-react";
+import AnleitungFilm from "@/components/AnleitungFilm";
 import { pricing, pricingNote, addons, addonNote } from "@/data/content";
 
 export default function Pricing() {
@@ -195,6 +196,17 @@ export default function Pricing() {
           <p className="text-center text-[0.78rem] text-silver max-w-2xl mx-auto mt-8 leading-relaxed">
             {addonNote}
           </p>
+
+          {/* Der Film steht unter den Karten, nicht in einer davon: Er
+              erklärt den ganzen Weg, nicht ein einzelnes Angebot. Und er
+              steht VOR der Entscheidung — wer selbst hosten will, soll
+              vorher sehen, worauf er sich einlässt. */}
+          <div className="mt-14 max-w-3xl mx-auto">
+            <p className="text-center text-[0.78rem] tracking-[0.2em] uppercase text-gold-text mb-5">
+              In knapp einer Minute erklärt
+            </p>
+            <AnleitungFilm />
+          </div>
         </div>
       </div>
     </section>

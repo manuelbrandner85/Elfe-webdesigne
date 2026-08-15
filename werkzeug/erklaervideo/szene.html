@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Erklärvideo — Hosting selbst in der Hand</title>
+<style>
+  /* Quelle des Erklärvideos.
+
+     WARUM NICHT MIT EINEM VIDEOMODELL ERZEUGT
+
+     Zwei Gründe, beide hart. Erstens das Geld: Ein Achtsekünder kostet
+     60 bis 240 Credits; für eine Minute wären es ein Vielfaches des
+     Restguthabens. Zweitens, und wichtiger: Videomodelle bekommen
+     lesbare deutsche Schrift nicht hin. Ein Erklärvideo, dessen Text
+     verwaschen ist, erklärt nichts.
+
+     Gebaut wird deshalb aus dem Designsystem der Seite: dieselben
+     Schriften, dieselben Farben, dieselben Zeichnungen wie im PDF.
+     Ergebnis ist gestochene Typografie, exakte Markenfarben und eine
+     Quelle, die sich ändern lässt, ohne dass jemand neu rendert und
+     hofft.
+
+     WIE DIE ZEIT LÄUFT
+
+     Nicht über CSS-Animationen — die laufen in Echtzeit und lassen sich
+     beim Aufnehmen nicht sauber anhalten. Stattdessen ist alles eine
+     Funktion von `window.__t` (Sekunden). Der Renderer setzt die Zeit,
+     macht ein Bild, setzt die nächste. Das ist bildgenau
+     reproduzierbar: Derselbe Aufruf ergibt immer dasselbe Video.
+
+     KEIN TON
+
+     Es gibt keine gesprochene Fassung. Eine künstliche Stimme über eine
+     Anleitung, die Vertrauen schaffen soll, wäre das falsche Signal —
+     und die meisten sehen solche Videos ohnehin stumm. Der Text trägt
+     deshalb allein. Kommt später eine echte Aufnahme dazu, passt sie
+     ohne Umbau darunter. */
+
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-500-normal.woff2) format('woff2'); font-weight: 500; }
+  @font-face { font-family: Jost; src: url(schrift/jost-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+  @font-face { font-family: Cormorant; src: url(schrift/cormorant-garamond-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+  @font-face { font-family: Cormorant; src: url(schrift/cormorant-garamond-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+
+  :root {
+    --grund: #3a3733;
+    --tiefer: #2a2724;
+    --gold: #c9a227;
+    --gold-hell: #f2d894;
+    --gold-text: #ead490;
+    --parchment: #f7f2e6;
+    --silber: #ddd8cb;
+    --linie: rgba(255, 250, 240, 0.16);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 720px; overflow: hidden; }
+  body {
+    background: var(--grund);
+    color: var(--parchment);
+    font-family: Jost, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #buehne { position: relative; width: 1280px; height: 720px; overflow: hidden; }
+
+  /* Grundrauschen und eine warme Lichtquelle oben links — dieselbe
+     Atmosphäre wie auf der Seite, nur statisch. */
+  #buehne::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 18% 8%, rgba(255, 250, 240, 0.07), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 90%, rgba(201, 162, 39, 0.06), transparent 60%);
+  }
+
+  .szene {
+    position: absolute; inset: 0;
+    padding: 78px 96px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .kicker {
+    font-size: 15px; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--gold-text); margin-bottom: 22px;
+  }
+  h1 { font-family: Cormorant, serif; font-size: 76px; line-height: 1.06; font-weight: 600; }
+  h2 { font-family: Cormorant, serif; font-size: 52px; line-height: 1.1; font-weight: 600; margin-bottom: 26px; }
+  p.gross { font-size: 26px; line-height: 1.6; color: var(--silber); max-width: 820px; }
+  .strich { width: 96px; height: 2px; background: var(--gold); margin: 26px 0; }
+
+  .karten { display: flex; gap: 26px; margin-top: 14px; }
+  .karte {
+    flex: 1; border: 1px solid var(--linie); border-radius: 3px;
+    background: linear-gradient(160deg, rgba(255,250,240,0.055), rgba(0,0,0,0.24));
+    padding: 30px 28px;
+  }
+  .karte .titel { font-family: Cormorant, serif; font-size: 30px; color: var(--gold-hell); margin-bottom: 12px; }
+  .karte .zeile { font-size: 19px; line-height: 1.55; color: var(--silber); }
+
+  ul.liste { list-style: none; }
+  ul.liste li {
+    display: flex; align-items: flex-start; gap: 18px;
+    font-size: 25px; line-height: 1.5; margin-bottom: 20px; color: var(--silber);
+  }
+  ul.liste .haken {
+    width: 30px; height: 30px; border: 1.5px solid var(--gold); border-radius: 2px;
+    flex-shrink: 0; margin-top: 4px; position: relative;
+  }
+  ul.liste .haken::after {
+    content: ""; position: absolute; left: 8px; top: 3px;
+    width: 9px; height: 16px; border: solid var(--gold-hell);
+    border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+  }
+
+  .adresszeile {
+    display: flex; align-items: center; gap: 16px;
+    border: 1px solid var(--linie); border-radius: 999px;
+    background: rgba(0,0,0,0.28); padding: 18px 30px; max-width: 640px;
+    font-size: 24px;
+  }
+  .schloss { width: 22px; height: 26px; position: relative; flex-shrink: 0; }
+  .schloss i { position: absolute; left: 0; bottom: 0; width: 22px; height: 15px; border-radius: 3px; background: #7dbb8a; display: block; }
+  .schloss b { position: absolute; left: 5px; top: 0; width: 12px; height: 12px; border: 2.5px solid #7dbb8a; border-bottom: 0; border-radius: 6px 6px 0 0; }
+
+  .ordner { display: flex; gap: 26px; margin-top: 10px; }
+  .ordner > div { flex: 1; border: 1px solid var(--linie); border-radius: 3px; padding: 24px 26px; }
+  .ordner .kopf { font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; }
+  .ordner code { font-family: "DejaVu Sans Mono", monospace; font-size: 19px; line-height: 1.85; display: block; color: var(--silber); }
+  .ordner .ein { padding-left: 26px; }
+  .gut .kopf { color: #8fc79c; }
+  .schlecht .kopf { color: #d99b8c; }
+  .schlecht .warn { color: #d99b8c; }
+
+  .marke { position: absolute; left: 96px; bottom: 54px; display: flex; align-items: center; gap: 16px; }
+  .marke img { width: 52px; height: 52px; object-fit: contain; }
+  .marke span { font-family: Cormorant, serif; font-size: 27px; }
+  .marke span i { color: var(--gold-hell); }
+
+  .fortschritt { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--gold); }
+</style>
+</head>
+<body>
+<div id="buehne">
+  <div class="szene" id="s0">
+    <p class="kicker">Webdesign Elfe erklärt</p>
+    <h1>Hosting selbst<br>in der Hand</h1>
+    <div class="strich"></div>
+    <p class="gross">Was Sie brauchen, was es kostet und in welcher<br>Reihenfolge Sie vorgehen — in einer Minute.</p>
+  </div>
+
+  <div class="szene" id="s1">
+    <p class="kicker">Schritt 1</p>
+    <h2>Drei Dinge, nicht eins</h2>
+    <div class="karten">
+      <div class="karte" data-teil="0">
+        <div class="titel">Die Domain</div>
+        <div class="zeile">ihr-betrieb.de<br>Die Adresse. Läuft immer auf Ihren Namen.</div>
+      </div>
+      <div class="karte" data-teil="1">
+        <div class="titel">Der Webspace</div>
+        <div class="zeile">Der Speicherplatz.<br>Hier liegen die Dateien Ihrer Website.</div>
+      </div>
+      <div class="karte" data-teil="2">
+        <div class="titel">Das Zertifikat</div>
+        <div class="zeile">Das Schloss in der Adresszeile.<br>Kostenlos enthalten.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="szene" id="s2">
+    <p class="kicker">Schritt 2</p>
+    <h2>Worauf es beim Anbieter ankommt</h2>
+    <ul class="liste">
+      <li data-teil="0"><span class="haken"></span><span>Speicherplatz ab 1 GB — jedes Einsteigerpaket reicht</span></li>
+      <li data-teil="1"><span class="haken"></span><span>SSL-Zertifikat inklusive, ohne Aufpreis</span></li>
+      <li data-teil="2"><span class="haken"></span><span>SFTP-Zugang zum Hochladen der Dateien</span></li>
+      <li data-teil="3"><span class="haken"></span><span>Eigene DNS-Verwaltung</span></li>
+      <li data-teil="4"><span class="haken"></span><span>Serverstandort in der EU</span></li>
+    </ul>
+  </div>
+
+  <div class="szene" id="s3">
+    <p class="kicker">Schritt 3</p>
+    <h2>Der häufigste Fehler beim Hochladen</h2>
+    <div class="ordner">
+      <div class="gut" data-teil="0">
+        <div class="kopf">Richtig</div>
+        <code>htdocs/</code>
+        <code class="ein">index.html</code>
+        <code class="ein">impressum/</code>
+        <code class="ein">_next/</code>
+      </div>
+      <div class="schlecht" data-teil="1">
+        <div class="kopf">Falsch</div>
+        <code>htdocs/</code>
+        <code class="ein warn">website-fertig/</code>
+        <code class="ein" style="padding-left:52px">index.html</code>
+        <code class="ein" style="padding-left:52px">impressum/</code>
+      </div>
+    </div>
+    <p class="gross" style="margin-top:30px;font-size:23px" data-teil="2">
+      Der <strong style="color:var(--parchment)">Inhalt</strong> des Ordners kommt auf den Webspace — nicht der Ordner selbst.
+    </p>
+  </div>
+
+  <div class="szene" id="s4">
+    <p class="kicker">Schritt 4</p>
+    <h2>Zum Schluss: das Schloss</h2>
+    <div class="adresszeile" data-teil="0">
+      <span class="schloss"><b></b><i></i></span>
+      <span>https://ihr-betrieb.de</span>
+    </div>
+    <p class="gross" style="margin-top:34px" data-teil="1">
+      Im Kundenbereich das kostenlose Zertifikat aktivieren und<br>
+      „HTTPS erzwingen" einschalten. Fertig.
+    </p>
+  </div>
+
+  <div class="szene" id="s5">
+    <p class="kicker">Und wenn etwas klemmt</p>
+    <h2>Fragen Sie einfach</h2>
+    <p class="gross">
+      Die ausführliche Anleitung gibt es als PDF zum Mitnehmen —<br>
+      mit Prüfliste und einer Tabelle für den Fall, dass etwas hakt.
+    </p>
+    <div class="strich"></div>
+    <p class="gross" style="font-size:23px">webdesign-elfe.de</p>
+  </div>
+
+  <div class="marke" id="marke">
+    <img src="logo.webp" alt="">
+    <span>Webdesign <i>Elfe</i></span>
+  </div>
+
+  <div class="fortschritt" id="fortschritt"></div>
+</div>
+
+<script>
+/* ---------- Zeitplan ----------
+   Jede Szene hat Anfang und Dauer in Sekunden. Die Teile innerhalb
+   einer Szene erscheinen gestaffelt. */
+const SZENEN = [
+  { id: "s0", start: 0.0,  dauer: 6.5, teile: 0 },
+  { id: "s1", start: 6.5,  dauer: 11.0, teile: 3 },
+  { id: "s2", start: 17.5, dauer: 12.5, teile: 5 },
+  { id: "s3", start: 30.0, dauer: 12.0, teile: 3 },
+  { id: "s4", start: 42.0, dauer: 10.0, teile: 2 },
+  { id: "s5", start: 52.0, dauer: 8.0,  teile: 0 },
+];
+const GESAMT = 60.0;
+window.__gesamt = GESAMT;
+
+/* Sanftes Ein- und Ausschwingen — dieselbe Kurve wie auf der Seite. */
+function kurve(x) {
+  x = Math.max(0, Math.min(1, x));
+  return 1 - Math.pow(1 - x, 3);
+}
+
+function setzeTeil(el, f) {
+  el.style.opacity = f;
+  el.style.transform = `translateY(${(1 - f) * 26}px)`;
+}
+
+window.__zeichne = function (t) {
+  document.getElementById("fortschritt").style.width = (t / GESAMT) * 1280 + "px";
+
+  for (const s of SZENEN) {
+    const el = document.getElementById(s.id);
+    const rel = t - s.start;
+    const drin = rel >= -0.6 && rel <= s.dauer + 0.4;
+    if (!drin) { el.style.opacity = 0; el.style.visibility = "hidden"; continue; }
+    el.style.visibility = "visible";
+
+    /* Szene blendet in 0,6 s auf und in 0,45 s wieder ab. */
+    const auf = kurve(rel / 0.6);
+    const ab = 1 - kurve((rel - s.dauer) / 0.45);
+    const sicht = Math.max(0, Math.min(auf, rel > s.dauer ? ab : 1));
+    el.style.opacity = sicht;
+
+    /* Der Kopf der Szene hebt sich mit; die Teile folgen gestaffelt. */
+    const kopf = el.querySelector(".kicker");
+    const h = el.querySelector("h2, h1");
+    if (kopf) setzeTeil(kopf, kurve(rel / 0.7));
+    if (h) setzeTeil(h, kurve((rel - 0.25) / 0.8));
+
+    el.querySelectorAll("[data-teil]").forEach((teil) => {
+      const i = Number(teil.dataset.teil);
+      const beginn = 1.0 + i * 0.85;
+      setzeTeil(teil, kurve((rel - beginn) / 0.75));
+    });
+  }
+
+  /* Die Marke steht ab der zweiten Sekunde und geht am Ende nicht weg. */
+  document.getElementById("marke").style.opacity = kurve((t - 1.6) / 1.0) * 0.85;
+};
+
+window.__zeichne(0);
+</script>
+</body>
+</html>

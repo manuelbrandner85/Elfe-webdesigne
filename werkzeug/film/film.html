@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Erklärfilm — Hosting selbst in der Hand</title>
+<style>
+/* QUELLE DES ERKLÄRFILMS
+
+   WARUM NICHT ERZEUGT
+
+   Ein Erklärfilm muss stimmen. Veo und Kling erfinden Bilder — sie
+   können weder einen lesbaren DNS-Eintrag noch eine korrekte
+   Ordnerstruktur darstellen, und beides ist hier der ganze Inhalt. Ein
+   schöner Film, der Falsches zeigt, ist schlechter als keiner.
+
+   Also gebaut statt erzeugt: dieselben Zeichnungen wie im PDF, in
+   Bewegung. Kostet nichts, ist jederzeit änderbar, und jede Zahl darin
+   ist geprüft.
+
+   WIE DIE ZEITLEISTE FUNKTIONIERT
+
+   Jedes Element trägt eine eigene CSS-Animation mit eigener Dauer und
+   eigener Verzögerung — alle angehalten. Der Renderer setzt für jedes
+   Bild die Abspielzeit ALLER Animationen auf denselben Wert. Weil eine
+   Verzögerung Teil der eigenen Zeitachse ist, ergibt das eine einzige
+   gemeinsame Zeitleiste, die sich exakt anspringen lässt.
+
+   Das ist der Grund für dieses Verfahren: Bild 700 sieht bei jedem Lauf
+   identisch aus. Ein Film, der beim Neurendern anders aussieht, lässt
+   sich nicht korrigieren.
+
+   OHNE TON
+
+   Auf einer Website laufen Filme stumm — fast niemand schaltet Ton ein,
+   und ein Video, das ungefragt spricht, ist ein Ärgernis. Deshalb trägt
+   die Schrift den Inhalt. Das hat einen zweiten Vorteil: Es ist ohne
+   Untertitel zugänglich und in jeder Umgebung lesbar. */
+
+@font-face { font-family: Jost; src: url(../anleitung/schrift/jost-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+@font-face { font-family: Jost; src: url(../anleitung/schrift/jost-latin-500-normal.woff2) format('woff2'); font-weight: 500; }
+@font-face { font-family: Jost; src: url(../anleitung/schrift/jost-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+@font-face { font-family: Cormorant; src: url(../anleitung/schrift/cormorant-garamond-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+@font-face { font-family: Cormorant; src: url(../anleitung/schrift/cormorant-garamond-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+
+:root {
+  --grund: #33302c;
+  --tiefe: #262320;
+  --gold: #c9a227;
+  --gold-hell: #f2d894;
+  --text: #f7f2e6;
+  --stumm: #b9b2a4;
+  --linie: rgba(255, 250, 240, 0.16);
+  --rot: #d98a72;
+  --gruen: #8fbf8f;
+  --kurve: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1280px; height: 720px; overflow: hidden; }
+body {
+  background: var(--grund);
+  color: var(--text);
+  font-family: Jost, sans-serif;
+  position: relative;
+}
+
+/* Grundstimmung: ein warmer Lichtkegel oben rechts, wie auf der Seite */
+body::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(70% 60% at 78% 12%, rgba(242, 216, 148, 0.10), transparent 62%),
+    radial-gradient(90% 80% at 20% 90%, rgba(0, 0, 0, 0.30), transparent 60%);
+}
+
+.szene {
+  position: absolute; inset: 0;
+  padding: 74px 96px;
+  display: flex; flex-direction: column; justify-content: center;
+  opacity: 0;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+  animation-timing-function: linear;
+}
+@keyframes szene { 0%, 100% { opacity: 0 } 6%, 94% { opacity: 1 } }
+
+h1 { font-family: Cormorant, serif; font-weight: 600; font-size: 76px; line-height: 1.05; }
+h2 { font-family: Cormorant, serif; font-weight: 600; font-size: 50px; line-height: 1.12; margin-bottom: 34px; }
+.kicker {
+  font-size: 15px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold-hell); margin-bottom: 22px;
+}
+.unter { font-size: 24px; color: var(--stumm); line-height: 1.55; max-width: 760px; }
+.strich { width: 96px; height: 2px; background: var(--gold); margin: 26px 0; }
+
+/* Auftritte — alle angehalten, alle über dieselbe Zeit angesteuert */
+.auf { opacity: 0; animation-fill-mode: both; animation-play-state: paused; animation-timing-function: var(--kurve); }
+@keyframes auf { from { opacity: 0; transform: translateY(26px) } to { opacity: 1; transform: none } }
+@keyframes weg { from { opacity: 1 } to { opacity: 0 } }
+@keyframes wachsen { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+@keyframes haken { from { stroke-dashoffset: 30 } to { stroke-dashoffset: 0 } }
+@keyframes rutschen { from { transform: translateY(0) } to { transform: translateY(-58px) } }
+
+.karten { display: flex; gap: 26px; margin-top: 14px; }
+.karte {
+  flex: 1; border: 1px solid var(--linie); background: rgba(255, 250, 240, 0.045);
+  border-radius: 3px; padding: 30px 28px;
+}
+.karte .titel { font-family: Cormorant, serif; font-size: 34px; color: var(--gold-hell); margin-bottom: 10px; }
+.karte .zeile { font-size: 19px; color: var(--stumm); line-height: 1.5; }
+.karte .marke { font-size: 21px; color: var(--text); margin-bottom: 12px; }
+
+ul { list-style: none; }
+li { display: flex; align-items: flex-start; gap: 18px; font-size: 26px; margin-bottom: 20px; }
+li .kasten {
+  width: 26px; height: 26px; border: 1.5px solid var(--gold); border-radius: 2px;
+  flex-shrink: 0; margin-top: 5px; position: relative;
+}
+li svg { position: absolute; left: 2px; top: 1px; }
+li svg path {
+  stroke: var(--gold-hell); stroke-width: 2.6; fill: none;
+  stroke-dasharray: 30; stroke-dashoffset: 30;
+  animation-fill-mode: both; animation-play-state: paused;
+}
+
+.ordner {
+  font-family: "DejaVu Sans Mono", monospace; font-size: 22px; line-height: 1.85;
+  border: 1px solid var(--linie); border-radius: 3px; padding: 26px 30px;
+  background: rgba(0, 0, 0, 0.20); flex: 1;
+}
+.ordner .weg { color: var(--stumm); }
+.ordner .falsch { color: var(--rot); }
+.ordner .tief { padding-left: 34px; }
+.marke-oben { font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 12px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 24px; }
+th, td { text-align: left; padding: 15px 18px; border-bottom: 1px solid var(--linie); }
+th { font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stumm); font-weight: 500; }
+.code {
+  font-family: "DejaVu Sans Mono", monospace; font-size: 21px;
+  background: rgba(0, 0, 0, 0.28); border: 1px solid var(--linie);
+  padding: 3px 9px; border-radius: 2px;
+}
+
+.leiste {
+  display: flex; align-items: center; gap: 16px;
+  border: 1px solid var(--linie); border-radius: 40px;
+  padding: 18px 30px; font-size: 24px; background: rgba(0, 0, 0, 0.22);
+}
+.leiste.gut { border-color: rgba(143, 191, 143, 0.55); }
+.leiste .warn { color: var(--rot); }
+.leiste .ok { color: var(--gruen); }
+
+.fuss {
+  position: absolute; left: 96px; right: 96px; bottom: 44px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stumm);
+  border-top: 1px solid var(--linie); padding-top: 18px;
+  opacity: 0; animation: auf 700ms 900ms var(--kurve) both paused;
+}
+.fortschritt {
+  position: absolute; left: 0; top: 0; height: 3px; background: var(--gold);
+  transform-origin: left center;
+  animation: wachsen 46s linear both paused;
+  width: 100%;
+}
+</style>
+</head>
+<body>
+
+<span class="fortschritt"></span>
+
+<!-- 1 · Titel  (0 – 4 s) -->
+<div class="szene" style="animation: szene 4s 0s linear both paused">
+  <p class="kicker" style="animation: auf 800ms 300ms var(--kurve) both paused">Webdesign Elfe</p>
+  <h1 class="auf" style="animation: auf 900ms 600ms var(--kurve) both paused">Hosting selbst<br>in der Hand</h1>
+  <span class="strich auf" style="animation: auf 700ms 1100ms var(--kurve) both paused"></span>
+  <p class="unter auf" style="animation: auf 800ms 1400ms var(--kurve) both paused">
+    In fünf Schritten von der Bestellung zur fertigen Website.
+  </p>
+</div>
+
+<!-- 2 · Die drei Bausteine  (4 – 13 s) -->
+<div class="szene" style="animation: szene 9s 4s linear both paused">
+  <p class="kicker" style="animation: auf 700ms 4.3s var(--kurve) both paused">Worum geht es</p>
+  <h2 class="auf" style="animation: auf 800ms 4.6s var(--kurve) both paused">Drei Dinge, eine Rechnung</h2>
+  <div class="karten">
+    <div class="karte auf" style="animation: auf 800ms 5.6s var(--kurve) both paused">
+      <div class="titel">Die Domain</div>
+      <div class="marke">ihr-betrieb.de</div>
+      <div class="zeile">Die Adresse.<br>Läuft immer auf Ihren Namen.</div>
+    </div>
+    <div class="karte auf" style="animation: auf 800ms 6.6s var(--kurve) both paused">
+      <div class="titel">Der Webspace</div>
+      <div class="marke">Speicherplatz</div>
+      <div class="zeile">Hier liegen die Dateien<br>Ihrer Website.</div>
+    </div>
+    <div class="karte auf" style="animation: auf 800ms 7.6s var(--kurve) both paused">
+      <div class="titel">Das Zertifikat</div>
+      <div class="marke">SSL · https</div>
+      <div class="zeile">Das Schloss in der<br>Adresszeile.</div>
+    </div>
+  </div>
+  <p class="unter auf" style="animation: auf 800ms 9.2s var(--kurve) both paused; margin-top:34px">
+    Meist vom selben Anbieter — aber drei verschiedene Dinge.
+  </p>
+</div>
+
+<!-- 3 · Anbieter  (13 – 21 s) -->
+<div class="szene" style="animation: szene 8s 13s linear both paused">
+  <p class="kicker" style="animation: auf 700ms 13.3s var(--kurve) both paused">Schritt 1</p>
+  <h2 class="auf" style="animation: auf 800ms 13.6s var(--kurve) both paused">Anbieter auswählen</h2>
+  <ul>
+    <li class="auf" style="animation: auf 700ms 14.4s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 500ms 14.9s ease both paused"/></svg></span>
+      Speicherplatz ab 1&nbsp;GB — jedes Einsteigerpaket reicht
+    </li>
+    <li class="auf" style="animation: auf 700ms 15.4s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 500ms 15.9s ease both paused"/></svg></span>
+      SSL-Zertifikat inklusive
+    </li>
+    <li class="auf" style="animation: auf 700ms 16.4s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 500ms 16.9s ease both paused"/></svg></span>
+      SFTP-Zugang zum Hochladen
+    </li>
+    <li class="auf" style="animation: auf 700ms 17.4s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 500ms 17.9s ease both paused"/></svg></span>
+      Eigene DNS-Verwaltung
+    </li>
+    <li class="auf" style="animation: auf 700ms 18.4s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 500ms 18.9s ease both paused"/></svg></span>
+      Serverstandort in der EU
+    </li>
+  </ul>
+</div>
+
+<!-- 4 · Hochladen  (21 – 30 s) -->
+<div class="szene" style="animation: szene 9s 21s linear both paused">
+  <p class="kicker" style="animation: auf 700ms 21.3s var(--kurve) both paused">Schritt 2</p>
+  <h2 class="auf" style="animation: auf 800ms 21.6s var(--kurve) both paused">Dateien hochladen</h2>
+  <div style="display:flex; gap:34px">
+    <div class="auf" style="flex:1; animation: auf 800ms 22.6s var(--kurve) both paused">
+      <div class="marke-oben" style="color:var(--gruen)">Richtig</div>
+      <div class="ordner">
+        <div class="weg">htdocs/</div>
+        <div class="tief">index.html</div>
+        <div class="tief">impressum/</div>
+        <div class="tief">_next/</div>
+        <div class="tief">images/</div>
+      </div>
+    </div>
+    <div class="auf" style="flex:1; animation: auf 800ms 24.4s var(--kurve) both paused">
+      <div class="marke-oben" style="color:var(--rot)">Falsch</div>
+      <div class="ordner">
+        <div class="weg">htdocs/</div>
+        <div class="tief falsch">website-fertig/</div>
+        <div class="tief" style="padding-left:68px">index.html</div>
+        <div class="tief" style="padding-left:68px">impressum/</div>
+        <div class="tief">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+  <p class="unter auf" style="animation: auf 800ms 26.6s var(--kurve) both paused; margin-top:30px">
+    Der häufigste Fehler: eine Ordnerebene zu tief.<br>
+    <strong style="color:var(--text)">index.html</strong> muss ganz oben liegen.
+  </p>
+</div>
+
+<!-- 5 · DNS  (30 – 38 s) -->
+<div class="szene" style="animation: szene 8s 30s linear both paused">
+  <p class="kicker" style="animation: auf 700ms 30.3s var(--kurve) both paused">Schritt 3</p>
+  <h2 class="auf" style="animation: auf 800ms 30.6s var(--kurve) both paused">Die Adresse verbinden</h2>
+  <table>
+    <tr class="auf" style="animation: auf 700ms 31.4s var(--kurve) both paused">
+      <th>Name</th><th>Typ</th><th>Wert</th>
+    </tr>
+    <tr class="auf" style="animation: auf 700ms 32.2s var(--kurve) both paused">
+      <td><span class="code">@</span></td><td>A</td><td>IP-Adresse Ihres Webspace</td>
+    </tr>
+    <tr class="auf" style="animation: auf 700ms 33.2s var(--kurve) both paused">
+      <td><span class="code">www</span></td><td>CNAME</td><td><span class="code">ihr-betrieb.de.</span></td>
+    </tr>
+  </table>
+  <p class="unter auf" style="animation: auf 800ms 34.6s var(--kurve) both paused; margin-top:34px">
+    Der Punkt am Ende gehört dazu.<br>
+    Änderungen brauchen bis zu 24 Stunden — das ist normal.
+  </p>
+</div>
+
+<!-- 6 · SSL  (38 – 44 s) -->
+<div class="szene" style="animation: szene 6s 38s linear both paused">
+  <p class="kicker" style="animation: auf 700ms 38.3s var(--kurve) both paused">Schritt 4</p>
+  <h2 class="auf" style="animation: auf 800ms 38.6s var(--kurve) both paused">Verschlüsselung einschalten</h2>
+  <div style="display:flex; gap:30px; align-items:center; margin-bottom:34px">
+    <div class="leiste auf" style="flex:1; animation: auf 700ms 39.4s var(--kurve) both paused">
+      <span class="warn">&#9888;</span><span class="warn">Nicht sicher</span>
+      <span style="color:var(--stumm)">ihr-betrieb.de</span>
+    </div>
+    <span class="auf" style="font-size:34px; color:var(--gold); animation: auf 600ms 40.4s var(--kurve) both paused">&rarr;</span>
+    <div class="leiste gut auf" style="flex:1; animation: auf 700ms 41s var(--kurve) both paused">
+      <span class="ok">&#128274;</span><span>https://ihr-betrieb.de</span>
+    </div>
+  </div>
+  <p class="unter auf" style="animation: auf 800ms 42s var(--kurve) both paused">
+    Im Kundenbereich unter „SSL“ das kostenlose Zertifikat aktivieren.<br>
+    Falls vorhanden: „HTTPS erzwingen“ einschalten.
+  </p>
+</div>
+
+<!-- 7 · Prüfliste  (44 – 51 s) -->
+<div class="szene" style="animation: szene 7s 44s linear both paused">
+  <p class="kicker" style="animation: auf 700ms 44.3s var(--kurve) both paused">Schritt 5</p>
+  <h2 class="auf" style="animation: auf 800ms 44.6s var(--kurve) both paused">Zum Schluss prüfen</h2>
+  <ul>
+    <li class="auf" style="animation: auf 600ms 45.4s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 450ms 45.8s ease both paused"/></svg></span>
+      Die Domain läuft auf Ihren Namen
+    </li>
+    <li class="auf" style="animation: auf 600ms 46.2s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 450ms 46.6s ease both paused"/></svg></span>
+      Die Seite lädt mit Schloss in der Adresszeile
+    </li>
+    <li class="auf" style="animation: auf 600ms 47s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 450ms 47.4s ease both paused"/></svg></span>
+      Mit und ohne www erreichbar
+    </li>
+    <li class="auf" style="animation: auf 600ms 47.8s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 450ms 48.2s ease both paused"/></svg></span>
+      Das Kontaktformular kommt an
+    </li>
+    <li class="auf" style="animation: auf 600ms 48.6s var(--kurve) both paused">
+      <span class="kasten"><svg width="22" height="22"><path d="M3 11 L9 17 L19 5" style="animation: haken 450ms 49s ease both paused"/></svg></span>
+      Auf dem Telefon geprüft
+    </li>
+  </ul>
+</div>
+
+<!-- 8 · Abbinder  (51 – 56 s) -->
+<div class="szene" style="animation: szene 5s 51s linear both paused">
+  <h2 class="auf" style="animation: auf 900ms 51.4s var(--kurve) both paused; font-size:58px">
+    Die ausführliche Anleitung<br>gibt es als PDF.
+  </h2>
+  <span class="strich auf" style="animation: auf 700ms 52.4s var(--kurve) both paused"></span>
+  <p class="unter auf" style="animation: auf 800ms 52.8s var(--kurve) both paused">
+    Sechs Seiten mit allen Schritten, einer Prüfliste und einer Übersicht,
+    woran es liegt, wenn etwas klemmt.
+  </p>
+  <p class="unter auf" style="animation: auf 800ms 53.8s var(--kurve) both paused; margin-top:26px; color:var(--gold-hell)">
+    webdesign-elfe.de
+  </p>
+</div>
+
+</body>
+</html>
