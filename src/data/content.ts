@@ -589,6 +589,139 @@ export const pricingNote =
 
    Bis echte Stimmen vorliegen, steht hier, was tatsächlich zugesagt wird —
    jede Zeile aus den Paketbedingungen belegt. */
+/* ---------- Anfrageformular ----------
+
+   Warum die Fragen hier stehen und nicht im Bauteil: Sie werden sich
+   ändern, sobald die ersten Anfragen zeigen, welche Antwort niemand
+   anklickt. Wer Text ändern will, soll nicht durch JSX suchen müssen.
+
+   ZWEI BEWUSSTE ABWEICHUNGEN VON DER ÜBLICHEN VORLAGE
+
+   1. Die Budgetstufen. In fast jeder Formularvorlage stehen Spannen bis
+      „10.000 € und mehr". Hier reicht die Preisliste von 399 bis 1.099 €
+      — jemanden nach zehntausend Euro zu fragen, hieße, alle
+      wegzuschicken, die tatsächlich anfragen sollen, und die übrigen zu
+      verwirren. Die Stufen folgen deshalb der eigenen Preisliste.
+
+   2. Die Anrede. Die ganze Seite siezt. Ein Formular, das plötzlich
+      duzt, liest sich wie von woanders kopiert — genau der Eindruck,
+      den eine Arbeitsprobe nicht machen darf.
+
+   Was NICHT gefragt wird: Anschrift, Straße, PLZ. Für eine erste Anfrage
+   sind sie unnötig, und was unnötig ist, darf nach der
+   Datenschutz-Grundverordnung nicht erhoben werden. Jedes Feld weniger
+   ist außerdem ein Grund weniger abzubrechen. */
+export const anfrage = {
+  kicker: "Projektanfrage",
+  h2: "Erzählen Sie mir von Ihrem Vorhaben",
+  intro:
+    "Sechs Fragen, überwiegend zum Anklicken — in zwei Minuten erledigt. Je mehr ich vorab weiß, desto konkreter kann ich Ihnen im Erstgespräch antworten.",
+
+  schritte: [
+    { titel: "Ihr Vorhaben", hinweis: "Womit fangen wir an?" },
+    { titel: "Rahmen", hinweis: "Damit ich realistisch planen kann." },
+    { titel: "Kontakt", hinweis: "Wohin darf die Antwort?" },
+  ],
+
+  was: {
+    frage: "Was möchten Sie umsetzen?",
+    optionen: [
+      "Neue Website",
+      "Bestehende Website überarbeiten",
+      "Onlineshop",
+      "Landingpage",
+      "Logo oder Erscheinungsbild",
+      "Etwas anderes",
+    ],
+  },
+
+  ziel: {
+    frage: "Was soll die Website vor allem erreichen?",
+    hinweis: "Mehrfachauswahl möglich.",
+    optionen: [
+      "Mehr Kunden und Anfragen gewinnen",
+      "Leistungen und Angebot zeigen",
+      "Produkte verkaufen",
+      "Professioneller auftreten",
+      "Bei Google gefunden werden",
+      "Etwas anderes",
+    ],
+  },
+
+  bestehend: {
+    frage: "Haben Sie bereits eine Website?",
+    optionen: ["Ja", "Nein"],
+    urlLabel: "Wie lautet die Adresse?",
+    urlPlatzhalter: "ihr-betrieb.de",
+    problemFrage: "Was stört Sie daran am meisten?",
+    problemPlatzhalter:
+      "Zum Beispiel: sieht veraltet aus, funktioniert auf dem Handy nicht, bringt keine Anfragen.",
+  },
+
+  start: {
+    frage: "Wann möchten Sie starten?",
+    optionen: [
+      "So bald wie möglich",
+      "In ein bis zwei Monaten",
+      "In drei bis sechs Monaten",
+      "Noch offen",
+    ],
+  },
+
+  budget: {
+    frage: "Womit rechnen Sie ungefähr?",
+    hinweis:
+      "Nur eine Einordnung — ein festes Angebot bekommen Sie nach dem Erstgespräch. Meine Pakete beginnen bei 399 €.",
+    optionen: [
+      "Bis 500 €",
+      "500 bis 1.000 €",
+      "1.000 bis 2.000 €",
+      "Mehr als 2.000 €",
+      "Weiß ich noch nicht",
+    ],
+  },
+
+  freitext: {
+    frage: "Worauf kommt es Ihnen an?",
+    hinweis: "Freiwillig — aber es hilft mir sehr.",
+    platzhalter:
+      "Erzählen Sie mir kurz von Ihrem Vorhaben, Ihren Vorstellungen oder Ihren bisherigen Erfahrungen.",
+  },
+
+  kontakt: {
+    name: "Ihr Name",
+    namePlatzhalter: "Vor- und Nachname",
+    email: "E-Mail",
+    emailPlatzhalter: "ihre@adresse.de",
+    telefon: "Telefon",
+    telefonHinweis: "Freiwillig — für kurze Rückfragen oft der schnellste Weg.",
+    telefonPlatzhalter: "0157 …",
+    betrieb: "Betrieb",
+    betriebPlatzhalter: "Freiwillig",
+  },
+
+  knopf: { weiter: "Weiter", zurueck: "Zurück", senden: "Anfrage abschicken" },
+
+  vertrauen: [
+    "Unverbindlich und kostenlos",
+    "Antwort innerhalb von 48 Stunden",
+    "Keine Weitergabe Ihrer Daten",
+  ],
+
+  danke: {
+    titel: "Ihre Anfrage ist unterwegs",
+    text:
+      "Vielen Dank — ich habe alles, was ich für den Anfang brauche. Ich sehe mir Ihr Vorhaben in Ruhe an und melde mich innerhalb von 48 Stunden persönlich bei Ihnen, in der Regel schneller.",
+    naechstes: [
+      "Ich lese Ihre Angaben und schaue mir Ihre bisherige Website an, falls vorhanden.",
+      "Sie bekommen eine erste ehrliche Einschätzung — auch dann, wenn ich nicht die Richtige für Ihr Vorhaben bin.",
+      "Passt es, vereinbaren wir ein Gespräch. Danach erhalten Sie ein schriftliches Festpreisangebot.",
+    ],
+    ohneDienst:
+      "Ihr E-Mail-Programm hat sich mit der fertigen Nachricht geöffnet. Bitte einmal auf Senden klicken — erst dann erreicht mich Ihre Anfrage.",
+  },
+};
+
 export const testimonials: { quote: string; name: string; role: string }[] = [];
 
 export const zusagen = [

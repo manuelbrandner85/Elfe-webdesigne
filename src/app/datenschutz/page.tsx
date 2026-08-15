@@ -188,8 +188,9 @@ export default function Datenschutz() {
           deinem Browser zu einer Nachricht zusammengesetzt und an dein eigenes
           E-Mail-Programm übergeben. Ob du sie absendest, entscheidest du
           selbst — erst dann erreichen uns deine Angaben, und zwar als
-          gewöhnliche E-Mail. Pflichtangaben sind nur Name, E-Mail-Adresse und
-          die Nachricht; alle weiteren Felder sind freiwillig.
+          gewöhnliche E-Mail. Pflichtangaben sind nur Name und E-Mail-Adresse;
+          alle weiteren Angaben sind freiwillig. Eine Anschrift wird nicht
+          erhoben.
         </Anmerkung>
 
         <h2 className={ueberschrift}>5) Rechte des Betroffenen</h2>
