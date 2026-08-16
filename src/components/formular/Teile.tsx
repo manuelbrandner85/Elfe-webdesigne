@@ -47,16 +47,19 @@ export function Chip({
 export function Frage({
   frage,
   hinweis,
+  pflicht,
   children,
 }: {
   frage: string;
   hinweis?: string;
+  /* Nur das Briefing kennzeichnet einzelne Fragen als Pflicht. */
+  pflicht?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <fieldset className="mb-8 border-0 p-0">
       <legend className="mb-1 font-serif-display text-[1.15rem] text-parchment">
-        {frage}
+        {frage} {pflicht && <span className="text-gold-bright">*</span>}
       </legend>
       {hinweis && <p className="mb-3 text-[0.78rem] text-silver/70">{hinweis}</p>}
       <div className={hinweis ? "" : "mt-3"}>{children}</div>
@@ -75,9 +78,12 @@ export function Textfeld({
   typ = "text",
   autoComplete,
   inputMode,
+  fehler,
 }: {
   id: string;
-  label: string;
+  /* Im Briefing steht die Frage schon darueber - dort waere eine
+     zweite Beschriftung nur Wiederholung. */
+  label?: string;
   wert: string;
   setzen: (v: string) => void;
   platzhalter?: string;
@@ -86,6 +92,9 @@ export function Textfeld({
   typ?: string;
   autoComplete?: string;
   inputMode?: "text" | "tel" | "email" | "url";
+  /* Gepruefte Eingabe: Steht hier ein Text, faerbt sich die Linie und
+     der Hinweis wird vorgelesen statt nur eingefaerbt. */
+  fehler?: string;
 }) {
   return (
     <div>
@@ -103,9 +112,18 @@ export function Textfeld({
         inputMode={inputMode}
         autoComplete={autoComplete}
         placeholder={platzhalter}
+        aria-invalid={fehler ? true : undefined}
+        aria-describedby={fehler ? `${id}-fehler` : undefined}
         onChange={(e) => setzen(e.target.value)}
-        className="w-full border-b border-line bg-transparent py-2 text-parchment outline-none transition-colors placeholder:text-silver/40 focus:border-gold"
+        className={`w-full border-b bg-transparent py-2 text-parchment outline-none transition-colors placeholder:text-silver/40 ${
+          fehler ? "border-[#d98a72]" : "border-line focus:border-gold"
+        }`}
       />
+      {fehler && (
+        <p id={`${id}-fehler`} className="mt-1.5 text-[0.76rem] text-[#e0a08c]">
+          {fehler}
+        </p>
+      )}
       {hinweis && <p className="mt-1.5 text-[0.74rem] text-silver/60">{hinweis}</p>}
     </div>
   );

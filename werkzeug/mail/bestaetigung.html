@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ihre Anfrage ist angekommen</title>
+</head>
+<!--
+  VORLAGE FÜR DIE AUTOMATISCHE ANTWORT
+
+  Einzusetzen im Formulardienst unter „Autoresponse" bzw.
+  „Auto-Reply". Der Platzhalter {{name}} wird dort ersetzt; heißt das
+  Feld beim Dienst anders, den Namen entsprechend anpassen.
+
+  WARUM TABELLEN UND EINGEBAUTE STILE
+
+  E-Mail-Programme sind kein Browser. Outlook rendert bis heute mit
+  einer Textverarbeitung, Gmail entfernt <style>-Blöcke im Kopf, und
+  @font-face funktioniert fast nirgends. Was hier steht, sieht deshalb
+  aus wie aus dem Jahr 2005 — und kommt dafür überall an.
+
+  WARUM HELL
+
+  Die Website ist dunkel. Dunkle E-Mails werden von mehreren Programmen
+  im Dunkelmodus ein zweites Mal invertiert, wodurch Text auf Text
+  landet. Die Marke trägt hier die Serifenschrift und das Gold, nicht
+  der Hintergrund — dieselbe Entscheidung wie beim PDF.
+
+  WARUM KEIN BILD IM KOPF
+
+  Die meisten Programme laden Bilder erst auf Klick. Eine Mail, deren
+  Aussage in einer Grafik steckt, ist dann leer. Der Absender steht
+  deshalb als Text da.
+-->
+<body style="margin:0;padding:0;background:#f2ede3;">
+
+  <!-- Vorschauzeile: erscheint in der Übersicht neben dem Betreff -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+    Ihre Anfrage ist da. Ein kurzes Briefing hilft mir, Ihr Projekt richtig zu verstehen.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f2ede3;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+               style="max-width:560px;background:#ffffff;border:1px solid #e2dccd;">
+
+          <!-- Kopf -->
+          <tr>
+            <td style="padding:34px 36px 0 36px;">
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#2a2724;">
+                Webdesign <span style="color:#a4801d;font-style:italic;">Elfe</span>
+              </p>
+              <div style="height:2px;width:56px;background:#a4801d;margin:18px 0 0 0;"></div>
+            </td>
+          </tr>
+
+          <!-- Anrede und Kern -->
+          <tr>
+            <td style="padding:26px 36px 0 36px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#3d3a35;">
+              <h1 style="margin:0 0 18px 0;font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:26px;line-height:1.25;color:#2a2724;">
+                Ihre Anfrage ist angekommen
+              </h1>
+
+              <p style="margin:0 0 16px 0;">Hallo {{name}},</p>
+
+              <p style="margin:0 0 16px 0;">
+                vielen Dank für Ihre Nachricht — ich habe sie gelesen und melde mich
+                innerhalb von 48&nbsp;Stunden persönlich bei Ihnen, in der Regel schneller.
+              </p>
+
+              <p style="margin:0 0 16px 0;">
+                Damit unser erstes Gespräch nicht mit Grundlagen anfängt, sondern
+                gleich bei Ihrem Projekt: Ich habe ein kurzes Briefing vorbereitet.
+                Darin frage ich nach Ihrem Betrieb, Ihren Kunden und dem, was die
+                neue Seite leisten soll. Das meiste ist zum Anklicken.
+              </p>
+
+              <p style="margin:0 0 26px 0;">
+                <strong style="color:#2a2724;">Etwa fünf bis zehn Minuten</strong> — und Sie
+                können jederzeit pausieren, Ihre Antworten bleiben erhalten.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Knopf. Als Tabelle mit Hintergrundfarbe, weil Outlook
+               weder border-radius noch Verläufe auf Links kann. -->
+          <tr>
+            <td style="padding:0 36px 8px 36px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="background:#a4801d;">
+                    <a href="https://webdesign-elfe.de/briefing/"
+                       style="display:inline-block;padding:15px 30px;font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#ffffff;text-decoration:none;">
+                      Projekt-Briefing ausfüllen
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:12px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#7d766c;">
+                Falls der Knopf nicht funktioniert:
+                <a href="https://webdesign-elfe.de/briefing/" style="color:#a4801d;">webdesign-elfe.de/briefing</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Abschluss -->
+          <tr>
+            <td style="padding:26px 36px 34px 36px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#3d3a35;">
+              <p style="margin:0 0 16px 0;">
+                Sie haben es eilig oder eine Frage vorab? Antworten Sie einfach auf
+                diese E-Mail — sie landet direkt bei mir.
+              </p>
+              <p style="margin:0;">
+                Herzliche Grüße<br>
+                <span style="font-family:Georgia,'Times New Roman',serif;font-size:17px;color:#2a2724;">Ulrike Elferich</span>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Fuß -->
+          <tr>
+            <td style="padding:20px 36px 26px 36px;border-top:1px solid #e2dccd;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#7d766c;">
+              Webdesign Elfe · Ulrike Elferich · Auf dem Kamp 20 · 21635 Jork<br>
+              <a href="mailto:info@webdesign-elfe.de" style="color:#a4801d;">info@webdesign-elfe.de</a> ·
+              <a href="https://webdesign-elfe.de/impressum/" style="color:#a4801d;">Impressum</a> ·
+              <a href="https://webdesign-elfe.de/datenschutz/" style="color:#a4801d;">Datenschutz</a>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
