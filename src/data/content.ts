@@ -722,6 +722,249 @@ export const anfrage = {
   },
 };
 
+/* ---------- Projekt-Briefing ----------
+
+   Kommt NACH der Anfrage: Wer hier ankommt, ist schon Kunde oder kurz
+   davor. Deshalb dürfen die Fragen tiefer gehen als im Anfrageformular.
+
+   WARUM SECHS SCHRITTE UND NICHT ZEHN
+
+   Die Vorlage sah zehn Schritte mit rund sechzig Fragen vor. Der eigene
+   Anspruch daneben lautete: „darf sich nicht wie Arbeit anfühlen".
+   Sechzig Fragen fühlen sich nach Arbeit an, weil sie welche sind — und
+   ein Briefing, das zu zwei Dritteln ausgefüllt liegen bleibt, ist
+   wertlos.
+
+   Weggefallen ist der Technikschritt (Domain, Hosting, wer hat Zugriff
+   worauf). Das klärt ein Telefonat in fünf Minuten, und im Formular
+   führt es dazu, dass jemand mit „weiß ich nicht" abbricht, statt
+   nachzufragen.
+
+   Zusammengelegt: Zielgruppe und Ziele, Seiten und Inhalte, Zeitplan
+   und Ansprechpartner. */
+export const briefing = {
+  kicker: "Projekt-Briefing",
+  h2: "Erzählen Sie mir von Ihrem Betrieb",
+  intro:
+    "Sechs Schritte, überwiegend zum Anklicken. Rechnen Sie mit fünf bis zehn Minuten. Ihre Antworten werden im Browser zwischengespeichert — Sie können jederzeit unterbrechen und später weitermachen.",
+
+  schritte: [
+    { titel: "Ihr Betrieb", hinweis: "Wer sind Sie, und was machen Sie?" },
+    { titel: "Ihre Kunden", hinweis: "Wen soll die Website erreichen?" },
+    { titel: "Ziele", hinweis: "Woran messen wir, ob es funktioniert hat?" },
+    { titel: "Inhalte", hinweis: "Was kommt auf die Seite — und wer liefert es?" },
+    { titel: "Gestaltung", hinweis: "Wie soll es wirken?" },
+    { titel: "Rahmen", hinweis: "Zeitplan und Ansprechpartner." },
+  ],
+
+  betrieb: {
+    name: { label: "Name des Betriebs", pflicht: true, platzhalter: "Nordwerk Handwerk GmbH" },
+    tun: {
+      frage: "Was machen Sie?",
+      hinweis: "Zwei, drei Sätze genügen — so, wie Sie es einem Nachbarn erzählen würden.",
+      platzhalter: "Wir bauen Dachstühle, machen Innenausbau und sanieren Fachwerk.",
+    },
+    anders: {
+      frage: "Was können Sie besser als andere in Ihrer Gegend?",
+      hinweis: "Der wichtigste Satz für die spätere Startseite.",
+      platzhalter: "Wir arbeiten in dritter Generation und machen alles selbst — kein Subunternehmer.",
+    },
+    worte: {
+      frage: "Ihr Betrieb in drei bis fünf Worten",
+      platzhalter: "bodenständig, gründlich, seit 1981",
+    },
+    website: { frage: "Gibt es schon eine Website?", optionen: ["Ja", "Nein"] },
+    url: { label: "Adresse", platzhalter: "ihr-betrieb.de" },
+    uebernehmen: {
+      label: "Was davon soll bleiben?",
+      platzhalter: "Zum Beispiel Texte, Bilder, die Referenzen — oder nichts.",
+    },
+  },
+
+  kunden: {
+    wer: { frage: "Wer sind Ihre Kunden?", optionen: ["Privatkunden", "Geschäftskunden", "Beides", "Anders"] },
+    beschreibung: {
+      frage: "Wen möchten Sie vor allem erreichen?",
+      platzhalter: "Hausbesitzer im Alten Land, die einen Altbau sanieren.",
+    },
+    problem: {
+      frage: "Was beschäftigt diese Menschen, bevor sie anrufen?",
+      hinweis: "Sorgen, Fragen, schlechte Erfahrungen — das bestimmt, was auf der Seite stehen muss.",
+      platzhalter: "Angst vor Kostenexplosion, Zweifel, ob der Handwerker Termine hält.",
+    },
+    fragen: {
+      frage: "Welche Fragen bekommen Sie immer wieder?",
+      hinweis: "Die stehen später als Antworten auf der Seite — das spart Ihnen Anrufe.",
+      platzhalter: "Was kostet das ungefähr? Wie lange dauert es? Kommen Sie auch nach Stade?",
+    },
+  },
+
+  ziele: {
+    wichtigstes: {
+      frage: "Was soll die Website vor allem bewirken?",
+      hinweis: "Mehrfachauswahl möglich — aber je klarer, desto besser wird die Seite.",
+      optionen: [
+        "Mehr Anfragen",
+        "Mehr Anrufe",
+        "Termine bekommen",
+        "Produkte verkaufen",
+        "Leistungen zeigen",
+        "Professioneller wirken",
+        "Bei Google gefunden werden",
+        "Mitarbeiter finden",
+      ],
+    },
+    handlung: {
+      frage: "Was soll ein Besucher am Ende tun?",
+      optionen: ["Anrufen", "Formular ausfüllen", "E-Mail schreiben", "Termin buchen", "Etwas kaufen", "Weiß ich noch nicht"],
+    },
+    erfolg: {
+      frage: "Woran würden Sie in einem Jahr merken, dass es sich gelohnt hat?",
+      platzhalter: "Zum Beispiel: zwei ernsthafte Anfragen im Monat statt zwei im Jahr.",
+    },
+    regionen: {
+      label: "In welchen Orten möchten Sie gefunden werden?",
+      hinweis: "Nur nötig, wenn Sie regional arbeiten.",
+      platzhalter: "Jork, Stade, Buxtehude, Hamburg-Süd",
+    },
+  },
+
+  inhalte: {
+    seiten: {
+      frage: "Welche Seiten brauchen Sie?",
+      hinweis: "Mehrfachauswahl. Im Zweifel weniger — jede Seite will gepflegt werden.",
+      optionen: [
+        "Startseite",
+        "Über uns",
+        "Leistungen",
+        "Einzelne Leistungsseiten",
+        "Referenzen",
+        "Team",
+        "Häufige Fragen",
+        "Preise",
+        "Blog",
+        "Stellenangebote",
+        "Kontakt",
+        "Shop",
+      ],
+    },
+    texte: {
+      frage: "Wer schreibt die Texte?",
+      optionen: ["Ich selbst", "Bitte übernehmen Sie das", "Gemeinsam", "Noch offen"],
+    },
+    material: {
+      frage: "Was haben Sie schon da?",
+      hinweis: "Mehrfachauswahl.",
+      optionen: [
+        "Logo",
+        "Professionelle Fotos",
+        "Eigene Handyfotos",
+        "Videos",
+        "Texte",
+        "Prospekte oder PDFs",
+        "Nichts davon",
+      ],
+    },
+    funktionen: {
+      frage: "Brauchen Sie etwas darüber hinaus?",
+      hinweis: "Mehrfachauswahl. Alles Weitere besprechen wir im Gespräch.",
+      optionen: [
+        "Kontaktformular",
+        "Terminbuchung",
+        "Karte / Anfahrt",
+        "Newsletter",
+        "Bewertungen",
+        "WhatsApp",
+        "Downloads",
+        "Mehrsprachig",
+        "Onlineshop",
+        "Nichts davon",
+      ],
+    },
+  },
+
+  gestaltung: {
+    wirkung: {
+      frage: "Wie soll Ihre Website wirken?",
+      hinweis: "Bis zu drei — mehr verwässert das Ergebnis.",
+      optionen: [
+        "Bodenständig",
+        "Hochwertig",
+        "Modern",
+        "Schlicht",
+        "Seriös",
+        "Warm und persönlich",
+        "Handwerklich",
+        "Technisch",
+      ],
+    },
+    vorbilder: {
+      frage: "Websites, die Ihnen gefallen",
+      hinweis: "Zwei bis drei Adressen und je ein Satz, was Ihnen daran gefällt. Muss nicht aus Ihrer Branche sein.",
+      platzhalter: "beispiel.de — mag ich, weil man sofort sieht, was die machen",
+    },
+    abneigung: {
+      frage: "Was möchten Sie auf keinen Fall?",
+      platzhalter: "Zum Beispiel: bunt, verspielt, Stockfotos mit lachenden Menschen im Anzug.",
+    },
+    marke: {
+      frage: "Gibt es feste Vorgaben?",
+      hinweis: "Mehrfachauswahl.",
+      optionen: ["Logo vorhanden", "Feste Farben", "Feste Schriften", "Gestaltungsrichtlinien", "Nichts davon"],
+    },
+  },
+
+  rahmen: {
+    start: {
+      frage: "Wann soll es losgehen?",
+      optionen: ["So bald wie möglich", "In ein bis zwei Monaten", "In drei bis sechs Monaten", "Noch offen"],
+    },
+    termin: {
+      label: "Gibt es einen festen Termin?",
+      hinweis: "Zum Beispiel eine Eröffnung, eine Messe, ein Jubiläum.",
+      platzhalter: "Datum und Anlass",
+    },
+    ansprech: { label: "Wer ist mein Ansprechpartner?", platzhalter: "Name, falls abweichend" },
+    entscheidung: {
+      frage: "Wer entscheidet am Ende?",
+      optionen: ["Ich allein", "Gemeinsam mit Partner oder Familie", "Ein Team", "Noch offen"],
+    },
+    sonstiges: {
+      label: "Gibt es sonst noch etwas, das ich wissen sollte?",
+      platzhalter: "Alles, was oben nicht gepasst hat.",
+    },
+  },
+
+  /* Dateien: Auf einer statischen Seite gibt es keinen Server, der sie
+     annehmen könnte. Statt einen Hochladebereich zu bauen, der nicht
+     funktioniert, steht hier der Weg, der heute schon funktioniert. */
+  dateien: {
+    titel: "Dateien schicken Sie mir einfach zu",
+    text:
+      "Logo, Fotos, Prospekte, alte Texte — antworten Sie dazu einfach auf meine Bestätigungsmail und hängen Sie an, was Sie haben. Das ist für Sie der kürzeste Weg, und ich habe alles im selben Verlauf.",
+    hinweis:
+      "Größere Sammlungen gern über einen Link zu Ihrer Cloud. Passwörter oder Zugangsdaten bitte nie per Formular oder E-Mail — dafür finden wir im Gespräch einen sicheren Weg.",
+  },
+
+  knopf: { weiter: "Weiter", zurueck: "Zurück", senden: "Briefing abschicken" },
+
+  danke: {
+    titel: "Ihr Briefing ist angekommen",
+    text:
+      "Vielen Dank — damit kann ich mich gezielt auf Ihr Projekt vorbereiten. Ich melde mich innerhalb von zwei Werktagen bei Ihnen, mit ersten Gedanken und den Fragen, die offengeblieben sind.",
+    ohneDienst:
+      "Ihr E-Mail-Programm hat sich mit dem fertigen Briefing geöffnet. Bitte einmal auf Senden klicken — erst dann erreicht es mich.",
+    terminTitel: "Möchten Sie direkt einen Termin ausmachen?",
+    terminText: "Zwanzig Minuten am Telefon reichen für den Anfang.",
+    terminKnopf: "Erstgespräch vereinbaren",
+    /* Platzhalter: Sobald ein Kalenderdienst eingerichtet ist, hier die
+       Adresse eintragen. Bleibt das Feld leer, führt der Knopf zur
+       E-Mail-Adresse — das funktioniert immer. */
+    terminAdresse: "",
+    postfach: "Eine Kopie Ihrer Angaben liegt in Ihrem gesendeten Postfach.",
+  },
+};
+
 export const testimonials: { quote: string; name: string; role: string }[] = [];
 
 export const zusagen = [
